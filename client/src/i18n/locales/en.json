@@ -1,0 +1,33 @@
+{
+  "nav": {
+    "home": "Home",
+    "forYou": "For You",
+    "myList": "My List",
+    "profile": "Profile"
+  },
+  "screens": {
+    "home": "Home",
+    "forYou": "For You",
+    "player": "Player",
+    "search": "Search",
+    "myList": "My List",
+    "profile": "Profile",
+    "login": "Login",
+    "store": "Store",
+    "rewards": "Rewards",
+    "termsOfUse": "Terms of Use",
+    "pointsHistory": "Points History",
+    "history": "History",
+    "myWallet": "My Wallet",
+    "transactionHistory": "Transaction History",
+    "rewardCoinsHistory": "Reward Coins History",
+    "consumptionRecords": "Consumption Records",
+    "language": "Language",
+    "downloads": "Downloads",
+    "settings": "Settings",
+    "manageMembership": "Manage Membership",
+    "accountDeletion": "Account Deletion",
+    "about": "About",
+    "helpFeedback": "Help & Feedback"
+  }
+}
