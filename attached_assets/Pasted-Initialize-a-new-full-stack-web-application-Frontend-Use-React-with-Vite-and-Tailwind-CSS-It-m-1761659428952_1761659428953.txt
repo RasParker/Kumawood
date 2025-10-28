@@ -1,0 +1,85 @@
+Initialize a new full-stack web application.
+
+Frontend: Use React (with Vite) and Tailwind CSS. It must be a mobile-first, single-page application. Include an i18n library (like react-i18next) for language support.
+
+Visual Design Style (NEW): Implement a modern, dark-mode visual style similar to popular short-form video apps (like DramaBox/ReelShort). Use dark backgrounds (black/dark grey, e.g., #111111, #1A1A1A), light text (white/light gray), and vibrant, contrasting colors (like pink/orange/red gradients, e.g., from #FF4E50 to #F9D423) for primary buttons and calls-to-action. Ensure high visual density on browsing screens and minimalist UI on the player.
+
+Backend: Use Supabase for the backend.
+
+Video Hosting: All video and image URLs will come from Cloudinary.
+
+UI Shell: Create a main App component with a sticky BottomNavBar at the bottom using the dark theme. Include icons for 'Home', 'For You', 'My List', and 'Profile'.
+
+Main Components (Pages): Create the following components that the BottomNavBar will switch between:
+
+HomeScreen
+
+ForYouScreen
+
+PlayerScreen
+
+SearchScreen
+
+MyListScreen
+
+ProfileScreen
+
+LoginScreen
+
+StoreScreen
+
+RewardsScreen
+
+TermsOfUseScreen (static text)
+
+DetailedPointsHistoryScreen
+
+HistoryScreen
+
+MyWalletScreen
+
+TransactionHistoryScreen
+
+RewardCoinsHistoryScreen
+
+ConsumptionRecordsScreen
+
+LanguageScreen
+
+DownloadsScreen
+
+SettingsScreen
+
+ManageMembershipScreen
+
+AccountDeletionScreen
+
+AboutScreen (Placeholder/Deferred)
+
+HelpFeedbackScreen (Placeholder/Deferred)
+
+State Management: In the main App component, create state variables for:
+
+currentView (default: 'home')
+
+selectedSeriesId (default: null)
+
+selectedEpisodeNumber (default: 1)
+
+playerStartTime (default: 0)
+
+showCopiedToast (default: false)
+
+showToastMessage (default: null).
+
+currentLanguage (default: 'en', fetched from user preference later)
+
+cacheSizeMB (default: 0.0)
+
+Navigation Functions (REVISED): In App, create:
+
+MapsToPlayer(seriesId, episodeNumber = 1, startTime = 0): This is the key function.
+
+Also create functions like MapsToHome(), MapsToProfile(), MapsToLogin(), MapsToRewards(), MapsToPointsHistory(), MapsToHistory(), MapsToStore(), MapsToMyWallet(), MapsToTransactionHistory(), MapsToRewardCoinsHistory(), MapsToConsumptionRecords(), MapsToLanguage(), MapsToDownloads(), MapsToSettings(), MapsToManageMembership(), MapsToAccountDeletion(), MapsToAbout(), MapsToHelpFeedback() etc., that just change the currentView.
+
+Prop Drilling: Pass all necessary navigation functions down to the components that need them.
