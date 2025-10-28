@@ -60,9 +60,9 @@
 
   --muted-foreground: 0 0% 35%;
 
-  --accent: 24 8% 88%;
+  --accent: 16 100% 63%;
 
-  --accent-foreground: 0 0% 9%;
+  --accent-foreground: 0 0% 98%;
 
   --destructive: 0 84% 60%;
 
@@ -178,9 +178,9 @@
 
   --muted-foreground: 0 0% 69%;  /* #B0B0B0 */
 
-  --accent: 45 96% 62%;  /* #F9D423 - gradient end */
+  --accent: 16 100% 63%;  /* #FF8C42 - gradient end (orange) */
 
-  --accent-foreground: 0 0% 6.7%;
+  --accent-foreground: 0 0% 100%;
 
   --destructive: 0 84% 60%;
 
