@@ -55,7 +55,7 @@ export default function BottomNavBar({
                     <defs>
                       <linearGradient id="nav-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" style={{ stopColor: 'hsl(357, 98%, 65%)', stopOpacity: 1 }} />
-                        <stop offset="100%" style={{ stopColor: 'hsl(45, 96%, 62%)', stopOpacity: 1 }} />
+                        <stop offset="100%" style={{ stopColor: 'hsl(16, 100%, 63%)', stopOpacity: 1 }} />
                       </linearGradient>
                     </defs>
                   </svg>
