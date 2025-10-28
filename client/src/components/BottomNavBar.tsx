@@ -39,27 +39,9 @@ export default function BottomNavBar({
               <div className={`relative ${isActive ? 'scale-110' : ''}`}>
                 <Icon
                   className={`h-6 w-6 transition-all ${
-                    isActive ? 'text-transparent' : 'text-muted-foreground'
+                    isActive ? 'text-primary' : 'text-muted-foreground'
                   }`}
-                  style={
-                    isActive
-                      ? {
-                          fill: 'url(#nav-gradient)',
-                          stroke: 'url(#nav-gradient)',
-                        }
-                      : undefined
-                  }
                 />
-                {isActive && (
-                  <svg width="0" height="0">
-                    <defs>
-                      <linearGradient id="nav-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style={{ stopColor: 'hsl(357, 98%, 65%)', stopOpacity: 1 }} />
-                        <stop offset="100%" style={{ stopColor: 'hsl(16, 100%, 63%)', stopOpacity: 1 }} />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                )}
               </div>
               <span
                 className={`text-xs font-medium transition-all ${
