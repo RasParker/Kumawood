@@ -1,38 +1,203 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { 
+  type User, 
+  type InsertUser,
+  type Series,
+  type InsertSeries,
+  type Episode,
+  type InsertEpisode,
+  type RedeemableItem,
+  type InsertRedeemableItem,
+} from "@shared/schema";
+import { supabase } from "./supabase";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  
+  getAllSeries(): Promise<Series[]>;
+  getSeriesByCategory(category: string): Promise<Series[]>;
+  getSeriesById(id: string): Promise<Series | undefined>;
+  getPopularSeries(): Promise<Series[]>;
+  getNewSeries(): Promise<Series[]>;
+  getRankingSeries(): Promise<Series[]>;
+  getKumawoodSeries(): Promise<Series[]>;
+  getNaijaSeries(): Promise<Series[]>;
+  getComingSoonSeries(): Promise<Series[]>;
+  
+  getEpisodesBySeriesId(seriesId: string): Promise<Episode[]>;
+  
+  getAllRedeemableItems(): Promise<RedeemableItem[]>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
-  }
-
+export class SupabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (error || !data) return undefined;
+    return data as User;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();
+    
+    if (error || !data) return undefined;
+    return data as User;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+    const { data, error } = await supabase
+      .from('users')
+      .insert(insertUser)
+      .select()
+      .single();
+    
+    if (error || !data) {
+      throw new Error(`Failed to create user: ${error?.message}`);
+    }
+    
+    return data as User;
+  }
+
+  async getAllSeries(): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('is_coming_soon', false)
+      .order('title', { ascending: true });
+    
+    if (error) throw new Error(`Failed to fetch series: ${error.message}`);
+    return (data || []) as Series[];
+  }
+
+  async getSeriesByCategory(category: string): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('is_coming_soon', false)
+      .contains('tags', [category])
+      .order('rating', { ascending: false });
+    
+    if (error) throw new Error(`Failed to fetch series by category: ${error.message}`);
+    return (data || []) as Series[];
+  }
+
+  async getSeriesById(id: string): Promise<Series | undefined> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (error || !data) return undefined;
+    return data as Series;
+  }
+
+  async getPopularSeries(): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('is_coming_soon', false)
+      .is('rank', null)
+      .eq('is_new', false)
+      .order('rating', { ascending: false })
+      .limit(20);
+    
+    if (error) throw new Error(`Failed to fetch popular series: ${error.message}`);
+    return (data || []) as Series[];
+  }
+
+  async getNewSeries(): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('is_coming_soon', false)
+      .eq('is_new', true)
+      .order('year', { ascending: false })
+      .limit(20);
+    
+    if (error) throw new Error(`Failed to fetch new series: ${error.message}`);
+    return (data || []) as Series[];
+  }
+
+  async getRankingSeries(): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('is_coming_soon', false)
+      .not('rank', 'is', null)
+      .order('rank', { ascending: true })
+      .limit(10);
+    
+    if (error) throw new Error(`Failed to fetch ranking series: ${error.message}`);
+    return (data || []) as Series[];
+  }
+
+  async getKumawoodSeries(): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('is_coming_soon', false)
+      .or('tags.cs.{Historical,Cultural}')
+      .order('rating', { ascending: false })
+      .limit(20);
+    
+    if (error) throw new Error(`Failed to fetch Kumawood series: ${error.message}`);
+    return (data || []) as Series[];
+  }
+
+  async getNaijaSeries(): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('is_coming_soon', false)
+      .or('tags.cs.{Urban,Business,Political}')
+      .order('rating', { ascending: false })
+      .limit(20);
+    
+    if (error) throw new Error(`Failed to fetch Naija series: ${error.message}`);
+    return (data || []) as Series[];
+  }
+
+  async getComingSoonSeries(): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('is_coming_soon', true)
+      .order('release_date', { ascending: true });
+    
+    if (error) throw new Error(`Failed to fetch coming soon series: ${error.message}`);
+    return (data || []) as Series[];
+  }
+
+  async getEpisodesBySeriesId(seriesId: string): Promise<Episode[]> {
+    const { data, error } = await supabase
+      .from('episodes')
+      .select('*')
+      .eq('series_id', seriesId)
+      .order('episode_number', { ascending: true });
+    
+    if (error) throw new Error(`Failed to fetch episodes: ${error.message}`);
+    return (data || []) as Episode[];
+  }
+
+  async getAllRedeemableItems(): Promise<RedeemableItem[]> {
+    const { data, error } = await supabase
+      .from('redeemable_items')
+      .select('*')
+      .order('points_cost', { ascending: true });
+    
+    if (error) throw new Error(`Failed to fetch redeemable items: ${error.message}`);
+    return (data || []) as RedeemableItem[];
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new SupabaseStorage();
