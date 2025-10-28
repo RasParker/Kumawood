@@ -1,11 +1,34 @@
-import { Play, Calendar, Star } from 'lucide-react';
-import { newSeries } from '@/data/mockData';
+import { Play, Star } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import type { Series } from '@shared/schema';
 
 interface NewTabComponentProps {
   navigateToPlayer: (seriesId: string, episodeNumber: number, startTime: number) => void;
 }
 
 export default function NewTabComponent({ navigateToPlayer }: NewTabComponentProps) {
+  const { data: newSeries = [], isLoading } = useQuery<Series[]>({
+    queryKey: ['/api/series/new'],
+  });
+
+  if (isLoading) {
+    return (
+      <div className="space-y-3 p-4">
+        <h3 className="text-lg font-bold text-foreground">New Releases</h3>
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div key={i} className="flex gap-3 p-3 bg-card rounded-lg border border-border animate-pulse">
+            <div className="w-32 h-20 bg-muted rounded-md" />
+            <div className="flex-1 space-y-2">
+              <div className="h-4 bg-muted rounded w-3/4" />
+              <div className="h-3 bg-muted rounded w-full" />
+              <div className="h-3 bg-muted rounded w-1/2" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3 p-4">
       <h3 className="text-lg font-bold text-foreground">New Releases</h3>
@@ -41,17 +64,19 @@ export default function NewTabComponent({ navigateToPlayer }: NewTabComponentPro
                 {series.title}
               </h4>
               <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
-                {series.description}
+                {series.synopsis}
               </p>
             </div>
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Star className="h-3 w-3 fill-primary text-primary" />
-                <span>{series.rating}</span>
-              </div>
-              <span>•</span>
-              <span>{series.episodeCount} Episodes</span>
-              <span>•</span>
+              {series.rating && (
+                <>
+                  <div className="flex items-center gap-1">
+                    <Star className="h-3 w-3 fill-primary text-primary" />
+                    <span>{series.rating}</span>
+                  </div>
+                  <span>•</span>
+                </>
+              )}
               <span>{series.genre}</span>
             </div>
           </div>

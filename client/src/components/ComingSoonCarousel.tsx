@@ -1,8 +1,33 @@
 import { Calendar, Bell } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
-import { comingSoonSeries } from '@/data/mockData';
+import type { Series } from '@shared/schema';
 
 export default function ComingSoonCarousel() {
+  const { data: comingSoonSeries = [], isLoading } = useQuery<Series[]>({
+    queryKey: ['/api/series/coming-soon'],
+  });
+
+  if (isLoading) {
+    return (
+      <div className="space-y-3">
+        <h3 className="text-lg font-bold text-foreground">Coming Soon</h3>
+        <div className="flex gap-3 overflow-x-auto pb-2">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex-shrink-0 w-72 bg-card rounded-lg overflow-hidden border border-border animate-pulse">
+              <div className="aspect-video bg-muted" />
+              <div className="p-4 space-y-3">
+                <div className="h-4 bg-muted rounded w-3/4" />
+                <div className="h-3 bg-muted rounded w-full" />
+                <div className="h-8 bg-muted rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
@@ -34,7 +59,7 @@ export default function ComingSoonCarousel() {
                   {series.title}
                 </h4>
                 <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                  {series.description}
+                  {series.synopsis}
                 </p>
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">

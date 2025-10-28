@@ -9,6 +9,7 @@ import {
   type InsertRedeemableItem,
 } from "@shared/schema";
 import { supabase } from "./supabase";
+import { mapSeriesToCamelCase, mapEpisodeToCamelCase, mapRedeemableItemToCamelCase } from "./mappers";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -75,7 +76,7 @@ export class SupabaseStorage implements IStorage {
       .order('title', { ascending: true });
     
     if (error) throw new Error(`Failed to fetch series: ${error.message}`);
-    return (data || []) as Series[];
+    return (data || []).map(mapSeriesToCamelCase);
   }
 
   async getSeriesByCategory(category: string): Promise<Series[]> {
@@ -87,7 +88,7 @@ export class SupabaseStorage implements IStorage {
       .order('rating', { ascending: false });
     
     if (error) throw new Error(`Failed to fetch series by category: ${error.message}`);
-    return (data || []) as Series[];
+    return (data || []).map(mapSeriesToCamelCase);
   }
 
   async getSeriesById(id: string): Promise<Series | undefined> {
@@ -98,7 +99,7 @@ export class SupabaseStorage implements IStorage {
       .single();
     
     if (error || !data) return undefined;
-    return data as Series;
+    return mapSeriesToCamelCase(data);
   }
 
   async getPopularSeries(): Promise<Series[]> {
@@ -112,7 +113,7 @@ export class SupabaseStorage implements IStorage {
       .limit(20);
     
     if (error) throw new Error(`Failed to fetch popular series: ${error.message}`);
-    return (data || []) as Series[];
+    return (data || []).map(mapSeriesToCamelCase);
   }
 
   async getNewSeries(): Promise<Series[]> {
@@ -125,7 +126,7 @@ export class SupabaseStorage implements IStorage {
       .limit(20);
     
     if (error) throw new Error(`Failed to fetch new series: ${error.message}`);
-    return (data || []) as Series[];
+    return (data || []).map(mapSeriesToCamelCase);
   }
 
   async getRankingSeries(): Promise<Series[]> {
@@ -138,7 +139,7 @@ export class SupabaseStorage implements IStorage {
       .limit(10);
     
     if (error) throw new Error(`Failed to fetch ranking series: ${error.message}`);
-    return (data || []) as Series[];
+    return (data || []).map(mapSeriesToCamelCase);
   }
 
   async getKumawoodSeries(): Promise<Series[]> {
@@ -151,7 +152,7 @@ export class SupabaseStorage implements IStorage {
       .limit(20);
     
     if (error) throw new Error(`Failed to fetch Kumawood series: ${error.message}`);
-    return (data || []) as Series[];
+    return (data || []).map(mapSeriesToCamelCase);
   }
 
   async getNaijaSeries(): Promise<Series[]> {
@@ -164,7 +165,7 @@ export class SupabaseStorage implements IStorage {
       .limit(20);
     
     if (error) throw new Error(`Failed to fetch Naija series: ${error.message}`);
-    return (data || []) as Series[];
+    return (data || []).map(mapSeriesToCamelCase);
   }
 
   async getComingSoonSeries(): Promise<Series[]> {
@@ -175,7 +176,7 @@ export class SupabaseStorage implements IStorage {
       .order('release_date', { ascending: true });
     
     if (error) throw new Error(`Failed to fetch coming soon series: ${error.message}`);
-    return (data || []) as Series[];
+    return (data || []).map(mapSeriesToCamelCase);
   }
 
   async getEpisodesBySeriesId(seriesId: string): Promise<Episode[]> {
@@ -186,7 +187,7 @@ export class SupabaseStorage implements IStorage {
       .order('episode_number', { ascending: true });
     
     if (error) throw new Error(`Failed to fetch episodes: ${error.message}`);
-    return (data || []) as Episode[];
+    return (data || []).map(mapEpisodeToCamelCase);
   }
 
   async getAllRedeemableItems(): Promise<RedeemableItem[]> {
@@ -196,7 +197,7 @@ export class SupabaseStorage implements IStorage {
       .order('points_cost', { ascending: true });
     
     if (error) throw new Error(`Failed to fetch redeemable items: ${error.message}`);
-    return (data || []) as RedeemableItem[];
+    return (data || []).map(mapRedeemableItemToCamelCase);
   }
 }
 
