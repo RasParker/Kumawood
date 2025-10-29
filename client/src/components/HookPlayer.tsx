@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Search, Heart, Film, Share2, ChevronRight } from 'lucide-react';
+import { Heart, Film, Share2, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -114,18 +114,6 @@ export default function HookPlayer({
       />
 
       <div className="absolute inset-0 pointer-events-none">
-        <div className="fixed top-4 right-4 z-50 pointer-events-auto">
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={onNavigateToSearch}
-            data-testid="button-search"
-            className="text-white hover:bg-white/20 rounded-full backdrop-blur-sm bg-black/20"
-          >
-            <Search className="h-6 w-6" />
-          </Button>
-        </div>
-
         <div className="absolute right-4 bottom-56 flex flex-col gap-8 pointer-events-auto items-center">
           <div className="flex flex-col items-center gap-1">
             <Button

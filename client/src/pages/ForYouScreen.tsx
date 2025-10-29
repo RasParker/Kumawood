@@ -30,7 +30,19 @@ export default function ForYouScreen({ onNavigateToPlayer, onNavigateToSearch }:
   }
 
   return (
-    <div className="h-full w-full bg-black">
+    <div className="h-full w-full bg-black relative">
+      <div className="fixed top-4 right-4 z-50">
+        <button
+          onClick={onNavigateToSearch}
+          data-testid="button-search"
+          className="text-white hover:bg-white/20 rounded-full backdrop-blur-sm bg-black/20 p-2 transition-colors"
+        >
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+      </div>
+      
       <Swiper
         direction="vertical"
         slidesPerView={1}
