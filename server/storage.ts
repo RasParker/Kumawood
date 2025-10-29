@@ -7,6 +7,8 @@ import {
   type InsertEpisode,
   type RedeemableItem,
   type InsertRedeemableItem,
+  type WatchHistory,
+  type InsertWatchHistory,
 } from "@shared/schema";
 import { supabase } from "./supabase";
 import { mapSeriesToCamelCase, mapEpisodeToCamelCase, mapRedeemableItemToCamelCase } from "./mappers";
@@ -27,8 +29,11 @@ export interface IStorage {
   getComingSoonSeries(): Promise<Series[]>;
   
   getEpisodesBySeriesId(seriesId: string): Promise<Episode[]>;
+  getEpisodeBySeriesAndNumber(seriesId: string, episodeNumber: number): Promise<Episode | undefined>;
   
   getAllRedeemableItems(): Promise<RedeemableItem[]>;
+  
+  upsertWatchHistory(watchHistory: InsertWatchHistory): Promise<WatchHistory>;
 }
 
 export class SupabaseStorage implements IStorage {
@@ -198,6 +203,45 @@ export class SupabaseStorage implements IStorage {
     
     if (error) throw new Error(`Failed to fetch redeemable items: ${error.message}`);
     return (data || []).map(mapRedeemableItemToCamelCase);
+  }
+
+  async getEpisodeBySeriesAndNumber(seriesId: string, episodeNumber: number): Promise<Episode | undefined> {
+    const { data, error } = await supabase
+      .from('episodes')
+      .select('*')
+      .eq('series_id', seriesId)
+      .eq('episode_number', episodeNumber)
+      .single();
+    
+    if (error || !data) return undefined;
+    return mapEpisodeToCamelCase(data);
+  }
+
+  async upsertWatchHistory(watchHistory: InsertWatchHistory): Promise<WatchHistory> {
+    const { data, error } = await supabase
+      .from('watch_history')
+      .upsert({
+        user_id: watchHistory.userId,
+        series_id: watchHistory.seriesId,
+        episode_id: watchHistory.episodeId,
+        last_watched_timestamp: watchHistory.lastWatchedTimestamp,
+      }, {
+        onConflict: 'user_id,series_id,episode_id'
+      })
+      .select()
+      .single();
+    
+    if (error || !data) {
+      throw new Error(`Failed to upsert watch history: ${error?.message}`);
+    }
+    
+    return {
+      id: data.id,
+      userId: data.user_id,
+      seriesId: data.series_id,
+      episodeId: data.episode_id,
+      lastWatchedTimestamp: data.last_watched_timestamp,
+    } as WatchHistory;
   }
 }
 

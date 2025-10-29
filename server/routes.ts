@@ -96,6 +96,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/series/:seriesId/episodes/:episodeNumber', async (req, res) => {
+    try {
+      const episode = await storage.getEpisodeBySeriesAndNumber(
+        req.params.seriesId,
+        parseInt(req.params.episodeNumber)
+      );
+      if (!episode) {
+        return res.status(404).json({ error: 'Episode not found' });
+      }
+      res.json(episode);
+    } catch (error) {
+      console.error('Error fetching episode:', error);
+      res.status(500).json({ error: 'Failed to fetch episode' });
+    }
+  });
+
+  app.get('/api/users/:id', async (req, res) => {
+    try {
+      const user = await storage.getUser(req.params.id);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(user);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      res.status(500).json({ error: 'Failed to fetch user' });
+    }
+  });
+
+  app.post('/api/watch-history', async (req, res) => {
+    try {
+      const watchHistory = await storage.upsertWatchHistory(req.body);
+      res.json(watchHistory);
+    } catch (error) {
+      console.error('Error upserting watch history:', error);
+      res.status(500).json({ error: 'Failed to upsert watch history' });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
