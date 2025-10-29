@@ -179,3 +179,7 @@ export type WatchHistory = typeof watchHistory.$inferSelect;
 
 export type InsertUserFollowing = z.infer<typeof insertUserFollowingSchema>;
 export type UserFollowing = typeof userFollowing.$inferSelect;
+
+export interface EpisodeWithSeries extends Episode {
+  series: Series;
+}

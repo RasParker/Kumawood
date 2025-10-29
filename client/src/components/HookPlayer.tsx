@@ -92,7 +92,12 @@ export default function HookPlayer({
     });
   };
 
-  const totalEpisodes = 80;
+  const { data: allEpisodes = [] } = useQuery<Episode[]>({
+    queryKey: ['/api/series', series.id, 'episodes'],
+    enabled: !!series.id,
+  });
+
+  const totalEpisodes = allEpisodes.length || 80;
 
   return (
     <div className="relative w-full h-full bg-black">

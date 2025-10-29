@@ -143,8 +143,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/episodes/random-first', async (req, res) => {
     try {
       const limit = parseInt(req.query.limit as string) || 20;
-      const episodes = await storage.getRandomFirstEpisodes(limit);
-      res.json(episodes);
+      const episodesWithSeries = await storage.getRandomFirstEpisodes(limit);
+      res.json(episodesWithSeries);
     } catch (error) {
       console.error('Error fetching random first episodes:', error);
       res.status(500).json({ error: 'Failed to fetch random first episodes' });

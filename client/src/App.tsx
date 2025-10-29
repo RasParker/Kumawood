@@ -165,7 +165,12 @@ function App() {
           />
         );
       case 'forYou':
-        return <ForYouScreen onNavigateToPlayer={navigateToPlayer} />;
+        return (
+          <ForYouScreen 
+            onNavigateToPlayer={navigateToPlayer} 
+            onNavigateToSearch={navigateToSearch}
+          />
+        );
       case 'player':
         return (
           <PlayerScreen

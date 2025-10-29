@@ -11,6 +11,7 @@ import {
   type InsertWatchHistory,
   type UserFollowing,
   type InsertUserFollowing,
+  type EpisodeWithSeries,
 } from "@shared/schema";
 import { supabase } from "./supabase";
 import { mapSeriesToCamelCase, mapEpisodeToCamelCase, mapRedeemableItemToCamelCase } from "./mappers";
@@ -32,7 +33,7 @@ export interface IStorage {
   
   getEpisodesBySeriesId(seriesId: string): Promise<Episode[]>;
   getEpisodeBySeriesAndNumber(seriesId: string, episodeNumber: number): Promise<Episode | undefined>;
-  getRandomFirstEpisodes(limit: number): Promise<Episode[]>;
+  getRandomFirstEpisodes(limit: number): Promise<EpisodeWithSeries[]>;
   
   getAllRedeemableItems(): Promise<RedeemableItem[]>;
   
@@ -250,22 +251,36 @@ export class SupabaseStorage implements IStorage {
     } as WatchHistory;
   }
 
-  async getRandomFirstEpisodes(limit: number): Promise<Episode[]> {
+  async getRandomFirstEpisodes(limit: number): Promise<EpisodeWithSeries[]> {
     const { data, error } = await supabase
-      .rpc('get_random_first_episodes', { limit_count: limit });
+      .from('episodes')
+      .select(`
+        *,
+        series:series_id (*)
+      `)
+      .eq('episode_number', 1)
+      .limit(limit);
     
-    if (error) {
-      const { data: fallbackData, error: fallbackError } = await supabase
-        .from('episodes')
-        .select('*')
-        .eq('episode_number', 1)
-        .limit(limit);
-      
-      if (fallbackError) throw new Error(`Failed to fetch random first episodes: ${fallbackError.message}`);
-      return (fallbackData || []).map(mapEpisodeToCamelCase);
-    }
+    if (error) throw new Error(`Failed to fetch random first episodes: ${error.message}`);
     
-    return (data || []).map(mapEpisodeToCamelCase);
+    return (data || [])
+      .filter((item: any) => item.series)
+      .map((item: any) => {
+        const episode = mapEpisodeToCamelCase({
+          id: item.id,
+          series_id: item.series_id,
+          episode_number: item.episode_number,
+          title: item.title,
+          video_url: item.video_url,
+        });
+        
+        const series = mapSeriesToCamelCase(item.series);
+        
+        return {
+          ...episode,
+          series,
+        } as EpisodeWithSeries;
+      });
   }
 
   async addUserFollowing(userFollowing: InsertUserFollowing): Promise<UserFollowing> {
