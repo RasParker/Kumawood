@@ -163,7 +163,7 @@ export default function HookPlayer({
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 pointer-events-auto">
-          <div className="bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 pt-12">
+          <div className="bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 pt-12 pb-24">
             <h2 className="text-white font-bold text-xl line-clamp-1 mb-2">
               {series.title}
             </h2>
