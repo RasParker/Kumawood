@@ -126,40 +126,49 @@ export default function HookPlayer({
           </Button>
         </div>
 
-        <div className="absolute right-4 bottom-32 flex flex-col gap-6 pointer-events-auto">
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={handleLike}
-            data-testid="button-like-hook"
-            className={`rounded-full ${
-              isLiked 
-                ? 'text-red-500 bg-white/20' 
-                : 'text-white hover:bg-white/20'
-            }`}
-          >
-            <Heart className="h-7 w-7" fill={isLiked ? 'currentColor' : 'none'} />
-          </Button>
+        <div className="absolute right-4 bottom-56 flex flex-col gap-8 pointer-events-auto items-center">
+          <div className="flex flex-col items-center gap-1">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={handleLike}
+              data-testid="button-like-hook"
+              className={`rounded-full p-3 ${
+                isLiked 
+                  ? 'text-red-500' 
+                  : 'text-white'
+              }`}
+            >
+              <Heart className="h-8 w-8" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
+            </Button>
+            <span className="text-white text-xs font-medium">Like</span>
+          </div>
           
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={handleManualInvest}
-            data-testid="button-episodes-hook"
-            className="text-white hover:bg-white/20 rounded-full"
-          >
-            <Film className="h-7 w-7" />
-          </Button>
+          <div className="flex flex-col items-center gap-1">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={handleManualInvest}
+              data-testid="button-episodes-hook"
+              className="text-white rounded-full p-3"
+            >
+              <Film className="h-8 w-8" strokeWidth={1.5} />
+            </Button>
+            <span className="text-white text-xs font-medium">Episodes</span>
+          </div>
           
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={handleShare}
-            data-testid="button-share-hook"
-            className="text-white hover:bg-white/20 rounded-full"
-          >
-            <Share2 className="h-7 w-7" />
-          </Button>
+          <div className="flex flex-col items-center gap-1">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={handleShare}
+              data-testid="button-share-hook"
+              className="text-white rounded-full p-3"
+            >
+              <Share2 className="h-8 w-8" strokeWidth={1.5} />
+            </Button>
+            <span className="text-white text-xs font-medium">Share</span>
+          </div>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 pointer-events-auto">
