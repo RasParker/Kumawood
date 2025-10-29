@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Heart, Film, Share2, ChevronRight } from 'lucide-react';
+import { Bookmark, Grid3x3, Share2, ChevronRight, Film } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -121,15 +121,15 @@ export default function HookPlayer({
               variant="ghost"
               onClick={handleLike}
               data-testid="button-like-hook"
-              className={`rounded-full p-3 ${
+              className={`rounded-full p-4 ${
                 isLiked 
-                  ? 'text-red-500' 
+                  ? 'text-primary' 
                   : 'text-white'
               }`}
             >
-              <Heart className="h-8 w-8" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
+              <Bookmark className="h-10 w-10" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
             </Button>
-            <span className="text-white text-xs font-medium">Like</span>
+            <span className="text-white text-xs font-medium">My List</span>
           </div>
           
           <div className="flex flex-col items-center gap-1">
@@ -138,9 +138,9 @@ export default function HookPlayer({
               variant="ghost"
               onClick={handleManualInvest}
               data-testid="button-episodes-hook"
-              className="text-white rounded-full p-3"
+              className="text-white rounded-full p-4"
             >
-              <Film className="h-8 w-8" strokeWidth={1.5} />
+              <Grid3x3 className="h-10 w-10" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-medium">Episodes</span>
           </div>
@@ -151,29 +151,31 @@ export default function HookPlayer({
               variant="ghost"
               onClick={handleShare}
               data-testid="button-share-hook"
-              className="text-white rounded-full p-3"
+              className="text-white rounded-full p-4"
             >
-              <Share2 className="h-8 w-8" strokeWidth={1.5} />
+              <Share2 className="h-10 w-10" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-medium">Share</span>
           </div>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 pointer-events-auto">
-          <div className="bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 pt-12 pb-24">
-            <h2 className="text-white font-bold text-xl line-clamp-1 mb-2">
-              {series.title}
-            </h2>
-            <p className="text-white/90 text-sm line-clamp-2 mb-4">
-              {series.synopsis}
-            </p>
+          <div className="bg-gradient-to-t from-black/90 via-black/70 to-transparent pt-12 pb-24">
+            <div className="px-4 mb-4">
+              <h2 className="text-white font-bold text-xl line-clamp-1 mb-2">
+                {series.title}
+              </h2>
+              <p className="text-white/90 text-sm line-clamp-2">
+                {series.synopsis}
+              </p>
+            </div>
 
             <button
               onClick={handleManualInvest}
               data-testid="button-manual-invest"
-              className="w-full bg-black/50 backdrop-blur-sm border border-white/20 rounded-lg p-3 flex items-center justify-between hover:bg-black/60 transition-all active:scale-95"
+              className="w-full bg-black/50 backdrop-blur-sm border-t border-b border-white/20 p-4 flex items-center justify-between hover:bg-black/60 transition-all active:scale-[0.99]"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 pl-4">
                 <div className="w-10 h-10 rounded bg-gradient-to-r from-primary to-accent flex items-center justify-center">
                   <Film className="h-5 w-5 text-white" />
                 </div>
@@ -181,7 +183,7 @@ export default function HookPlayer({
                   EP.1 / EP.{totalEpisodes}
                 </span>
               </div>
-              <ChevronRight className="h-5 w-5 text-white" />
+              <ChevronRight className="h-5 w-5 text-white mr-4" />
             </button>
           </div>
         </div>
