@@ -114,13 +114,13 @@ export default function HookPlayer({
       />
 
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-4 right-4 pointer-events-auto">
+        <div className="fixed top-4 right-4 z-50 pointer-events-auto">
           <Button
             size="icon"
             variant="ghost"
             onClick={onNavigateToSearch}
             data-testid="button-search"
-            className="text-white hover:bg-white/20 rounded-full"
+            className="text-white hover:bg-white/20 rounded-full backdrop-blur-sm bg-black/20"
           >
             <Search className="h-6 w-6" />
           </Button>
