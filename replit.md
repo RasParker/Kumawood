@@ -6,7 +6,13 @@ AfriShorts is a mobile-first, short-form video streaming application focused on 
 
 **Core Purpose**: Provide an immersive, content-first streaming experience for African short-form dramas with a freemium business model combining ad-supported viewing, virtual currency purchases, and premium memberships.
 
-**Current Status** (Updated: October 28, 2025): Fully migrated from mock data to Supabase backend. The database schema, API endpoints, and frontend components are all configured to work with Supabase. User must follow setup instructions in SUPABASE_SETUP.md to run migrations and seed data.
+**Current Status** (Updated: October 29, 2025): 
+- Phases 4 and 4.5 completed
+- Full-featured PlayerScreen with HTML5 video player, watch history tracking, autoplay, overlays, and bottom sheets
+- ForYouScreen with vertical TikTok-style feed using Swiper
+- HookPlayer component for vertical feed showing first episodes with like/follow functionality
+- All data fully integrated with Supabase backend
+- User must follow setup instructions in SUPABASE_SETUP.md to run migrations and seed data
 
 ## User Preferences
 
@@ -39,8 +45,8 @@ Preferred communication style: Simple, everyday language.
 
 **Key Pages/Views**:
 - HomeScreen: Tabbed interface (Popular, New, Rankings, Kumawood, Naija)
-- ForYouScreen: Personalized recommendations
-- PlayerScreen: Video playback with episode navigation
+- ForYouScreen: Vertical TikTok-style feed using Swiper, shows random first episodes with HookPlayer component
+- PlayerScreen: Full-featured video player with HTML5 controls, watch history tracking (every 15s), autoplay next episode, tap-to-toggle overlays, seek bar, and bottom sheets (Episodes, Speed, Settings)
 - ProfileScreen: User account, settings, wallet management
 - StoreScreen: Coin purchase packages
 - RewardsScreen: Daily tasks, achievements, points system
@@ -73,6 +79,8 @@ Preferred communication style: Simple, everyday language.
 - `users`: User accounts with email/password, coins (purchasable), rewardCoins (earned), points, membership status, preferences
 - `series`: TV series/shows with metadata (title, synopsis, poster, genre, rating, tags, rank)
 - `episodes`: Individual episodes linked to series (episode_number, title, video_url)
+- `watch_history`: Tracks user viewing progress (unique on user_id, series_id, episode_id)
+- `user_following`: Tracks series that users have liked/followed (unique on user_id, series_id)
 
 **Gamification Tables**:
 - `redeemable_items`: Items users can redeem with points (membership extensions, bonuses)
@@ -126,6 +134,7 @@ Preferred communication style: Simple, everyday language.
 - Shadcn/ui: Pre-built accessible components built on Radix
 - Lucide React: Icon library
 - class-variance-authority + clsx: Conditional CSS class utilities
+- Swiper: Touch slider for vertical feed (swiper, swiper/react)
 
 **Development Tools**:
 - Vite: Frontend dev server and build tool
