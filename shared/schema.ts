@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, boolean, timestamp, uuid, real } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, boolean, timestamp, uuid, real, uniqueIndex } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -103,7 +103,9 @@ export const watchHistory = pgTable("watch_history", {
   seriesId: uuid("series_id").notNull().references(() => series.id, { onDelete: 'cascade' }),
   episodeId: uuid("episode_id").notNull().references(() => episodes.id, { onDelete: 'cascade' }),
   lastWatchedTimestamp: real("last_watched_timestamp").notNull(),
-});
+}, (table) => ({
+  uniqueUserSeriesEpisode: uniqueIndex("watch_history_user_series_episode_unique").on(table.userId, table.seriesId, table.episodeId),
+}));
 
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({

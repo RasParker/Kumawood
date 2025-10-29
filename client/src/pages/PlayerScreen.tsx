@@ -1,124 +1,381 @@
-import { ChevronLeft, ChevronRight, Play, SkipBack, SkipForward } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { 
+  ChevronLeft, 
+  Pause, 
+  Play, 
+  Heart, 
+  Share2, 
+  MoreVertical,
+  Film,
+  Gauge
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import EpisodeSheet from '@/components/EpisodeSheet';
+import SpeedSelectionSheet from '@/components/SpeedSelectionSheet';
+import PlaybackSettingsSheet from '@/components/PlaybackSettingsSheet';
+import { apiRequest } from '@/lib/queryClient';
+import type { Episode, Series, User } from '@shared/schema';
 
 interface PlayerScreenProps {
   seriesId: string;
   episodeNumber: number;
+  playerStartTime?: number;
   onNavigateHome: () => void;
-  onNavigateToPlayer: (seriesId: string, episodeNumber: number) => void;
+  onNavigateToPlayer: (seriesId: string, episodeNumber: number, startTime?: number) => void;
 }
 
 export default function PlayerScreen({
   seriesId,
   episodeNumber,
+  playerStartTime = 0,
   onNavigateHome,
   onNavigateToPlayer,
 }: PlayerScreenProps) {
-  const totalEpisodes = 120;
-  const canGoPrevious = episodeNumber > 1;
-  const canGoNext = episodeNumber < totalEpisodes;
+  const { toast } = useToast();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const hideOverlaysTimeoutRef = useRef<NodeJS.Timeout>();
+  const lastSaveTimeRef = useRef<number>(0);
+  
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [showOverlays, setShowOverlays] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [autoplayEnabled, setAutoplayEnabled] = useState(true);
+  const [isLiked, setIsLiked] = useState(false);
+  
+  const [showEpisodeSheet, setShowEpisodeSheet] = useState(false);
+  const [showSpeedSheet, setShowSpeedSheet] = useState(false);
+  const [showSettingsSheet, setShowSettingsSheet] = useState(false);
+
+  const userId = 'demo-user-id';
+
+  const { data: episode, isLoading: episodeLoading } = useQuery<Episode>({
+    queryKey: ['/api/series', seriesId, 'episodes', episodeNumber],
+    enabled: !!seriesId && !!episodeNumber,
+  });
+
+  const { data: series } = useQuery<Series>({
+    queryKey: ['/api/series', seriesId],
+    enabled: !!seriesId,
+  });
+
+  const { data: episodes = [] } = useQuery<Episode[]>({
+    queryKey: ['/api/series', seriesId, 'episodes'],
+    enabled: !!seriesId,
+  });
+
+  const { data: user } = useQuery<User>({
+    queryKey: ['/api/users', userId],
+    enabled: !!userId,
+  });
+
+  const saveWatchHistoryMutation = useMutation({
+    mutationFn: async (timestamp: number) => {
+      if (!episode) return;
+      return apiRequest('POST', '/api/watch-history', {
+        userId,
+        seriesId,
+        episodeId: episode.id,
+        lastWatchedTimestamp: timestamp,
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (user?.autoplayPreference !== undefined) {
+      setAutoplayEnabled(user.autoplayPreference);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (videoRef.current && episode?.videoUrl) {
+      videoRef.current.src = episode.videoUrl;
+      videoRef.current.playbackRate = playbackSpeed;
+    }
+  }, [episode, playbackSpeed]);
+
+  useEffect(() => {
+    resetOverlayTimer();
+    return () => {
+      if (hideOverlaysTimeoutRef.current) {
+        clearTimeout(hideOverlaysTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const resetOverlayTimer = () => {
+    if (hideOverlaysTimeoutRef.current) {
+      clearTimeout(hideOverlaysTimeoutRef.current);
+    }
+    setShowOverlays(true);
+    hideOverlaysTimeoutRef.current = setTimeout(() => {
+      setShowOverlays(false);
+    }, 3000);
+  };
+
+  const handleLoadedMetadata = () => {
+    if (videoRef.current) {
+      setDuration(videoRef.current.duration);
+      videoRef.current.currentTime = playerStartTime;
+      setCurrentTime(playerStartTime);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      const time = videoRef.current.currentTime;
+      setCurrentTime(time);
+
+      if (time - lastSaveTimeRef.current >= 15) {
+        saveWatchHistoryMutation.mutate(time);
+        lastSaveTimeRef.current = time;
+      }
+    }
+  };
+
+  const handleEnded = () => {
+    if (autoplayEnabled && episodes.length > 0) {
+      const nextEpisode = episodes.find(ep => ep.episodeNumber === episodeNumber + 1);
+      if (nextEpisode) {
+        onNavigateToPlayer(seriesId, episodeNumber + 1, 0);
+      }
+    }
+  };
+
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleVideoClick = () => {
+    resetOverlayTimer();
+  };
+
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!videoRef.current || !duration) return;
+    
+    const bounds = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - bounds.left;
+    const newTime = (clickX / bounds.width) * duration;
+    
+    videoRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
+
+  const handleSpeedSelect = (speed: number) => {
+    setPlaybackSpeed(speed);
+    if (videoRef.current) {
+      videoRef.current.playbackRate = speed;
+    }
+  };
+
+  const handleAutoplayToggle = (enabled: boolean) => {
+    setAutoplayEnabled(enabled);
+  };
+
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    toast({
+      title: isLiked ? 'Removed from favorites' : 'Added to favorites',
+      duration: 2000,
+    });
+  };
+
+  const handleShare = () => {
+    toast({
+      title: 'Share link copied!',
+      description: 'Episode link has been copied to clipboard',
+      duration: 2000,
+    });
+  };
+
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+  if (episodeLoading || !episode) {
+    return (
+      <div className="flex items-center justify-center h-full bg-black text-foreground">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Loading episode...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col h-full bg-black">
-      {/* Video Player Area */}
-      <div className="relative flex-1 flex items-center justify-center bg-black">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <div className="text-muted-foreground text-sm">Video Player Area</div>
-            <div className="text-foreground font-semibold">
-              Episode {episodeNumber} of {totalEpisodes}
+    <div className="relative h-full bg-black overflow-hidden">
+      <video
+        ref={videoRef}
+        className="absolute inset-0 w-full h-full object-contain"
+        autoPlay
+        playsInline
+        onLoadedMetadata={handleLoadedMetadata}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleEnded}
+        onClick={handleVideoClick}
+        data-testid="video-player"
+      />
+
+      <div 
+        className={`absolute inset-0 transition-opacity duration-300 ${
+          showOverlays ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 via-black/50 to-transparent">
+          <div className="flex items-center justify-between">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={onNavigateHome}
+              data-testid="button-back"
+              className="text-white hover:bg-white/20"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </Button>
+            
+            <div className="flex-1 text-center">
+              <p className="text-white text-sm font-semibold">
+                Episode {episodeNumber}
+              </p>
             </div>
-            <Play className="h-16 w-16 text-primary mx-auto" />
+
+            <div className="flex items-center gap-2">
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => setShowSpeedSheet(true)}
+                data-testid="button-speed"
+                className="text-white hover:bg-white/20"
+              >
+                <Gauge className="h-5 w-5" />
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => setShowSettingsSheet(true)}
+                data-testid="button-more"
+                className="text-white hover:bg-white/20"
+              >
+                <MoreVertical className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Top Controls */}
-        <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 to-transparent">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <Button
             size="icon"
-            variant="ghost"
-            onClick={onNavigateHome}
-            data-testid="button-back"
-            className="text-foreground hover-elevate active-elevate-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              togglePlayPause();
+            }}
+            data-testid="button-play-pause"
+            className="h-16 w-16 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/40 pointer-events-auto"
           >
-            <ChevronLeft className="h-6 w-6" />
+            {isPlaying ? (
+              <Pause className="h-8 w-8 text-white" fill="white" />
+            ) : (
+              <Play className="h-8 w-8 text-white" fill="white" />
+            )}
           </Button>
         </div>
 
-        {/* Bottom Controls */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-          {/* Progress Bar */}
-          <div className="mb-4">
-            <div className="h-1 bg-muted rounded-full overflow-hidden">
-              <div className="h-full w-1/3 bg-gradient-to-r from-primary to-accent" />
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-6">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleLike}
+            data-testid="button-like"
+            className={`rounded-full ${
+              isLiked 
+                ? 'text-red-500 bg-white/20' 
+                : 'text-white hover:bg-white/20'
+            }`}
+          >
+            <Heart className="h-6 w-6" fill={isLiked ? 'currentColor' : 'none'} />
+          </Button>
+          
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => setShowEpisodeSheet(true)}
+            data-testid="button-episodes"
+            className="text-white hover:bg-white/20 rounded-full"
+          >
+            <Film className="h-6 w-6" />
+          </Button>
+          
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleShare}
+            data-testid="button-share"
+            className="text-white hover:bg-white/20 rounded-full"
+          >
+            <Share2 className="h-6 w-6" />
+          </Button>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0">
+          <div 
+            className="h-1 bg-white/30 mx-4 mb-2 rounded-full cursor-pointer group"
+            onClick={handleSeek}
+            data-testid="seekbar"
+          >
+            <div 
+              className="h-full bg-gradient-to-r from-primary to-accent rounded-full relative group-hover:h-1.5 transition-all"
+              style={{ width: `${progress}%` }}
+            >
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
           </div>
 
-          {/* Control Buttons */}
-          <div className="flex items-center justify-center gap-6">
-            <Button
-              size="icon"
-              variant="ghost"
-              disabled={!canGoPrevious}
-              onClick={() => canGoPrevious && onNavigateToPlayer(seriesId, episodeNumber - 1)}
-              data-testid="button-previous-episode"
-              className="text-foreground hover-elevate active-elevate-2"
-            >
-              <SkipBack className="h-6 w-6" />
-            </Button>
-
-            <Button
-              size="icon"
-              className="h-12 w-12 bg-gradient-to-r from-primary to-accent text-primary-foreground hover-elevate active-elevate-2 rounded-full"
-              data-testid="button-play-pause"
-            >
-              <Play className="h-6 w-6" />
-            </Button>
-
-            <Button
-              size="icon"
-              variant="ghost"
-              disabled={!canGoNext}
-              onClick={() => canGoNext && onNavigateToPlayer(seriesId, episodeNumber + 1)}
-              data-testid="button-next-episode"
-              className="text-foreground hover-elevate active-elevate-2"
-            >
-              <SkipForward className="h-6 w-6" />
-            </Button>
+          <div 
+            className="bg-gradient-to-t from-black/80 via-black/50 to-transparent p-4 pt-8 cursor-pointer"
+            onClick={() => setShowEpisodeSheet(true)}
+            data-testid="bottom-title"
+          >
+            <h2 className="text-white font-bold text-lg line-clamp-1">
+              {series?.title || 'Loading...'}
+            </h2>
+            <p className="text-white/80 text-sm line-clamp-2 mt-1">
+              {episode.title}
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Episode Navigation */}
-      <div className="bg-background border-t border-border p-4 pb-20">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-foreground">Episodes</h3>
-          <span className="text-xs text-muted-foreground">
-            {episodeNumber} / {totalEpisodes}
-          </span>
-        </div>
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {[...Array(10)].map((_, i) => {
-            const ep = episodeNumber - 5 + i;
-            if (ep < 1 || ep > totalEpisodes) return null;
-            const isActive = ep === episodeNumber;
-            return (
-              <button
-                key={ep}
-                onClick={() => onNavigateToPlayer(seriesId, ep)}
-                data-testid={`button-episode-${ep}`}
-                className={`flex-shrink-0 w-12 h-12 rounded-lg font-semibold text-sm transition-all hover-elevate active-elevate-2 ${
-                  isActive
-                    ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground'
-                    : 'bg-card text-foreground'
-                }`}
-              >
-                {ep}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <EpisodeSheet
+        open={showEpisodeSheet}
+        onOpenChange={setShowEpisodeSheet}
+        series={series || null}
+        episodes={episodes}
+        currentEpisodeNumber={episodeNumber}
+        onEpisodeSelect={(ep) => onNavigateToPlayer(seriesId, ep, 0)}
+      />
+
+      <SpeedSelectionSheet
+        open={showSpeedSheet}
+        onOpenChange={setShowSpeedSheet}
+        currentSpeed={playbackSpeed}
+        onSpeedSelect={handleSpeedSelect}
+      />
+
+      <PlaybackSettingsSheet
+        open={showSettingsSheet}
+        onOpenChange={setShowSettingsSheet}
+        autoplayEnabled={autoplayEnabled}
+        onAutoplayToggle={handleAutoplayToggle}
+      />
     </div>
   );
 }

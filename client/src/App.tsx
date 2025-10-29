@@ -171,6 +171,7 @@ function App() {
           <PlayerScreen
             seriesId={selectedSeriesId}
             episodeNumber={selectedEpisodeNumber}
+            playerStartTime={playerStartTime}
             onNavigateHome={navigateToHome}
             onNavigateToPlayer={navigateToPlayer}
           />

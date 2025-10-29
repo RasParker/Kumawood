@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { insertWatchHistorySchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/series/popular', async (_req, res) => {
@@ -127,10 +128,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/watch-history', async (req, res) => {
     try {
-      const watchHistory = await storage.upsertWatchHistory(req.body);
+      const validatedData = insertWatchHistorySchema.parse(req.body);
+      const watchHistory = await storage.upsertWatchHistory(validatedData);
       res.json(watchHistory);
     } catch (error) {
       console.error('Error upserting watch history:', error);
+      if (error instanceof Error && error.name === 'ZodError') {
+        return res.status(400).json({ error: 'Invalid request data', details: error.message });
+      }
       res.status(500).json({ error: 'Failed to upsert watch history' });
     }
   });
