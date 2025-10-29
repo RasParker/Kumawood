@@ -9,6 +9,8 @@ import {
   type InsertRedeemableItem,
   type WatchHistory,
   type InsertWatchHistory,
+  type UserFollowing,
+  type InsertUserFollowing,
 } from "@shared/schema";
 import { supabase } from "./supabase";
 import { mapSeriesToCamelCase, mapEpisodeToCamelCase, mapRedeemableItemToCamelCase } from "./mappers";
@@ -30,10 +32,14 @@ export interface IStorage {
   
   getEpisodesBySeriesId(seriesId: string): Promise<Episode[]>;
   getEpisodeBySeriesAndNumber(seriesId: string, episodeNumber: number): Promise<Episode | undefined>;
+  getRandomFirstEpisodes(limit: number): Promise<Episode[]>;
   
   getAllRedeemableItems(): Promise<RedeemableItem[]>;
   
   upsertWatchHistory(watchHistory: InsertWatchHistory): Promise<WatchHistory>;
+  addUserFollowing(userFollowing: InsertUserFollowing): Promise<UserFollowing>;
+  removeUserFollowing(userId: string, seriesId: string): Promise<void>;
+  isUserFollowingSeries(userId: string, seriesId: string): Promise<boolean>;
 }
 
 export class SupabaseStorage implements IStorage {
@@ -242,6 +248,70 @@ export class SupabaseStorage implements IStorage {
       episodeId: data.episode_id,
       lastWatchedTimestamp: data.last_watched_timestamp,
     } as WatchHistory;
+  }
+
+  async getRandomFirstEpisodes(limit: number): Promise<Episode[]> {
+    const { data, error } = await supabase
+      .rpc('get_random_first_episodes', { limit_count: limit });
+    
+    if (error) {
+      const { data: fallbackData, error: fallbackError } = await supabase
+        .from('episodes')
+        .select('*')
+        .eq('episode_number', 1)
+        .limit(limit);
+      
+      if (fallbackError) throw new Error(`Failed to fetch random first episodes: ${fallbackError.message}`);
+      return (fallbackData || []).map(mapEpisodeToCamelCase);
+    }
+    
+    return (data || []).map(mapEpisodeToCamelCase);
+  }
+
+  async addUserFollowing(userFollowing: InsertUserFollowing): Promise<UserFollowing> {
+    const { data, error } = await supabase
+      .from('user_following')
+      .upsert({
+        user_id: userFollowing.userId,
+        series_id: userFollowing.seriesId,
+      }, {
+        onConflict: 'user_id,series_id'
+      })
+      .select()
+      .single();
+    
+    if (error || !data) {
+      throw new Error(`Failed to add user following: ${error?.message}`);
+    }
+    
+    return {
+      id: data.id,
+      userId: data.user_id,
+      seriesId: data.series_id,
+    } as UserFollowing;
+  }
+
+  async removeUserFollowing(userId: string, seriesId: string): Promise<void> {
+    const { error } = await supabase
+      .from('user_following')
+      .delete()
+      .eq('user_id', userId)
+      .eq('series_id', seriesId);
+    
+    if (error) {
+      throw new Error(`Failed to remove user following: ${error.message}`);
+    }
+  }
+
+  async isUserFollowingSeries(userId: string, seriesId: string): Promise<boolean> {
+    const { data, error } = await supabase
+      .from('user_following')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('series_id', seriesId)
+      .single();
+    
+    return !!data && !error;
   }
 }
 

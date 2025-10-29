@@ -107,6 +107,14 @@ export const watchHistory = pgTable("watch_history", {
   uniqueUserSeriesEpisode: uniqueIndex("watch_history_user_series_episode_unique").on(table.userId, table.seriesId, table.episodeId),
 }));
 
+export const userFollowing = pgTable("user_following", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  seriesId: uuid("series_id").notNull().references(() => series.id, { onDelete: 'cascade' }),
+}, (table) => ({
+  uniqueUserSeries: uniqueIndex("user_following_user_series_unique").on(table.userId, table.seriesId),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -133,6 +141,7 @@ export const insertPurchaseHistorySchema = createInsertSchema(purchaseHistory).o
 export const insertRewardCoinHistorySchema = createInsertSchema(rewardCoinHistory).omit({ id: true, createdAt: true });
 export const insertConsumptionHistorySchema = createInsertSchema(consumptionHistory).omit({ id: true, createdAt: true });
 export const insertWatchHistorySchema = createInsertSchema(watchHistory).omit({ id: true });
+export const insertUserFollowingSchema = createInsertSchema(userFollowing).omit({ id: true });
 
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -167,3 +176,6 @@ export type ConsumptionHistory = typeof consumptionHistory.$inferSelect;
 
 export type InsertWatchHistory = z.infer<typeof insertWatchHistorySchema>;
 export type WatchHistory = typeof watchHistory.$inferSelect;
+
+export type InsertUserFollowing = z.infer<typeof insertUserFollowingSchema>;
+export type UserFollowing = typeof userFollowing.$inferSelect;

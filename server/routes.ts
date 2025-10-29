@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertWatchHistorySchema } from "@shared/schema";
+import { insertWatchHistorySchema, insertUserFollowingSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/series/popular', async (_req, res) => {
@@ -137,6 +137,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Invalid request data', details: error.message });
       }
       res.status(500).json({ error: 'Failed to upsert watch history' });
+    }
+  });
+
+  app.get('/api/episodes/random-first', async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 20;
+      const episodes = await storage.getRandomFirstEpisodes(limit);
+      res.json(episodes);
+    } catch (error) {
+      console.error('Error fetching random first episodes:', error);
+      res.status(500).json({ error: 'Failed to fetch random first episodes' });
+    }
+  });
+
+  app.post('/api/user-following', async (req, res) => {
+    try {
+      const validatedData = insertUserFollowingSchema.parse(req.body);
+      const following = await storage.addUserFollowing(validatedData);
+      res.json(following);
+    } catch (error) {
+      console.error('Error adding user following:', error);
+      if (error instanceof Error && error.name === 'ZodError') {
+        return res.status(400).json({ error: 'Invalid request data', details: error.message });
+      }
+      res.status(500).json({ error: 'Failed to add user following' });
+    }
+  });
+
+  app.delete('/api/user-following/:userId/:seriesId', async (req, res) => {
+    try {
+      await storage.removeUserFollowing(req.params.userId, req.params.seriesId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error removing user following:', error);
+      res.status(500).json({ error: 'Failed to remove user following' });
+    }
+  });
+
+  app.get('/api/user-following/:userId/:seriesId', async (req, res) => {
+    try {
+      const isFollowing = await storage.isUserFollowingSeries(req.params.userId, req.params.seriesId);
+      res.json({ isFollowing });
+    } catch (error) {
+      console.error('Error checking user following:', error);
+      res.status(500).json({ error: 'Failed to check user following' });
     }
   });
 
