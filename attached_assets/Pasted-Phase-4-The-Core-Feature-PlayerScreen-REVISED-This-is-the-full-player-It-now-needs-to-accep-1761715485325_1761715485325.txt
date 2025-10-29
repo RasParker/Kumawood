@@ -1,0 +1,26 @@
+Phase 4: The Core Feature - 'PlayerScreen' (REVISED)
+This is the full player. It now needs to accept a startTime and write to the user's watch_history.
+Follow-up Prompt:
+"Let's build the complete PlayerScreen component and add watch history tracking. Ensure all overlays and bottom sheets use the dark theme.
+New Table: First, create a new table in Supabase called watch_history (columns: id (primary key), user_id, series_id, episode_id, last_watched_timestamp).
+Props: It must accept selectedSeriesId, selectedEpisodeNumber, playerStartTime, and the MapsToHome function.
+Data Fetching: On load, use the props to query Supabase and find the specific episode row. Also fetch the user's autoplay_preference.
+Main Player & video Element:
+Get the video_url from the fetched episode row (a Cloudinary URL).
+Set this as the src for the HTML5 <video> tag. The video must auto-play.
+Start Time: Add an onLoadedMetadata event listener to the <video> tag. Inside this listener, set video.currentTime = props.playerStartTime.
+History Tracking (CRITICAL): Add an onTimeUpdate event listener to the <video> tag. Every 15 seconds, it must 'upsert' a row into the watch_history table for the current user_id, series_id, and episode_id, updating the last_watched_timestamp.
+Autoplay Next: Add an onEnded event listener. If autoplay_preference is true, automatically navigate to the next episode (MapsToPlayer(seriesId, currentEpisode + 1, 0)).
+Tap-to-Toggle Overlays:
+A single tap on the video must toggle the visibility of all overlay elements using a smooth fade transition.
+They should be visible by default, fade out after 3 seconds, and re-appear on tap.
+The Overlays (Default Auto-Hiding):
+Top Bar Overlay: A semi-transparent dark bar at the top with a "Back" arrow (calls MapsToHome), Episode Number, "Speed" button, and "More" (three dots) icon (all light colored).
+Center Overlay: A light-colored "Pause" icon in the center.
+Right-Side Icons Overlay: A vertical stack of light-colored icon buttons on the right: "Like", "Episodes", "Share".
+Bottom Title Overlay: A semi-transparent dark block at the bottom with the Series Title and a short description (light text). Clickable.
+Bottom Seek Bar: A very thin, white horizontal, interactive seek bar positioned just above the bottom title overlay.
+All Bottom Sheets:
+Create and connect the EpisodeSheet (with 'Synopsis'/'Episodes' tabs). Style using the dark theme.
+Create and connect the SpeedSelectionSheet. Style using the dark theme.
+Create and connect the PlaybackSettingsSheet. Style using the dark theme."
