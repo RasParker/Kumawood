@@ -232,19 +232,18 @@ export default function PlayerScreen({
       >
         <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 via-black/50 to-transparent">
           <div className="flex items-center justify-between">
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={onNavigateHome}
-              data-testid="button-back"
-              className="text-white hover:bg-white/20"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </Button>
-            
-            <div className="flex-1 text-center">
+            <div className="flex items-center gap-2">
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={onNavigateHome}
+                data-testid="button-back"
+                className="text-white hover:bg-white/20"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </Button>
               <p className="text-white text-sm font-semibold">
-                Episode {episodeNumber}
+                EP{episodeNumber}
               </p>
             </div>
 
