@@ -21,13 +21,13 @@ export default function PopularTabComponent({ navigateToPlayer }: PopularTabComp
       <div>
         <h3 className="text-lg font-bold text-foreground mb-4">Most Popular</h3>
         {isLoading ? (
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="aspect-[9/16] bg-card rounded-lg animate-pulse" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid grid-cols-3 gap-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {popularSeries.map((series) => (
               <div
                 key={series.id}
