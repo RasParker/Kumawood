@@ -307,7 +307,7 @@ export const kumawoodSeries: Series[] = [
   {
     id: 'kuma1',
     title: 'Asante Kingdom',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_17.jpg',
+    posterUrl: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=400&h=600&fit=crop&q=80',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 65,
     genre: 'Historical',
@@ -319,7 +319,7 @@ export const kumawoodSeries: Series[] = [
   {
     id: 'kuma2',
     title: 'Kumasi Love',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_18.jpg',
+    posterUrl: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&h=600&fit=crop&q=80',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 72,
     genre: 'Romance',
@@ -331,7 +331,7 @@ export const kumawoodSeries: Series[] = [
   {
     id: 'kuma3',
     title: 'The Akan Warrior',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_19.jpg',
+    posterUrl: 'https://images.unsplash.com/photo-1555680206-5f35120d1c37?w=400&h=600&fit=crop&q=80',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 58,
     genre: 'Action',
@@ -343,7 +343,7 @@ export const kumawoodSeries: Series[] = [
   {
     id: 'kuma4',
     title: 'Village Comedy',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_20.jpg',
+    posterUrl: 'https://images.unsplash.com/photo-1541843319471-80b3710c7031?w=400&h=600&fit=crop&q=80',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 81,
     genre: 'Comedy',
@@ -355,7 +355,7 @@ export const kumawoodSeries: Series[] = [
   {
     id: 'kuma5',
     title: 'Traditional Healer',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_21.jpg',
+    posterUrl: 'https://images.unsplash.com/photo-1578632292335-df3abbb0d586?w=400&h=600&fit=crop&q=80',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 47,
     genre: 'Drama',
@@ -367,7 +367,7 @@ export const kumawoodSeries: Series[] = [
   {
     id: 'kuma6',
     title: 'Market Queen',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_22.jpg',
+    posterUrl: 'https://images.unsplash.com/photo-1567443024551-f3e3cc2be870?w=400&h=600&fit=crop&q=80',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 69,
     genre: 'Drama',
