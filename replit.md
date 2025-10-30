@@ -127,10 +127,11 @@ Preferred communication style: Simple, everyday language.
 - Upload Endpoints:
   - `POST /api/upload/image` - Upload images (jpg, jpeg, png, webp, gif) to `afrishorts/images` folder
   - `POST /api/upload/video` - Upload videos (mp4, mov, avi, mkv, webm) to `afrishorts/videos` folder
-  - `DELETE /api/upload/:publicId` - Delete uploaded assets by public ID
+  - `DELETE /api/upload/:publicId` - Delete uploaded assets by public ID (requires `ADMIN_TOKEN` in `x-admin-token` header for security)
 - Integration: All video URLs (`videoUrl`) and poster images (`posterUrl`) reference Cloudinary endpoints
 - Format: URLs structured as `https://res.cloudinary.com/[cloud-name]/...`
 - Upload Handler: Uses multer middleware with memory storage for file handling before Cloudinary upload
+- Security: DELETE endpoint protected with admin token authentication to prevent unauthorized asset deletion
 
 **Drizzle ORM**:
 - Purpose: Type-safe database schema definition and query building

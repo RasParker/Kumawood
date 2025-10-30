@@ -256,6 +256,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/upload/:publicId', async (req, res) => {
     try {
+      const adminToken = req.headers['x-admin-token'];
+      
+      if (!adminToken || adminToken !== process.env.ADMIN_TOKEN) {
+        return res.status(401).json({ error: 'Unauthorized: Invalid or missing admin token' });
+      }
+
       const publicId = decodeURIComponent(req.params.publicId);
       const resourceType = req.query.type === 'video' ? 'video' : 'image';
       
