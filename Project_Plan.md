@@ -617,20 +617,33 @@ This builds the central wallet screen.
 
 **Follow-up Prompt:**
 
-"Let's build the MyWalletScreen component using the dark theme.
-Props: It must accept MapsToStore, MapsToTransactionHistory, MapsToRewardCoinsHistory, MapsToConsumptionRecords, and MapsToProfile.
-UI (Dark Theme): Create the MyWalletScreen component with:
-A "Back" arrow (calls MapsToProfile).
-Display for coins (Paid) balance (large light text).
-Display for reward_coins (Earned) balance (large light text).
-A prominent "Top Up" button (primary CTA style, calls MapsToStore).
-Clickable rows (dark theme styled) for:
-"Transaction History" (calls MapsToTransactionHistory).
-"Reward Coins" (calls MapsToRewardCoinsHistory).
-"Consumption Records" (calls MapsToConsumptionRecords).
-An "Autoplay next video" toggle switch (styled for dark theme).
-Data Fetching: Fetch the user's coins, reward_coins, and autoplay_preference from the users table in Supabase.
-Toggle Logic: The "Autoplay" toggle must update the autoplay_preference value in the user's row in the users table."
+"Let's build the `MyWalletScreen` component using the dark theme.
+
+1. **Props:** It must accept `MapsToStore`, `MapsToTransactionHistory`, `MapsToRewardCoinsHistory`, `MapsToConsumptionRecords`, and `MapsToProfile`.
+
+2. **UI (Dark Theme):** Create the `MyWalletScreen` component with:
+
+   * A "Back" arrow (calls `MapsToProfile`).
+
+   * Display for `coins` (Paid) balance (large light text).
+
+   * Display for `reward_coins` (Earned) balance (large light text).
+
+   * A prominent **"Top Up"** button (primary CTA style, calls `MapsToStore`).
+
+   * Clickable rows (dark theme styled) for:
+
+     * "Transaction History" (calls `MapsToTransactionHistory`).
+
+     * "Reward Coins" (calls `MapsToRewardCoinsHistory`).
+
+     * "Consumption Records" (calls `MapsToConsumptionRecords`).
+
+   * An **"Autoplay next video"** toggle switch (styled for dark theme).
+
+4. **Data Fetching:** Fetch the user's `coins`, `reward_coins`, and `autoplay_preference` from the `users` table in Supabase.
+
+5. **Toggle Logic:** The "Autoplay" toggle must update the `autoplay_preference` value in the user's row in the `users` table."
 
 ---
 
