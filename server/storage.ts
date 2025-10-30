@@ -14,7 +14,7 @@ import {
   type EpisodeWithSeries,
 } from "@shared/schema";
 import { supabase } from "./supabase";
-import { mapSeriesToCamelCase, mapEpisodeToCamelCase, mapRedeemableItemToCamelCase, mapSeries } from "./mappers";
+import { mapSeriesToCamelCase, mapEpisodeToCamelCase, mapRedeemableItemToCamelCase } from "./mappers";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -332,7 +332,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async deleteSeries(id: string): Promise<void> {
-    const { error } = await this.supabase
+    const { error } = await supabase
       .from('series')
       .delete()
       .eq('id', id);
@@ -343,7 +343,7 @@ export class SupabaseStorage implements IStorage {
   }
 
   async updateSeries(id: string, updates: Partial<Series>): Promise<Series> {
-    const { data, error } = await this.supabase
+    const { data, error } = await supabase
       .from('series')
       .update(updates)
       .eq('id', id)
@@ -354,7 +354,7 @@ export class SupabaseStorage implements IStorage {
       throw new Error(`Failed to update series: ${error.message}`);
     }
 
-    return mapSeries(data);
+    return mapSeriesToCamelCase(data);
   }
 }
 
