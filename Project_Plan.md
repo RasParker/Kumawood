@@ -87,7 +87,7 @@ Your goal here is to get the basic, visible structure of the app built and manag
 Now, we build the complex, multi-tab `HomeScreen` using mock data.
 
 **Follow-up Prompt:**
-"Let's build the full, tabbed `HomeScreen`. Ensure all UI elements adhere to the dark theme established in Phase.
+"Let's build the full, tabbed `HomeScreen`. Ensure all UI elements adhere to the dark theme established in Phase 1.
 
 1. **Props:** The `HomeScreen` must accept the `MapsToPlayer` function as a prop.
 
