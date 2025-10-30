@@ -60,19 +60,22 @@ export default function HomeScreen({ onNavigateToPlayer, onNavigateToSearch }: H
         </div>
 
         {/* Tab Bar */}
-        <div className="flex gap-2 px-4 pb-3 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-6 px-4 pb-3 overflow-x-auto scrollbar-hide border-b border-border/50">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               data-testid={`tab-${tab.toLowerCase()}`}
-              className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-semibold transition-all hover-elevate active-elevate-2 ${
+              className={`flex-shrink-0 pb-2 text-base font-medium transition-colors relative ${
                 activeTab === tab
-                  ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-lg scale-105'
-                  : 'bg-card text-foreground border border-border'
+                  ? 'text-foreground'
+                  : 'text-muted-foreground'
               }`}
             >
               {tab}
+              {activeTab === tab && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-foreground" />
+              )}
             </button>
           ))}
         </div>
