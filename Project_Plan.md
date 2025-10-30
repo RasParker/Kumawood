@@ -1,9 +1,10 @@
-Project Plan: "AfriShorts" (African Micro-Drama App)
-A Step-by-Step Guide for Replit Agent 3
+# Project Plan: "AfriShorts" (African Micro-Drama App) #
+## A Step-by-Step Guide for Replit Agent 3
 
 This document outlines the phased development plan to build a "ReelShort" style streaming app with a focus on African micro-dramas.
 
-**Core Tech Stack:**
+### Core Tech Stack:
+
 - **Frontend:** React (with Vite) + Tailwind CSS + i18n library (for language support)
 - **Backend (BaaS):** Supabase (for Database, Auth, and Edge Functions)
 - **Video Hosting:** Cloudinary (for all video/image storage, optimization, and delivery)
@@ -20,57 +21,57 @@ Your goal here is to get the basic, visible structure of the app built and manag
 
 "Initialize a new full-stack web application.
 
-1. **Frontend:** Use **React** (with Vite) and **Tailwind CSS**. It must be a **mobile-first**, single-page application. Include an **i18n library** (like react-i18next) for language support.
+1. **Frontend:** Use **React** (with Vite) and **Tailwind CSS**. It must be a **mobile-first**, single-page application. Include an **i18n library** (like `react-i18next`) for language support.
 
-2. **Visual Design Style (NEW):** Implement a modern, **dark-mode visual style** similar to popular short-form video apps (like DramaBox/ReelShort). Use **dark backgrounds** (black/dark grey, e.g., #111111, #1A1A1A), **light text** (white/light gray), and **vibrant, contrasting colors** (like **pink/orange/red gradients**, e.g., from #FF4E50 to #F9D423) for primary buttons and calls-to-action. Ensure high visual density on browsing screens and minimalist UI on the player.
+2. **Visual Design Style (NEW):** Implement a modern, **dark-mode visual style** similar to popular short-form video apps (like DramaBox/ReelShort). Use **dark backgrounds** (black/dark grey, e.g., `#111111`, `#1A1A1A`), **light text** (white/light gray), and **vibrant, contrasting colors** (like **pink/orange/red gradients**, e.g., from `#FF4E50` to `#F9D423`) for primary buttons and calls-to-action. Ensure high visual density on browsing screens and minimalist UI on the player.
 
 3. **Backend:** Use **Supabase** for the backend.
 
 4. **Video Hosting:** All video and image URLs will come from **Cloudinary**.
 
-5. **UI Shell:** Create a main App component with a sticky BottomNavBar at the bottom using the dark theme. Include icons for 'Home', 'For You', 'My List', and 'Profile'.
+5. **UI Shell:** Create a main App component with a sticky `BottomNavBar` at the bottom using the dark theme. Include icons for 'Home', 'For You', 'My List', and 'Profile'.
 
 6. **Main Components (Pages):** Create the following components that the `BottomNavBar` will switch between:
     
-    * HomeScreen
-    * ForYouScreen
-    * PlayerScreen
-    * SearchScreen
-    * MyListScreen
-    * ProfileScreen
-    * LoginScreen
-    * StoreScreen
-    * RewardsScreen
-    * TermsOfUseScreen (static text)
-    * DetailedPointsHistoryScreen
-    * HistoryScreen
-    * MyWalletScreen
-    * TransactionHistoryScreen
-    * RewardCoinsHistoryScreen
-    * ConsumptionRecordsScreen
-    * LanguageScreen
-    * DownloadsScreen
-    * SettingsScreen
-    * ManageMembershipScreen
-    * AccountDeletionScreen
-    * AboutScreen (Placeholder/Deferred)
-    * HelpFeedbackScreen (Placeholder/Deferred)
+    * `HomeScreen`
+    * `ForYouScreen`
+    * `PlayerScreen`
+    * `SearchScreen`
+    * `MyListScreen`
+    * `ProfileScreen`
+    * `LoginScreen`
+    * `StoreScreen`
+    * `RewardsScreen`
+    * `TermsOfUseScreen` (static text)
+    * `DetailedPointsHistoryScreen`
+    * `HistoryScreen`
+    * `MyWalletScreen`
+    * `TransactionHistoryScreen`
+    * `RewardCoinsHistoryScreen`
+    * `ConsumptionRecordsScreen`
+    * `LanguageScreen`
+    * `DownloadsScreen`
+    * `SettingsScreen`
+    * `ManageMembershipScreen`
+    * `AccountDeletionScreen`
+    * `AboutScreen` (Placeholder/Deferred)
+    * `HelpFeedbackScreen` (Placeholder/Deferred)
 
-7. **State Management:** In the main App component, create state variables for:
+7. **State Management:** In the main `App` component, create state variables for:
     
-    * currentView (default: 'home')
-    * selectedSeriesId (default: null)
-    * selectedEpisodeNumber (default: 1)
-    * playerStartTime (default: 0)
-    * showCopiedToast (default: false)
-    * showToastMessage (default: null).
-    * currentLanguage (default: 'en', fetched from user preference later)
-    * cacheSizeMB (default: 0.0)
+    * `currentView` (default: 'home')
+    * `selectedSeriesId` (default: null)
+    * `selectedEpisodeNumber` (default: 1)
+    * `playerStartTime` (default: 0)
+    * `showCopiedToast` (default: false)
+    * `showToastMessage` (default: null).
+    * `currentLanguage` (default: 'en', fetched from user preference later)
+    * `cacheSizeMB` (default: 0.0)
 
-8. **Navigation Functions (REVISED):** In App, create:
+8. **Navigation Functions (REVISED):** In `App`, create:
      
-     * MapsToPlayer(seriesId, episodeNumber = 1, startTime = 0): This is the key function.
-     * Also create functions like MapsToHome(), MapsToProfile(), MapsToLogin(), MapsToRewards(), MapsToPointsHistory(), MapsToHistory(),    MapsToStore(), MapsToMyWallet(), MapsToTransactionHistory(), MapsToRewardCoinsHistory(), MapsToConsumptionRecords(),         MapsToLanguage(),  MapsToDownloads(), MapsToSettings(), MapsToManageMembership(), MapsToAccountDeletion(), MapsToAbout(),    MapsToHelpFeedback() etc., that just change the currentView.
+     * `MapsToPlayer(seriesId, episodeNumber = 1, startTime = 0)`: This is the key function.
+     * Also create functions like `MapsToHome()`, `MapsToProfile()`, `MapsToLogin()`, `MapsToRewards()`, `MapsToPointsHistory()`, `MapsToHistory()`,    `MapsToStore()`, `MapsToMyWallet()`, `MapsToTransactionHistory()`, `MapsToRewardCoinsHistory()`, `MapsToConsumptionRecords()`,         `MapsToLanguage()`,  `MapsToDownloads()`, `MapsToSettings()`, `MapsToManageMembership()`, `MapsToAccountDeletion()`, `MapsToAbout()`,    `MapsToHelpFeedback()` etc., that just change the `currentView`.
 
 9. **Prop Drilling:** Pass all necessary navigation functions down to the components that need them."
 
@@ -313,7 +314,7 @@ This phase makes the app a real business, using Supabase for the backend.
 
      1. * Securely update the user's *paid* `coins` balance in their `users` table row.
 
-     2. Log the transaction in the `purchase_history` table.
+     2. Log the transaction in the `purchase_history` table."
 
 ---
 
@@ -441,7 +442,7 @@ This phase builds the central hub for the user's account and monetization.
     * **Payment Logic:** Clicking a membership option must trigger the **Paystack/Flutterwave** payment flow (showing a native-style payment sheet) for the selected plan, using **GHS (₵)**.
     * **Supabase Edge Function:** On successful payment, a webhook must trigger a Supabase function to:
         1. Update the user's `has_membership` and `membership_expires_at` columns in the `users` table.
-        2. Log the transaction in the `purchase_history` table.
+        2. Log the transaction in the `purchase_history` table."
 
 ---
 
@@ -740,20 +741,34 @@ Builds the screen for managing offline downloads (Membership required).
 **Follow-up Prompt:**
 
 "Let's build the DownloadsScreen component using the dark theme.
-Props: It must accept MapsToProfile and MapsToPlayer.
-UI (Dark Theme): Create a new screen with a "Back" arrow (calls MapsToProfile) and a title "Download". Show available device storage (light text) at the bottom.
-Membership Check: Fetch the user's has_membership status from Supabase.
-Conditional Rendering:
-If has_membership is false: Show the empty state icon and text: "Your download list is empty." (light color). Maybe add an upsell button to the StoreScreen.
-If has_membership is true:
-Implement offline storage (e.g., using IndexedDB via a library like Dexie.js or Service Workers).
-Add a "Download" button to the EpisodeSheet in the PlayerScreen (only visible to members). This button downloads the video file (from Cloudinary) and saves it to local storage, associating it with the episode_id.
-Fetch the list of locally stored episode_ids.
-Query Supabase to get the details (poster, title) for these episodes.
-Display the downloaded episodes in a list (dark theme styled).
-Tapping a downloaded episode should call MapsToPlayer, passing a flag or special URL to indicate it should play from local storage, not stream.
-Add functionality (e.g., swipe-to-delete or an edit mode) to manage/delete downloaded files.
-(Advanced - Optional): Implement background downloading and progress indicators."
+
+1. **Props:** It must accept `MapsToProfile` and `MapsToPlayer`.
+
+2. **UI (Dark Theme):** Create a new screen with a "Back" arrow (calls `MapsToProfile`) and a title "Download". Show available device            storage (light text) at the bottom.
+
+3. **Membership Check:** Fetch the user's `has_membership` status from Supabase.
+
+4. **Conditional Rendering:**
+     
+     * If `has_membership` is false: Show the empty state icon and text: "Your download list is empty." (light color). Maybe add an upsell         button to the `StoreScreen`.
+     
+     * If `has_membership` is true:
+
+       * Implement offline storage (e.g., using IndexedDB via a library like `Dexie.js` or Service Workers).
+
+       * Add a "Download" button to the `EpisodeSheet` in the `PlayerScreen` (only visible to members). This button downloads the video              file (from Cloudinary) and saves it to local storage, associating it with the `episode_id`.
+
+       * Fetch the list of locally stored `episode_ids`.
+
+       * Query Supabase to get the details (poster, title) for these episodes.
+
+       * Display the downloaded episodes in a list (dark theme styled).
+
+       * Tapping a downloaded episode should call `MapsToPlayer`, passing a flag or special URL to indicate it should play from local                storage, not stream.
+
+       * Add functionality (e.g., swipe-to-delete or an edit mode) to manage/delete downloaded files.
+
+5. **(Advanced - Optional):** Implement background downloading and progress indicators."
 
 ---
 
@@ -763,24 +778,41 @@ Builds the main settings page.
 
 **Follow-up Prompt:**
 
-"Let's build the SettingsScreen component using the dark theme.
-Props: It must accept MapsToProfile, MapsToManageMembership, MapsToAccountDeletion, MapsToAbout, and the cacheSizeMB state setter. It also needs the Supabase signOut function.
-UI (Dark Theme): Create a screen with a "Back" arrow (calls MapsToProfile) and title "Settings".
-Menu List (Dark Theme): Create clickable rows for:
-"Manage Membership" (calls MapsToManageMembership).
-"Clear Cache" (shows current cacheSizeMB, light text).
-"Account Deletion" (calls MapsToAccountDeletion).
-"Download with mobile data allowed" (Toggle switch, styled for dark theme).
-"About" (calls MapsToAbout). (Deferred Feature)
-A "Log out" button at the bottom (styled distinctly, perhaps red text on dark background).
-Clear Cache Logic:
-The "Clear Cache" button should trigger a function to clear relevant browser/local storage (e.g., image thumbnails, not downloaded videos). Use standard browser APIs.
-After clearing, it should update the cacheSizeMB state to 0.0. Show a confirmation toast.
-Mobile Download Toggle Logic:
-This toggle must update the allow_mobile_download value in the user's row in the users table.
-Log Out Logic:
-The "Log out" button must call the Supabase Auth signOut() function.
-On successful sign out, navigate the user back to the LoginScreen or HomeScreen."
+"Let's build the `SettingsScreen` component using the dark theme.
+
+1. **Props:** It must accept `MapsToProfile`, `MapsToManageMembership`, `MapsToAccountDeletion`, `MapsToAbout`, and the `cacheSizeMB` state      setter. It also needs the Supabase `signOut` function.
+
+2. **UI (Dark Theme):** Create a screen with a "Back" arrow (calls `MapsToProfile`) and title "Settings".
+
+3. **Menu List (Dark Theme):** Create clickable rows for:
+     
+     * "Manage Membership" (calls `MapsToManageMembership`).
+     
+     * "Clear Cache" (shows current `cacheSizeMB`, light text).
+     
+     * "Account Deletion" (calls `MapsToAccountDeletion`).
+     
+     * "Download with mobile data allowed" (Toggle switch, styled for dark theme).
+     
+     * "About" (calls `MapsToAbout`). (**Deferred Feature**)
+     
+     * A **"Log out"** button at the bottom (styled distinctly, perhaps red text on dark background).
+
+4. **Clear Cache Logic:**
+
+     * The "Clear Cache" button should trigger a function to clear relevant browser/local storage (e.g., image thumbnails, not downloaded          videos). Use standard browser APIs.
+     
+     * After clearing, it should update the `cacheSizeMB` state to 0.0. Show a confirmation toast.
+
+5. **Mobile Download Toggle Logic:**
+
+     * This toggle must update the `allow_mobile_download` value in the user's row in the `users` table.
+
+6. **Log Out Logic:**
+
+     * The "Log out" button must call the **Supabase Auth** `signOut()` function.
+     
+     * On successful sign out, navigate the user back to the `LoginScreen` or `HomeScreen`."
 
 ---
 
@@ -790,16 +822,25 @@ Builds the screen for managing an active subscription.
 
 **Follow-up Prompt:**
 
-"Let's build the ManageMembershipScreen component using the dark theme.
-Props: It must accept MapsToSettings and MapsToStore.
-UI (Dark Theme): Create a screen with a "Back" arrow (calls MapsToSettings) and title "Manage Membership".
-Membership Check: Fetch the user's has_membership status and membership_expires_at date from Supabase.
-Conditional Rendering (Dark Theme):
-If has_membership is false: Show a message like "You are not currently a member" (light text) and an upsell button linking to the StoreScreen (primary CTA style).
-If has_membership is true:
-Display the current plan (e.g., "Weekly Plan") (light text).
-Show the expiry/renewal date (membership_expires_at) (light text).
-Provide information or a button/link (styled appropriately) on how to cancel the subscription via the payment provider (Paystack/Flutterwave) or platform store."
+"Let's build the `ManageMembershipScreen` component using the dark theme.
+
+1. **Props:** It must accept `MapsToSetting` and `MapsToStore`.
+
+2. **UI (Dark Theme):** Create a screen with a "Back" arrow (calls `MapsToSettings`) and title "Manage Membership".
+
+3. **Membership Check:** Fetch the user's `has_membership` status and `membership_expires_at` date from Supabase.
+
+4. **Conditional Rendering (Dark Theme):**
+     
+     * If `has_membership` is false: Show a message like "You are not currently a member" (light text) and an upsell button linking to the         `StoreScreen` (primary CTA style).
+     
+     * If `has_membership` **is true:**
+
+       * Display the current plan (e.g., "Weekly Plan") (light text).
+
+       * Show the expiry/renewal date (`membership_expires_at`) (light text).
+
+       * Provide information or a button/link (styled appropriately) on how to cancel the subscription via the payment provider                      (Paystack/Flutterwave) or platform store."
 
 ---
 
@@ -809,14 +850,24 @@ Builds the screen for account deletion confirmation.
 
 **Follow-up Prompt:**
 
-"Let's build the AccountDeletionScreen component using the dark theme.
-Props: It must accept MapsToSettings and likely a function to navigate back to the LoginScreen after deletion.
-UI (Dark Theme): Create a screen with a "Back" arrow (calls MapsToSettings) and title "Account Deletion".
-Confirmation (Dark Theme):
-Display warnings about permanent deletion (light text).
-Add a checkbox (styled for dark theme): "I understand and wish to proceed."
-Add a "Delete Account" button (styled dangerously, e.g., red background), which is disabled (grayed out) until the checkbox is checked.
-Deletion Logic:
-onClick for the enabled "Delete Account" button must:
-Call a Supabase Edge Function ('delete-user-account'). This function must securely handle deleting the user's data from all relevant tables (users, history, lists, etc.) and their Auth entry.
-On success, sign the user out and navigate them to the LoginScreen."
+"Let's build the `AccountDeletionScreen` component using the dark theme.
+
+1. **Props:** It must accept `MapsToSettings` and likely a function to navigate back to the `LoginScreen` after deletion.
+
+2. **UI (Dark Theme):** Create a screen with a "Back" arrow (calls `MapsToSettings`) and title "Account Deletion".
+
+3. **Confirmation (Dark Theme):**
+    
+     * Display warnings about permanent deletion (light text).
+     
+     * Add a checkbox (styled for dark theme): "I understand and wish to proceed."
+     
+     * Add a **"Delete Account"** button (styled dangerously, e.g., red background), which is **disabled** (grayed out) until the checkbox         is checked.
+
+4. **Deletion Logic:**
+     
+     * `onClick` for the enabled "Delete Account" button must:
+
+        1. * Call a **Supabase Edge Function ('delete-user-account')**. This function must securely handle deleting the user's data from                 all relevant tables (users, history, lists, etc.) and their Auth entry.
+        
+        2. * On success, sign the user out and navigate them to the `LoginScreen`."
