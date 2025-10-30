@@ -1,5 +1,5 @@
-import { 
-  type User, 
+import {
+  type User,
   type InsertUser,
   type Series,
   type InsertSeries,
@@ -14,13 +14,13 @@ import {
   type EpisodeWithSeries,
 } from "@shared/schema";
 import { supabase } from "./supabase";
-import { mapSeriesToCamelCase, mapEpisodeToCamelCase, mapRedeemableItemToCamelCase } from "./mappers";
+import { mapSeriesToCamelCase, mapEpisodeToCamelCase, mapRedeemableItemToCamelCase, mapSeries } from "./mappers";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  
+
   getAllSeries(): Promise<Series[]>;
   getSeriesByCategory(category: string): Promise<Series[]>;
   getSeriesById(id: string): Promise<Series | undefined>;
@@ -30,17 +30,19 @@ export interface IStorage {
   getKumawoodSeries(): Promise<Series[]>;
   getNaijaSeries(): Promise<Series[]>;
   getComingSoonSeries(): Promise<Series[]>;
-  
+
   getEpisodesBySeriesId(seriesId: string): Promise<Episode[]>;
   getEpisodeBySeriesAndNumber(seriesId: string, episodeNumber: number): Promise<Episode | undefined>;
   getRandomFirstEpisodes(limit: number): Promise<EpisodeWithSeries[]>;
-  
+
   getAllRedeemableItems(): Promise<RedeemableItem[]>;
-  
+
   upsertWatchHistory(watchHistory: InsertWatchHistory): Promise<WatchHistory>;
   addUserFollowing(userFollowing: InsertUserFollowing): Promise<UserFollowing>;
   removeUserFollowing(userId: string, seriesId: string): Promise<void>;
   isUserFollowingSeries(userId: string, seriesId: string): Promise<boolean>;
+  updateSeries(id: string, updates: Partial<Series>): Promise<Series>;
+  deleteSeries(id: string): Promise<void>;
 }
 
 export class SupabaseStorage implements IStorage {
@@ -50,7 +52,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error || !data) return undefined;
     return data as User;
   }
@@ -61,7 +63,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('email', email)
       .single();
-    
+
     if (error || !data) return undefined;
     return data as User;
   }
@@ -72,11 +74,11 @@ export class SupabaseStorage implements IStorage {
       .insert(insertUser)
       .select()
       .single();
-    
+
     if (error || !data) {
       throw new Error(`Failed to create user: ${error?.message}`);
     }
-    
+
     return data as User;
   }
 
@@ -86,7 +88,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('is_coming_soon', false)
       .order('title', { ascending: true });
-    
+
     if (error) throw new Error(`Failed to fetch series: ${error.message}`);
     return (data || []).map(mapSeriesToCamelCase);
   }
@@ -98,7 +100,7 @@ export class SupabaseStorage implements IStorage {
       .eq('is_coming_soon', false)
       .contains('tags', [category])
       .order('rating', { ascending: false });
-    
+
     if (error) throw new Error(`Failed to fetch series by category: ${error.message}`);
     return (data || []).map(mapSeriesToCamelCase);
   }
@@ -109,7 +111,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error || !data) return undefined;
     return mapSeriesToCamelCase(data);
   }
@@ -123,7 +125,7 @@ export class SupabaseStorage implements IStorage {
       .eq('is_new', false)
       .order('rating', { ascending: false })
       .limit(20);
-    
+
     if (error) throw new Error(`Failed to fetch popular series: ${error.message}`);
     return (data || []).map(mapSeriesToCamelCase);
   }
@@ -136,7 +138,7 @@ export class SupabaseStorage implements IStorage {
       .eq('is_new', true)
       .order('year', { ascending: false })
       .limit(20);
-    
+
     if (error) throw new Error(`Failed to fetch new series: ${error.message}`);
     return (data || []).map(mapSeriesToCamelCase);
   }
@@ -149,7 +151,7 @@ export class SupabaseStorage implements IStorage {
       .not('rank', 'is', null)
       .order('rank', { ascending: true })
       .limit(10);
-    
+
     if (error) throw new Error(`Failed to fetch ranking series: ${error.message}`);
     return (data || []).map(mapSeriesToCamelCase);
   }
@@ -162,7 +164,7 @@ export class SupabaseStorage implements IStorage {
       .or('tags.cs.{Historical,Cultural}')
       .order('rating', { ascending: false })
       .limit(20);
-    
+
     if (error) throw new Error(`Failed to fetch Kumawood series: ${error.message}`);
     return (data || []).map(mapSeriesToCamelCase);
   }
@@ -175,7 +177,7 @@ export class SupabaseStorage implements IStorage {
       .or('tags.cs.{Urban,Business,Political}')
       .order('rating', { ascending: false })
       .limit(20);
-    
+
     if (error) throw new Error(`Failed to fetch Naija series: ${error.message}`);
     return (data || []).map(mapSeriesToCamelCase);
   }
@@ -186,7 +188,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('is_coming_soon', true)
       .order('release_date', { ascending: true });
-    
+
     if (error) throw new Error(`Failed to fetch coming soon series: ${error.message}`);
     return (data || []).map(mapSeriesToCamelCase);
   }
@@ -197,7 +199,7 @@ export class SupabaseStorage implements IStorage {
       .select('*')
       .eq('series_id', seriesId)
       .order('episode_number', { ascending: true });
-    
+
     if (error) throw new Error(`Failed to fetch episodes: ${error.message}`);
     return (data || []).map(mapEpisodeToCamelCase);
   }
@@ -207,7 +209,7 @@ export class SupabaseStorage implements IStorage {
       .from('redeemable_items')
       .select('*')
       .order('points_cost', { ascending: true });
-    
+
     if (error) throw new Error(`Failed to fetch redeemable items: ${error.message}`);
     return (data || []).map(mapRedeemableItemToCamelCase);
   }
@@ -219,7 +221,7 @@ export class SupabaseStorage implements IStorage {
       .eq('series_id', seriesId)
       .eq('episode_number', episodeNumber)
       .single();
-    
+
     if (error || !data) return undefined;
     return mapEpisodeToCamelCase(data);
   }
@@ -237,11 +239,11 @@ export class SupabaseStorage implements IStorage {
       })
       .select()
       .single();
-    
+
     if (error || !data) {
       throw new Error(`Failed to upsert watch history: ${error?.message}`);
     }
-    
+
     return {
       id: data.id,
       userId: data.user_id,
@@ -260,9 +262,9 @@ export class SupabaseStorage implements IStorage {
       `)
       .eq('episode_number', 1)
       .limit(limit);
-    
+
     if (error) throw new Error(`Failed to fetch random first episodes: ${error.message}`);
-    
+
     return (data || [])
       .filter((item: any) => item.series)
       .map((item: any) => {
@@ -273,9 +275,9 @@ export class SupabaseStorage implements IStorage {
           title: item.title,
           video_url: item.video_url,
         });
-        
+
         const series = mapSeriesToCamelCase(item.series);
-        
+
         return {
           ...episode,
           series,
@@ -294,11 +296,11 @@ export class SupabaseStorage implements IStorage {
       })
       .select()
       .single();
-    
+
     if (error || !data) {
       throw new Error(`Failed to add user following: ${error?.message}`);
     }
-    
+
     return {
       id: data.id,
       userId: data.user_id,
@@ -312,7 +314,7 @@ export class SupabaseStorage implements IStorage {
       .delete()
       .eq('user_id', userId)
       .eq('series_id', seriesId);
-    
+
     if (error) {
       throw new Error(`Failed to remove user following: ${error.message}`);
     }
@@ -325,8 +327,34 @@ export class SupabaseStorage implements IStorage {
       .eq('user_id', userId)
       .eq('series_id', seriesId)
       .single();
-    
+
     return !!data && !error;
+  }
+
+  async deleteSeries(id: string): Promise<void> {
+    const { error } = await this.supabase
+      .from('series')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      throw new Error(`Failed to delete series: ${error.message}`);
+    }
+  }
+
+  async updateSeries(id: string, updates: Partial<Series>): Promise<Series> {
+    const { data, error } = await this.supabase
+      .from('series')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(`Failed to update series: ${error.message}`);
+    }
+
+    return mapSeries(data);
   }
 }
 
