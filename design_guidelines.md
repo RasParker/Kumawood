@@ -89,10 +89,11 @@ Use consistent spacing: `p-2`, `p-4`, `p-6`, `gap-4`, `mb-6`, `mt-8`
 ### Video Cards (Home/Browse)
 - **Aspect Ratio**: 9:16 (portrait) for thumbnails
 - **Thumbnail**: Full-bleed image with rounded corners (`rounded-lg`, 8px-12px)
-- **Overlay**: Gradient from transparent to `rgba(0,0,0,0.7)` on bottom 40%
-- **Metadata Placement**: Overlay on bottom - white title (14px-16px bold), grey subtitle (12px)
-- **Episode Badge**: Top-right corner, small pill (`bg-gradient-to-r from-[#FF4E50] to-[#F9D423]`, 8px padding, 10px text)
-- **Hover/Press**: Subtle scale (`scale-105`) and shadow increase
+- **View Count Overlay**: Bottom-left corner of thumbnail, white text with play icon (12px, `Play` icon 12px)
+- **Rating Badge**: Top-right corner, backdrop-blur pill with star icon
+- **Metadata Placement**: BELOW thumbnail (not overlay) - white title (14px-16px bold), grey genre/subtitle (12px)
+- **Spacing**: `mb-2` between thumbnail and text metadata, `space-y-1` for metadata stack
+- **Hover/Press**: Subtle scale (`scale-105`) and shadow increase on thumbnail only
 
 ### Player Screen (Minimalist)
 - **Background**: Pure black (`#000000`)

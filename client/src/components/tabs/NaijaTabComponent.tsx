@@ -9,6 +9,17 @@ interface NaijaTabComponentProps {
 
 const naijaTags = ['All', 'Drama', 'Romance', 'Comedy', 'Thriller', 'Urban', 'Cultural'];
 
+function formatViewCount(count?: number | null): string {
+  if (!count) return '0';
+  if (count >= 1000000) {
+    return `${(count / 1000000).toFixed(1).replace(/\.0$/, '')}M`;
+  }
+  if (count >= 1000) {
+    return `${(count / 1000).toFixed(1).replace(/\.0$/, '')}K`;
+  }
+  return count.toString();
+}
+
 export default function NaijaTabComponent({ navigateToPlayer }: NaijaTabComponentProps) {
   const [selectedTag, setSelectedTag] = useState('All');
   
@@ -57,13 +68,13 @@ export default function NaijaTabComponent({ navigateToPlayer }: NaijaTabComponen
               className="cursor-pointer group"
               data-testid={`series-${series.id}`}
             >
-              <div className="relative aspect-[9/16] bg-card rounded-lg overflow-hidden hover-elevate active-elevate-2">
+              {/* Thumbnail */}
+              <div className="relative aspect-[9/16] bg-card rounded-lg overflow-hidden hover-elevate active-elevate-2 mb-2">
                 <img
                   src={series.posterUrl}
                   alt={series.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
                 
                 {/* Rating */}
                 {series.rating && (
@@ -80,13 +91,19 @@ export default function NaijaTabComponent({ navigateToPlayer }: NaijaTabComponen
                   </div>
                 </div>
 
-                {/* Title & Genre */}
-                <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <h4 className="text-sm font-bold text-foreground line-clamp-2 mb-1">
-                    {series.title}
-                  </h4>
-                  <p className="text-xs text-muted-foreground">{series.genre}</p>
+                {/* View Count Overlay */}
+                <div className="absolute bottom-2 left-2 flex items-center gap-1 text-white">
+                  <Play className="h-3 w-3 fill-white" />
+                  <span className="text-xs font-semibold">{formatViewCount(series.viewCount)}</span>
                 </div>
+              </div>
+
+              {/* Title & Genre Below Thumbnail */}
+              <div className="space-y-1">
+                <h4 className="text-sm font-bold text-foreground line-clamp-2">
+                  {series.title}
+                </h4>
+                <p className="text-xs text-muted-foreground">{series.genre}</p>
               </div>
             </div>
           ))}

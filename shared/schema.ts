@@ -33,6 +33,7 @@ export const series = pgTable("series", {
   tags: text("tags").array(),
   rank: integer("rank"),
   isNew: boolean("is_new").default(false),
+  viewCount: integer("view_count").default(0),
 });
 
 export const episodes = pgTable("episodes", {
