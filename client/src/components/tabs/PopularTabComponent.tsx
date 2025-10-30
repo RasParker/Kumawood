@@ -70,8 +70,8 @@ export default function PopularTabComponent({ navigateToPlayer }: PopularTabComp
                   </div>
 
                   {/* View Count Overlay */}
-                  <div className="absolute bottom-2 left-2 flex items-center gap-1 text-white">
-                    <Play className="h-3 w-3 fill-white" />
+                  <div className="absolute bottom-2 right-2 flex items-center gap-1 text-white">
+                    <Play className="h-3 w-3 fill-white rounded-sm" />
                     <span className="text-xs font-semibold">{formatViewCount(series.viewCount)}</span>
                   </div>
                 </div>
