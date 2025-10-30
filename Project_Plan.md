@@ -653,12 +653,17 @@ Builds the screen showing real money purchases.
 
 **Follow-up Prompt:**
 
-"Let's build the TransactionHistoryScreen component using the dark theme.
-Props: It must accept MapsToMyWallet.
-UI (Dark Theme): Create a screen with a "Back" arrow (calls MapsToMyWallet) and title "Transaction History".
-Data Fetching: Fetch all records for the user from purchase_history table, ordered descending.
-List (Dark Theme): Display records showing item details, amount (GHS), and date.
-Empty State (Dark Theme): If no records, show "You don't have any purchases"."
+"Let's build the `TransactionHistoryScreen` component using the dark theme.
+
+1. **Props:** It must accept `MapsToMyWallet`.
+
+2. **UI (Dark Theme):** Create a screen with a "Back" arrow (calls `MapsToMyWallet`) and title "Transaction History".
+
+3. **Data Fetching:** Fetch all records for the user from `purchase_history` table, ordered descending.
+
+4. **List (Dark Theme):** Display records showing item details, amount (GHS), and date.
+
+5. **Empty State (Dark Theme):** If no records, show "You don't have any purchases"."
 
 ---
 
@@ -668,12 +673,17 @@ Builds the screen showing earned reward coins.
 
 **Follow-up Prompt:**
 
-"Let's build the RewardCoinsHistoryScreen component using the dark theme.
-Props: It must accept MapsToMyWallet.
-UI (Dark Theme): Create a screen with a "Back" arrow (calls MapsToMyWallet) and title "Reward Coins".
-Data Fetching: Fetch all records for the user from reward_coin_history table, ordered descending.
-List (Dark Theme): Display records showing coins_change (e.g., "+20") and reason.
-Empty State (Dark Theme): If no records, show placeholder."
+"Let's build the `RewardCoinsHistoryScreen` component using the dark theme.
+
+1. **Props:** It must accept `MapsToMyWallet`.
+
+2. **UI (Dark Theme):** Create a screen with a "Back" arrow (calls `MapsToMyWallet`) and title "Reward Coins".
+
+3. **Data Fetching:** Fetch all records for the user from `reward_coin_history` table, ordered descending.
+
+4. **List (Dark Theme):** Display records showing `coins_change` (e.g., "+20") and `reason`.
+
+5. **Empty State (Dark Theme):** If no records, show placeholder."
 
 ---
 
@@ -683,13 +693,17 @@ Builds the screen showing spent coins.
 
 **Follow-up Prompt:**
 
-"Let's build the ConsumptionRecordsScreen component using the dark theme.
+"Let's build the `ConsumptionRecordsScreen` component using the dark theme.
 
-Props: It must accept MapsToMyWallet.
-UI (Dark Theme): Create a screen with a "Back" arrow (calls MapsToMyWallet) and title "Consumption Records".
-Data Fetching: Fetch all records for the user from consumption_history table, ordered descending.
-List (Dark Theme): Display records showing episode unlocked, coins_spent, coin_type ('Paid' or 'Reward'), and date.
-Empty State (Dark Theme): If no records, show placeholder."
+1. **Props:** It must accept `MapsToMyWallet`.
+
+2. **UI (Dark Theme):** Create a screen with a "Back" arrow (calls `MapsToMyWallet`) and title "Consumption Records".
+
+3. **Data Fetching:** Fetch all records for the user from `consumption_history` table, ordered descending.
+
+4. **List (Dark Theme):** Display records showing episode unlocked, `coins_spent`, `coin_type` ('Paid' or 'Reward'), and date.
+
+5. **Empty State (Dark Theme):** If no records, show placeholder."
 
 ---
 
@@ -701,14 +715,21 @@ Builds the language selection screen.
 
 "Let's build the LanguageScreen component using the dark theme.
 
-Props: It must accept MapsToProfile.
-UI (Dark Theme): Create a new screen with a "Cancel" button (light text, calls MapsToProfile) and a title "Language" (light text).
-Data Fetching: Fetch the user's current language_preference from the users table.
-Language List (Dark Theme): Display a list of available languages (light text). Show a checkmark (e.g., primary color) next to the current language.
-Selection Logic: Tapping a language must:
-Update the language_preference in the user's row in the users table.
-Update the app's language using the i18n library.
-Navigate back to the ProfileScreen."
+1. **Props:** It must accept `MapsToProfile`.
+
+2. **UI (Dark Theme):** Create a new screen with a "Cancel" button (light text, calls `MapsToProfile`) and a title "Language" (light text).
+
+3. **Data Fetching:** Fetch the user's current `language_preference` from the `users` table.
+
+4. **Language List (Dark Theme):** Display a list of available languages (light text). Show a checkmark (e.g., primary color) next to the        current language.
+
+5. **Selection Logic:** Tapping a language must:
+     
+     * Update the `language_preference` in the user's row in the `users` table.
+     
+     * Update the app's language using the i18n library.
+     
+     * Navigate back to the `ProfileScreen`."
 
 ---
 
