@@ -44,16 +44,15 @@ export default function HomeScreen({ onNavigateToPlayer, onNavigateToSearch }: H
     <div className="flex flex-col h-full bg-background overflow-hidden pb-20">
       {/* Header */}
       <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-md border-b border-border">
-        <div className="flex items-center justify-end p-4">
-          <Button
-            size="icon"
-            variant="ghost"
+        <div className="flex items-center p-4">
+          <div 
             onClick={onNavigateToSearch}
+            className="flex-1 flex items-center gap-3 bg-card border border-border rounded-full px-4 py-2 cursor-pointer hover-elevate active-elevate-2"
             data-testid="button-search"
-            className="hover-elevate active-elevate-2"
           >
-            <SearchIcon className="h-5 w-5" />
-          </Button>
+            <SearchIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <span className="text-sm text-muted-foreground">Search series, genres...</span>
+          </div>
         </div>
 
         {/* Tab Bar */}
