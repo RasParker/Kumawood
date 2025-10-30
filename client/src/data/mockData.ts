@@ -52,7 +52,7 @@ export const popularSeries: Series[] = [
   {
     id: 'pop3',
     title: 'Modern Marriage',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_3.jpg',
+    posterUrl: '/posters/Modern_Marriage_drama_poster_6e9f3a8b.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 95,
     genre: 'Drama',
@@ -76,7 +76,7 @@ export const popularSeries: Series[] = [
   {
     id: 'pop5',
     title: 'African Queen',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_5.jpg',
+    posterUrl: '/posters/African_Queen_romance_poster_a9f4e1b2.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 78,
     genre: 'Romance',
@@ -343,7 +343,7 @@ export const kumawoodSeries: Series[] = [
   {
     id: 'kuma4',
     title: 'Village Comedy',
-    posterUrl: 'https://images.unsplash.com/photo-1541843319471-80b3710c7031?w=400&h=600&fit=crop&q=80',
+    posterUrl: '/posters/Village_Comedy_comedy_poster_7c3d9e5f.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 81,
     genre: 'Comedy',
@@ -395,7 +395,7 @@ export const naijaSeries: Series[] = [
   {
     id: 'naija2',
     title: 'Yoruba Romance',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_24.jpg',
+    posterUrl: '/posters/Yoruba_Romance_romance_poster_4b8a2c1d.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 76,
     genre: 'Romance',
@@ -443,7 +443,7 @@ export const naijaSeries: Series[] = [
   {
     id: 'naija6',
     title: 'Calabar Beauty',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_28.jpg',
+    posterUrl: '/posters/Calabar_Beauty_romance_poster_2d7c4f9e.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 55,
     genre: 'Romance',
