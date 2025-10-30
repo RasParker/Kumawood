@@ -6,12 +6,13 @@ AfriShorts is a mobile-first, short-form video streaming application focused on 
 
 **Core Purpose**: Provide an immersive, content-first streaming experience for African short-form dramas with a freemium business model combining ad-supported viewing, virtual currency purchases, and premium memberships.
 
-**Current Status** (Updated: October 29, 2025): 
+**Current Status** (Updated: October 30, 2025): 
 - Phases 4 and 4.5 completed
 - Full-featured PlayerScreen with HTML5 video player, watch history tracking, autoplay, overlays, and bottom sheets
 - ForYouScreen with vertical TikTok-style feed using Swiper
 - HookPlayer component for vertical feed showing first episodes with like/follow functionality
 - All data fully integrated with Supabase backend
+- Cloudinary integration fully implemented with image/video upload and delete endpoints
 - User must follow setup instructions in SUPABASE_SETUP.md to run migrations and seed data
 
 ## User Preferences
@@ -119,9 +120,17 @@ Preferred communication style: Simple, everyday language.
 - Usage: All database operations route through Supabase client
 
 **Cloudinary**:
-- Purpose: Video and image CDN hosting
+- Purpose: Video and image CDN hosting, optimization, and delivery
+- Configuration: Requires `CLOUDINARY_URL` environment variable (contains cloud name, API key, and secret)
+- SDK: `cloudinary` v2 package for Node.js
+- Configuration File: `server/cloudinary.ts` initializes the Cloudinary client
+- Upload Endpoints:
+  - `POST /api/upload/image` - Upload images (jpg, jpeg, png, webp, gif) to `afrishorts/images` folder
+  - `POST /api/upload/video` - Upload videos (mp4, mov, avi, mkv, webm) to `afrishorts/videos` folder
+  - `DELETE /api/upload/:publicId` - Delete uploaded assets by public ID
 - Integration: All video URLs (`videoUrl`) and poster images (`posterUrl`) reference Cloudinary endpoints
-- Format: URLs structured as `https://res.cloudinary.com/demo/...`
+- Format: URLs structured as `https://res.cloudinary.com/[cloud-name]/...`
+- Upload Handler: Uses multer middleware with memory storage for file handling before Cloudinary upload
 
 **Drizzle ORM**:
 - Purpose: Type-safe database schema definition and query building
