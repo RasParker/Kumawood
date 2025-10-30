@@ -573,13 +573,19 @@ This is the new gamification/loyalty system.
 
 This is the new screen to show all point transactions.
 
-Follow-up Prompt:
-"Let's build the DetailedPointsHistoryScreen component using the dark theme.
-Props: It must accept a MapsToRewards function.
-UI (Dark Theme): Create a new screen with a "Back" arrow (light color, calls MapsToRewards) and a title "Detailed Points History" (light text).
-Data Fetching: Fetch all records for the current user from the user_points_history table in Supabase, ordered by created_at descending.
-List (Dark Theme): Render the records in a vertical list. Each row should show the reason and points_change (light text, use green/red for positive/negative changes).
-Empty State (Dark Theme): If there are no records, show an icon and the text "No Records" (light color)."
+**Follow-up Prompt:**
+
+"Let's build the `DetailedPointsHistoryScreen` component using the dark theme.
+
+1. **Props:** It must accept a `MapsToRewards` function.
+
+2. **UI (Dark Theme):** Create a new screen with a "Back" arrow (light color, calls `MapsToRewards`) and a title "Detailed Points History"       (light text).
+
+3. **Data Fetching:** Fetch all records for the current user from the `user_points_history` table in Supabase, ordered by `created_at`           descending.
+
+4. **List (Dark Theme):** Render the records in a vertical list. Each row should show the `reason` and `points_change` (light text, use          green/red for positive/negative changes).
+
+5. **Empty State (Dark Theme):** If there are no records, show an icon and the text **"No Records"** (light color)."
 
 ---
 
@@ -589,13 +595,19 @@ This builds the standalone history page accessed from the Profile screen.
 
 **Follow-up Prompt:**
 
-"Let's build the dedicated HistoryScreen component using the dark theme.
-Props: It must accept MapsToPlayer and MapsToProfile.
-UI (Dark Theme): Create a new screen with a "Back" arrow (calls MapsToProfile), a title "History", and an "Edit" icon in the top-right corner.
-Data Fetching: Fetch all shows from the user's watch_history table (grouped by series_id, showing the latest episode for each series).
-List (Dark Theme): Display the fetched history as a vertical list. Each item should show the series poster, title, and the last watched episode number.
-Click-to-Play: When not in edit mode, tapping an item must call props.navigateToPlayer(series.id, last_watched_episode_id).
-Implement Bulk Edit/Delete: Re-implement the exact same 'Edit Mode' logic from Phase 8 (steps 5, 9, 10), ensuring all UI elements (Choose/Cancel header, checkboxes, Remove button, confirmation modal) are styled for the dark theme. The 'Confirm Delete' action must call the Supabase function to delete the selected items from the watch_history table."
+"Let's build the dedicated `HistoryScreen` component using the dark theme.
+
+1. **Props:** It must accept `MapsToPlayer` and `MapsToProfile`.
+
+2. **UI (Dark Theme):** Create a new screen with a "Back" arrow (calls `MapsToProfile`), a title "History", and an "Edit" icon in the top-       right corner.
+
+3. **Data Fetching:** Fetch all shows from the user's `watch_history` table (grouped by `series_id`, showing the latest episode for each         series).
+
+4. **List (Dark Theme):** Display the fetched history as a vertical list. Each item should show the series poster, title, and the last           watched episode number.
+
+5. **Click-to-Play:** When *not* in edit mode, tapping an item must call `props.navigateToPlayer(series.id, last_watched_episode_id`).
+
+6. **Implement Bulk Edit/Delete:** Re-implement the exact same 'Edit Mode' logic from Phase 8 (steps 5, 9, 10), ensuring all UI elements (Choose/Cancel header, checkboxes, Remove button, confirmation modal) are styled for the dark theme. The 'Confirm Delete' action must call the Supabase function to delete the selected items from the `watch_history` table."
 
 ---
 
