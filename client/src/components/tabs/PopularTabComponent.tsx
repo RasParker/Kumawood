@@ -47,7 +47,7 @@ export default function PopularTabComponent({ navigateToPlayer }: PopularTabComp
                 data-testid={`series-${series.id}`}
               >
                 {/* Thumbnail */}
-                <div className="relative aspect-[9/16] bg-card rounded-lg overflow-hidden hover-elevate active-elevate-2 mb-2">
+                <div className="relative aspect-[2/3] bg-card rounded-lg overflow-hidden hover-elevate active-elevate-2 mb-2">
                   <img
                     src={series.posterUrl}
                     alt={series.title}

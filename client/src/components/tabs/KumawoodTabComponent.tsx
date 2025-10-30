@@ -22,7 +22,7 @@ function formatViewCount(count?: number | null): string {
 
 export default function KumawoodTabComponent({ navigateToPlayer }: KumawoodTabComponentProps) {
   const [selectedTag, setSelectedTag] = useState('All');
-  
+
   const { data: kumawoodSeries = [], isLoading } = useQuery<Series[]>({
     queryKey: ['/api/series/kumawood'],
   });
@@ -69,13 +69,13 @@ export default function KumawoodTabComponent({ navigateToPlayer }: KumawoodTabCo
               data-testid={`series-${series.id}`}
             >
               {/* Thumbnail */}
-              <div className="relative aspect-[9/16] bg-card rounded-lg overflow-hidden hover-elevate active-elevate-2 mb-2">
+              <div className="relative aspect-[2/3] bg-card rounded-lg overflow-hidden hover-elevate active-elevate-2 mb-2">
                 <img
                   src={series.posterUrl}
                   alt={series.title}
                   className="w-full h-full object-cover"
                 />
-                
+
                 {/* Rating */}
                 {series.rating && (
                   <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 bg-background/80 backdrop-blur-sm rounded-full">
