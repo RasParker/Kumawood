@@ -1,10 +1,3 @@
-import loveInLagosPoster from '@assets/generated_images/Love_in_Lagos_romance_poster_c762e8e9.png';
-import theKingdomPoster from '@assets/generated_images/The_Kingdom_historical_drama_poster_3d8b72d2.png';
-import desertRosePoster from '@assets/generated_images/Desert_Rose_adventure_romance_poster_ee2fd557.png';
-import asanteKingdomPoster from '@assets/generated_images/Asante_Kingdom_historical_poster_87dc10ae.png';
-import lagosHustlePoster from '@assets/generated_images/Lagos_Hustle_urban_drama_poster_c1f01201.png';
-import nightTalesPoster from '@assets/generated_images/Night_Tales_supernatural_thriller_poster_264c2306.png';
-
 export interface Series {
   id: string;
   title: string;
@@ -35,7 +28,7 @@ export const popularSeries: Series[] = [
   {
     id: 'pop1',
     title: 'Love in Lagos',
-    posterUrl: loveInLagosPoster,
+    posterUrl: '/posters/Love_in_Lagos_romance_poster_c762e8e9.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 120,
     genre: 'Romance',
@@ -47,7 +40,7 @@ export const popularSeries: Series[] = [
   {
     id: 'pop2',
     title: 'The Kingdom',
-    posterUrl: theKingdomPoster,
+    posterUrl: '/posters/The_Kingdom_historical_drama_poster_3d8b72d2.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 85,
     genre: 'Action',
@@ -111,7 +104,7 @@ export const newSeries: Series[] = [
   {
     id: 'new1',
     title: 'Desert Rose',
-    posterUrl: desertRosePoster,
+    posterUrl: '/posters/Desert_Rose_adventure_romance_poster_ee2fd557.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 45,
     genre: 'Romance',
@@ -137,7 +130,7 @@ export const newSeries: Series[] = [
   {
     id: 'new3',
     title: 'Night Tales',
-    posterUrl: nightTalesPoster,
+    posterUrl: '/posters/Night_Tales_supernatural_thriller_poster_264c2306.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 52,
     genre: 'Thriller',
@@ -314,7 +307,7 @@ export const kumawoodSeries: Series[] = [
   {
     id: 'kuma1',
     title: 'Asante Kingdom',
-    posterUrl: asanteKingdomPoster,
+    posterUrl: '/posters/Asante_Kingdom_historical_poster_87dc10ae.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 65,
     genre: 'Historical',
@@ -390,7 +383,7 @@ export const naijaSeries: Series[] = [
   {
     id: 'naija1',
     title: 'Lagos Hustle',
-    posterUrl: lagosHustlePoster,
+    posterUrl: '/posters/Lagos_Hustle_urban_drama_poster_c1f01201.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 93,
     genre: 'Drama',
