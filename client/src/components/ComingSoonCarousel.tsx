@@ -1,4 +1,4 @@
-import { Calendar, Bell } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import type { Series } from '@shared/schema';
@@ -14,8 +14,9 @@ export default function ComingSoonCarousel() {
         <h3 className="text-lg font-bold text-foreground">Coming Soon</h3>
         <div className="flex gap-3 overflow-x-auto pb-2">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="flex-shrink-0 w-36 bg-card rounded-lg overflow-hidden border border-border animate-pulse">
-              <div className="aspect-[9/16] bg-muted" />
+            <div key={i} className="flex-shrink-0 w-32 animate-pulse">
+              <div className="aspect-[2/3] bg-muted rounded-lg mb-2" />
+              <div className="h-8 bg-muted rounded" />
             </div>
           ))}
         </div>
@@ -32,39 +33,32 @@ export default function ComingSoonCarousel() {
         {comingSoonSeries.map((series) => (
           <div
             key={series.id}
-            className="flex-shrink-0 w-36 bg-card rounded-lg overflow-hidden border border-border"
+            className="flex-shrink-0 w-32"
             data-testid={`coming-soon-${series.id}`}
           >
-            <div className="relative aspect-[9/16] bg-muted">
+            {/* Thumbnail Panel */}
+            <div className="relative aspect-[2/3] bg-muted rounded-lg overflow-hidden mb-2">
               <img
                 src={series.posterUrl}
                 alt={series.title}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-transparent to-transparent" />
-              <div className="absolute top-2 left-2 right-2">
-                <span className="inline-block px-2 py-0.5 bg-gradient-to-r from-primary to-accent rounded-full text-[10px] font-semibold text-primary-foreground">
-                  {series.genre}
-                </span>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-2 space-y-1.5">
-                <h4 className="text-xs font-bold text-foreground line-clamp-2 leading-tight">
-                  {series.title}
-                </h4>
-                <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                  <Calendar className="h-2.5 w-2.5" />
-                  <span className="line-clamp-1">{series.releaseDate}</span>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  data-testid={`button-remind-${series.id}`}
-                  className="w-full h-7 text-[10px] rounded-full hover-elevate active-elevate-2"
-                >
-                  <Bell className="h-2.5 w-2.5 mr-1" />
-                  Remind Me
-                </Button>
-              </div>
+            </div>
+            
+            {/* Info Panel */}
+            <div className="space-y-2">
+              <h4 className="text-xs font-bold text-foreground line-clamp-2 leading-tight">
+                {series.title}
+              </h4>
+              <Button
+                variant="outline"
+                size="sm"
+                data-testid={`button-remind-${series.id}`}
+                className="w-full h-7 text-[10px] rounded-full hover-elevate active-elevate-2"
+              >
+                <Bell className="h-2.5 w-2.5 mr-1" />
+                Remind Me
+              </Button>
             </div>
           </div>
         ))}
