@@ -2,6 +2,10 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertWatchHistorySchema, insertUserFollowingSchema } from "@shared/schema";
+import { cloudinary } from "./cloudinary";
+import multer from "multer";
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/series/popular', async (_req, res) => {
@@ -182,6 +186,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error checking user following:', error);
       res.status(500).json({ error: 'Failed to check user following' });
+    }
+  });
+
+  app.post('/api/upload/image', upload.single('file'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'afrishorts/images',
+            resource_type: 'image',
+            allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(req.file!.buffer);
+      });
+
+      res.json({
+        url: (result as any).secure_url,
+        publicId: (result as any).public_id,
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      res.status(500).json({ error: 'Failed to upload image' });
+    }
+  });
+
+  app.post('/api/upload/video', upload.single('file'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'afrishorts/videos',
+            resource_type: 'video',
+            allowed_formats: ['mp4', 'mov', 'avi', 'mkv', 'webm'],
+            chunk_size: 6000000,
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(req.file!.buffer);
+      });
+
+      res.json({
+        url: (result as any).secure_url,
+        publicId: (result as any).public_id,
+        duration: (result as any).duration,
+        format: (result as any).format,
+      });
+    } catch (error) {
+      console.error('Error uploading video:', error);
+      res.status(500).json({ error: 'Failed to upload video' });
+    }
+  });
+
+  app.delete('/api/upload/:publicId', async (req, res) => {
+    try {
+      const publicId = decodeURIComponent(req.params.publicId);
+      const resourceType = req.query.type === 'video' ? 'video' : 'image';
+      
+      const result = await cloudinary.uploader.destroy(publicId, {
+        resource_type: resourceType,
+      });
+
+      res.json(result);
+    } catch (error) {
+      console.error('Error deleting asset:', error);
+      res.status(500).json({ error: 'Failed to delete asset' });
     }
   });
 
