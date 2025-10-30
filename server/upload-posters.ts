@@ -2,6 +2,10 @@
 import { cloudinary } from './cloudinary';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function uploadPoster(filePath: string, publicId: string) {
   try {
@@ -20,6 +24,12 @@ async function uploadPoster(filePath: string, publicId: string) {
 
 async function uploadAllPosters() {
   const postersDir = path.join(__dirname, '../client/public/posters');
+  
+  if (!fs.existsSync(postersDir)) {
+    console.error(`Posters directory not found: ${postersDir}`);
+    return;
+  }
+  
   const files = fs.readdirSync(postersDir);
   
   const urls: Record<string, string> = {};
