@@ -44,10 +44,7 @@ export default function HomeScreen({ onNavigateToPlayer, onNavigateToSearch }: H
     <div className="flex flex-col h-full bg-background overflow-hidden pb-20">
       {/* Header */}
       <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-md border-b border-border">
-        <div className="flex items-center justify-between p-4">
-          <h1 className="text-2xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            AfriShorts
-          </h1>
+        <div className="flex items-center justify-end p-4">
           <Button
             size="icon"
             variant="ghost"
