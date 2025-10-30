@@ -1,3 +1,8 @@
+### IMPORTANT NOTICE: 
+- Only use this document (Project_Plan.md) as reference and/or guidance.
+- This document is meant for **step by step design and build clarity**
+- Do not remove or overwrite this document (Project_Plan.md).
+
 # Project Plan: "AfriShorts" (African Micro-Drama App) #
 ## A Step-by-Step Guide for Replit Agent 3
 
