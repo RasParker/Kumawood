@@ -21,28 +21,30 @@ export default function SearchScreen({ onNavigateToPlayer }: SearchScreenProps) 
   return (
     <div className="flex flex-col h-full bg-background pb-20">
       {/* Search Header */}
-      <div className="sticky top-0 z-10 p-4 bg-background border-b border-border">
-        <div className="relative">
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search series, genres..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            data-testid="input-search"
-            className="pl-10 pr-10 bg-card border-border"
-          />
-          {searchQuery && (
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => setSearchQuery('')}
-              data-testid="button-clear-search"
-              className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 hover-elevate active-elevate-2"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          )}
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-md border-b border-border">
+        <div className="flex items-center p-4">
+          <div className="flex-1 flex items-center gap-3 bg-card border border-border rounded-full px-4 py-2">
+            <SearchIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <Input
+              type="search"
+              placeholder="Search series, genres..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              data-testid="input-search"
+              className="flex-1 border-0 bg-transparent p-0 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+            />
+            {searchQuery && (
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => setSearchQuery('')}
+                data-testid="button-clear-search"
+                className="h-7 w-7 hover-elevate active-elevate-2 flex-shrink-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
