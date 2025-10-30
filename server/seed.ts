@@ -38,7 +38,7 @@ interface MockComingSoonSeries {
 
 async function clearExistingData() {
   console.log('Clearing existing data...');
-  
+
   await supabase.from('consumption_history').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('reward_coin_history').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('purchase_history').delete().neq('id', '00000000-0000-0000-0000-000000000000');
@@ -48,13 +48,13 @@ async function clearExistingData() {
   await supabase.from('episodes').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('series').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('redeemable_items').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-  
+
   console.log('Existing data cleared!');
 }
 
 async function seedSeries(seriesData: MockSeries[], category: string) {
   console.log(`Seeding ${category} series...`);
-  
+
   for (const series of seriesData) {
     const { data: insertedSeries, error: seriesError } = await supabase
       .from('series')
@@ -73,14 +73,14 @@ async function seedSeries(seriesData: MockSeries[], category: string) {
       })
       .select()
       .single();
-    
+
     if (seriesError) {
       console.error(`Error inserting series ${series.title}:`, seriesError);
       continue;
     }
-    
+
     console.log(`  ✓ Inserted: ${series.title}`);
-    
+
     const episodes = [];
     for (let i = 1; i <= series.episodeCount; i++) {
       episodes.push({
@@ -90,11 +90,11 @@ async function seedSeries(seriesData: MockSeries[], category: string) {
         video_url: series.videoUrl,
       });
     }
-    
+
     const { error: episodesError } = await supabase
       .from('episodes')
       .insert(episodes);
-    
+
     if (episodesError) {
       console.error(`Error inserting episodes for ${series.title}:`, episodesError);
     } else {
@@ -105,7 +105,7 @@ async function seedSeries(seriesData: MockSeries[], category: string) {
 
 async function seedComingSoon(comingSoonData: MockComingSoonSeries[]) {
   console.log('Seeding coming soon series...');
-  
+
   for (const series of comingSoonData) {
     const { error } = await supabase
       .from('series')
@@ -122,7 +122,7 @@ async function seedComingSoon(comingSoonData: MockComingSoonSeries[]) {
         rank: null,
         is_new: false,
       });
-    
+
     if (error) {
       console.error(`Error inserting coming soon series ${series.title}:`, error);
     } else {
@@ -133,7 +133,7 @@ async function seedComingSoon(comingSoonData: MockComingSoonSeries[]) {
 
 async function seedRedeemableItems() {
   console.log('Seeding redeemable items...');
-  
+
   const items = [
     {
       title: '5-Day Membership Extension',
@@ -154,9 +154,9 @@ async function seedRedeemableItems() {
       reward_value: 500,
     },
   ];
-  
+
   const { error } = await supabase.from('redeemable_items').insert(items);
-  
+
   if (error) {
     console.error('Error inserting redeemable items:', error);
   } else {
@@ -168,13 +168,13 @@ async function main() {
   console.log('Starting database seeding...\n');
   console.log('⚠️  Make sure you have run the migration SQL in your Supabase SQL Editor first!');
   console.log('    Location: server/migrations/001_initial_schema.sql\n');
-  
+
   await clearExistingData();
-  
+
   const popularSeries: MockSeries[] = [
-    { id: 'pop1', title: 'Love in Lagos', posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_1.jpg', videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4', episodeCount: 120, genre: 'Romance', rating: 4.8, description: 'A passionate love story set in the bustling streets of Lagos', year: 2024, tags: ['Romance', 'Drama'] },
-    { id: 'pop2', title: 'The Kingdom', posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_2.jpg', videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4', episodeCount: 85, genre: 'Action', rating: 4.6, description: 'Power struggles in a fictional African kingdom', year: 2024, tags: ['Action', 'Drama', 'Historical'] },
-    { id: 'pop3', title: 'Modern Marriage', posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_3.jpg', videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4', episodeCount: 95, genre: 'Drama', rating: 4.7, description: 'Contemporary take on marriage and relationships in urban Africa', year: 2024, tags: ['Romance', 'Drama'] },
+    { id: 'pop1', title: 'The Kingdom', posterUrl: '/posters/The_Kingdom_historical_drama_poster_3d8b72d2.png', videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4', episodeCount: 120, genre: 'Historical Drama', rating: 4.8, description: 'An epic tale of power, betrayal, and legacy', year: 2024, tags: ['Drama', 'Historical'] },
+    { id: 'pop2', title: 'Love in Lagos', posterUrl: '/posters/Love_in_Lagos_romance_poster_c762e8e9.png', videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4', episodeCount: 95, genre: 'Romance', rating: 4.6, description: 'Modern love story set in bustling Lagos', year: 2024, tags: ['Romance', 'Urban'] },
+    { id: 'pop3', title: 'Night Tales', posterUrl: '/posters/Night_Tales_supernatural_thriller_poster_264c2306.png', videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4', episodeCount: 87, genre: 'Supernatural Thriller', rating: 4.7, description: 'Mysterious happenings after dark', year: 2024, tags: ['Thriller', 'Supernatural'] },
     { id: 'pop4', title: 'Street Tales', posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_4.jpg', videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4', episodeCount: 110, genre: 'Drama', rating: 4.5, description: 'Stories from the streets of Accra', year: 2024, tags: ['Drama', 'Urban'] },
     { id: 'pop5', title: 'African Queen', posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_5.jpg', videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4', episodeCount: 78, genre: 'Romance', rating: 4.9, description: 'A modern retelling of classic African royalty tales', year: 2024, tags: ['Romance', 'Historical'] },
     { id: 'pop6', title: 'City Lights', posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_portrait_6.jpg', videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4', episodeCount: 92, genre: 'Drama', rating: 4.4, description: 'Life and ambitions in the big city', year: 2024, tags: ['Drama', 'Urban'] },
@@ -234,7 +234,7 @@ async function main() {
     await seedSeries(naijaSeries, 'Naija');
     await seedComingSoon(comingSoonSeries);
     await seedRedeemableItems();
-    
+
     console.log('\n✅ Database seeding completed successfully!');
   } catch (error) {
     console.error('\n❌ Error during seeding:', error);
