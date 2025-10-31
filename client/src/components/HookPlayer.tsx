@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Bookmark, PlaySquare, Send, ChevronRight, Film } from 'lucide-react';
+import { Bookmark, List, Send, ChevronRight, Film } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -127,7 +127,7 @@ export default function HookPlayer({
                   : 'text-white'
               }`}
             >
-              <Bookmark className="h-20 w-20" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
+              <Bookmark className="h-14 w-14" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
             </Button>
             <span className="text-white text-sm font-medium">My List</span>
           </div>
@@ -140,7 +140,7 @@ export default function HookPlayer({
               data-testid="button-episodes-hook"
               className="text-white rounded-full p-3"
             >
-              <PlaySquare className="h-20 w-20" strokeWidth={1.5} />
+              <List className="h-14 w-14" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-sm font-medium">Episodes</span>
           </div>
@@ -153,7 +153,7 @@ export default function HookPlayer({
               data-testid="button-share-hook"
               className="text-white rounded-full p-3"
             >
-              <Send className="h-20 w-20" strokeWidth={1.5} />
+              <Send className="h-14 w-14" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-sm font-medium">Share</span>
           </div>
