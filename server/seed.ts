@@ -87,6 +87,7 @@ async function seedSeries(seriesData: MockSeries[], category: string) {
         series_id: insertedSeries.id,
         episode_number: i,
         title: `Episode ${i}`,
+        synopsis: `Episode ${i} of ${series.title}: Continue the journey as the story unfolds with new twists and developments.`,
         video_url: series.videoUrl,
       });
     }
