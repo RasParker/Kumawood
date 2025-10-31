@@ -299,7 +299,7 @@ export default function PlayerScreen({
           </Button>
         </div>
 
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-6 items-center">
+        <div className="absolute right-4 bottom-56 flex flex-col gap-6 items-center">
           <div className="flex flex-col items-center gap-1">
             <Button
               size="icon"
