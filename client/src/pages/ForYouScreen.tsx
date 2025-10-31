@@ -35,9 +35,9 @@ export default function ForYouScreen({ onNavigateToPlayer, onNavigateToSearch }:
         <button
           onClick={onNavigateToSearch}
           data-testid="button-search"
-          className="text-white hover:bg-white/20 rounded-full backdrop-blur-sm bg-black/20 p-3 transition-colors"
+          className="text-white hover:bg-white/10 rounded-full p-2 transition-colors"
         >
-          <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </button>
