@@ -191,7 +191,7 @@ export default function HookPlayer({
               className="w-full bg-black/50 backdrop-blur-sm border-t border-b border-white/20 p-4 flex items-center justify-between hover:bg-black/60 transition-all active:scale-[0.99]"
             >
               <div className="flex items-center gap-3 pl-4">
-                <Film className="h-5 w-5 text-white" />
+                <ListVideo className="h-5 w-5 text-white" />
                 <span className="text-white font-semibold text-sm">
                   EP.1 / EP.{totalEpisodes}
                 </span>
