@@ -41,7 +41,6 @@ export const episodes = pgTable("episodes", {
   seriesId: uuid("series_id").notNull().references(() => series.id, { onDelete: 'cascade' }),
   episodeNumber: integer("episode_number").notNull(),
   title: text("title").notNull(),
-  synopsis: text("synopsis").notNull(),
   videoUrl: text("video_url").notNull(),
 });
 

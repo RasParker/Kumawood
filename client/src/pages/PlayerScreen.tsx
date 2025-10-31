@@ -359,7 +359,7 @@ export default function PlayerScreen({
               {series?.title || 'Loading...'}
             </h2>
             <p className="text-white/90 text-sm line-clamp-2 mt-1">
-              {episode.synopsis}
+              {series?.synopsis}
             </p>
           </div>
 
