@@ -7,7 +7,7 @@ import {
   Heart, 
   Share2, 
   MoreVertical,
-  Film,
+  List,
   Gauge
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -288,40 +288,49 @@ export default function PlayerScreen({
           </Button>
         </div>
 
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-6">
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={handleLike}
-            data-testid="button-like"
-            className={`rounded-full ${
-              isLiked 
-                ? 'text-red-500 bg-white/20' 
-                : 'text-white hover:bg-white/20'
-            }`}
-          >
-            <Heart className="h-6 w-6" fill={isLiked ? 'currentColor' : 'none'} />
-          </Button>
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-6 items-center">
+          <div className="flex flex-col items-center gap-1.5">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={handleLike}
+              data-testid="button-like"
+              className={`rounded-full p-2 ${
+                isLiked 
+                  ? 'text-red-500' 
+                  : 'text-white'
+              }`}
+            >
+              <Heart className="h-9 w-9" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
+            </Button>
+            <span className="text-white text-xs font-medium">Like</span>
+          </div>
           
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => setShowEpisodeSheet(true)}
-            data-testid="button-episodes"
-            className="text-white hover:bg-white/20 rounded-full"
-          >
-            <Film className="h-6 w-6" />
-          </Button>
+          <div className="flex flex-col items-center gap-1.5">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setShowEpisodeSheet(true)}
+              data-testid="button-episodes"
+              className="text-white rounded-full p-2"
+            >
+              <List className="h-9 w-9" strokeWidth={1.5} />
+            </Button>
+            <span className="text-white text-xs font-medium">Episodes</span>
+          </div>
           
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={handleShare}
-            data-testid="button-share"
-            className="text-white hover:bg-white/20 rounded-full"
-          >
-            <Share2 className="h-6 w-6" />
-          </Button>
+          <div className="flex flex-col items-center gap-1.5">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={handleShare}
+              data-testid="button-share"
+              className="text-white rounded-full p-2"
+            >
+              <Share2 className="h-9 w-9" strokeWidth={1.5} />
+            </Button>
+            <span className="text-white text-xs font-medium">Share</span>
+          </div>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0">
