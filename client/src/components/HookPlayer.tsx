@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Bookmark, Grid3x3, Share2, ChevronRight, Film } from 'lucide-react';
+import { Bookmark, PlaySquare, Send, ChevronRight, Film } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -114,46 +114,46 @@ export default function HookPlayer({
       />
 
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute right-4 bottom-56 flex flex-col gap-8 pointer-events-auto items-center">
-          <div className="flex flex-col items-center gap-1">
+        <div className="absolute right-4 bottom-56 flex flex-col gap-6 pointer-events-auto items-center">
+          <div className="flex flex-col items-center gap-1.5">
             <Button
               size="icon"
               variant="ghost"
               onClick={handleLike}
               data-testid="button-like-hook"
-              className={`rounded-full p-4 ${
+              className={`rounded-full p-5 ${
                 isLiked 
                   ? 'text-primary' 
                   : 'text-white'
               }`}
             >
-              <Bookmark className="h-10 w-10" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
+              <Bookmark className="h-12 w-12" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-medium">My List</span>
           </div>
           
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center gap-1.5">
             <Button
               size="icon"
               variant="ghost"
               onClick={handleManualInvest}
               data-testid="button-episodes-hook"
-              className="text-white rounded-full p-4"
+              className="text-white rounded-full p-5"
             >
-              <Grid3x3 className="h-10 w-10" strokeWidth={1.5} />
+              <PlaySquare className="h-12 w-12" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-medium">Episodes</span>
           </div>
           
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center gap-1.5">
             <Button
               size="icon"
               variant="ghost"
               onClick={handleShare}
               data-testid="button-share-hook"
-              className="text-white rounded-full p-4"
+              className="text-white rounded-full p-5"
             >
-              <Share2 className="h-10 w-10" strokeWidth={1.5} />
+              <Send className="h-12 w-12" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-medium">Share</span>
           </div>
