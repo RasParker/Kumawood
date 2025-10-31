@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Bookmark, List, Send, ChevronRight, Film } from 'lucide-react';
+import { Bookmark, List, Send, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -131,7 +131,7 @@ export default function HookPlayer({
             </Button>
             <span className="text-white text-xs font-medium">My List</span>
           </div>
-          
+
           <div className="flex flex-col items-center gap-1.5">
             <Button
               size="icon"
@@ -144,7 +144,7 @@ export default function HookPlayer({
             </Button>
             <span className="text-white text-xs font-medium">Episodes</span>
           </div>
-          
+
           <div className="flex flex-col items-center gap-1.5">
             <Button
               size="icon"
@@ -177,7 +177,7 @@ export default function HookPlayer({
             >
               <div className="flex items-center gap-3 pl-4">
                 <div className="w-10 h-10 rounded bg-gradient-to-r from-primary to-accent flex items-center justify-center">
-                  <Film className="h-5 w-5 text-white" />
+                  <List className="h-5 w-5 text-white" />
                 </div>
                 <span className="text-white font-semibold text-sm">
                   EP.1 / EP.{totalEpisodes}
