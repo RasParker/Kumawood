@@ -114,48 +114,48 @@ export default function HookPlayer({
       />
 
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute right-4 bottom-56 flex flex-col gap-8 pointer-events-auto items-center">
-          <div className="flex flex-col items-center gap-2">
+        <div className="absolute right-4 bottom-56 flex flex-col gap-6 pointer-events-auto items-center">
+          <div className="flex flex-col items-center gap-1.5">
             <Button
               size="icon"
               variant="ghost"
               onClick={handleLike}
               data-testid="button-like-hook"
-              className={`rounded-full p-3 ${
+              className={`rounded-full p-2 ${
                 isLiked 
                   ? 'text-primary' 
                   : 'text-white'
               }`}
             >
-              <Bookmark className="h-14 w-14" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
+              <Bookmark className="h-9 w-9" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
             </Button>
-            <span className="text-white text-sm font-medium">My List</span>
+            <span className="text-white text-xs font-medium">My List</span>
           </div>
           
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-1.5">
             <Button
               size="icon"
               variant="ghost"
               onClick={handleManualInvest}
               data-testid="button-episodes-hook"
-              className="text-white rounded-full p-3"
+              className="text-white rounded-full p-2"
             >
-              <List className="h-14 w-14" strokeWidth={1.5} />
+              <List className="h-9 w-9" strokeWidth={1.5} />
             </Button>
-            <span className="text-white text-sm font-medium">Episodes</span>
+            <span className="text-white text-xs font-medium">Episodes</span>
           </div>
           
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-1.5">
             <Button
               size="icon"
               variant="ghost"
               onClick={handleShare}
               data-testid="button-share-hook"
-              className="text-white rounded-full p-3"
+              className="text-white rounded-full p-2"
             >
-              <Send className="h-14 w-14" strokeWidth={1.5} />
+              <Send className="h-9 w-9" strokeWidth={1.5} />
             </Button>
-            <span className="text-white text-sm font-medium">Share</span>
+            <span className="text-white text-xs font-medium">Share</span>
           </div>
         </div>
 
