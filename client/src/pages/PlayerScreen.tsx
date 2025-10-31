@@ -358,8 +358,8 @@ export default function PlayerScreen({
             <h2 className="text-white font-bold text-lg line-clamp-1">
               {series?.title || 'Loading...'}
             </h2>
-            <p className="text-white/80 text-sm line-clamp-2 mt-1">
-              {episode.synopsis || episode.title}
+            <p className="text-white/90 text-sm line-clamp-2 mt-1">
+              {series?.synopsis}
             </p>
           </div>
 
