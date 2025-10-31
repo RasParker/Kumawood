@@ -237,7 +237,7 @@ This is the "Hook Player." It now needs the "Like" button to work.
 
       * **"Manual Invest" Button:** A clickable bar (semi-transparent dark) showing "[Icon] EP.1 / EP.80 [>]" (light text/icon).
 
-  * **"Like" Button Logic:** When the user taps the **"Like" (Heart) icon**, it must add a row to the `user_following` table for the current `user_id` and `series_id`.
+  * **"Like" Button Logic:** When the user taps the **"Like" (bookmark) icon**, it must add a row to the `user_following` table for the current `user_id` and `series_id`.
 
   * **"Manual Invest" Click Logic:** When a user taps this button, it must get the `currentTime` from its video and call `props.navigateToPlayer(series.id, 1, videoCurrentTime`).
 
