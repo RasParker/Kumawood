@@ -346,20 +346,7 @@ export default function PlayerScreen({
 
         <div className="absolute bottom-0 left-0 right-0">
           <div 
-            className="h-1 bg-white/30 mx-4 mb-2 rounded-full cursor-pointer group"
-            onClick={handleSeek}
-            data-testid="seekbar"
-          >
-            <div 
-              className="h-full bg-gradient-to-r from-primary to-accent rounded-full relative group-hover:h-1.5 transition-all"
-              style={{ width: `${progress}%` }}
-            >
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-          </div>
-
-          <div 
-            className="bg-gradient-to-t from-black/80 via-black/50 to-transparent p-4 pt-8 cursor-pointer"
+            className="bg-gradient-to-t from-black/80 via-black/50 to-transparent p-4 pt-8 pb-2 cursor-pointer"
             onClick={() => setShowEpisodeSheet(true)}
             data-testid="bottom-title"
           >
@@ -369,6 +356,19 @@ export default function PlayerScreen({
             <p className="text-white/80 text-sm line-clamp-2 mt-1">
               {episode.synopsis || episode.title}
             </p>
+          </div>
+
+          <div 
+            className="h-1 bg-white/30 mx-4 mb-4 rounded-full cursor-pointer group"
+            onClick={handleSeek}
+            data-testid="seekbar"
+          >
+            <div 
+              className="h-full bg-gradient-to-r from-primary to-accent rounded-full relative group-hover:h-1.5 transition-all"
+              style={{ width: `${progress}%` }}
+            >
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
           </div>
         </div>
       </div>
