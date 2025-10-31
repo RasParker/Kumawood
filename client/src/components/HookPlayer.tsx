@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Bookmark, List, Send, ChevronRight } from 'lucide-react';
+import { Award, ListVideo, Share, ChevronRight, Film } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -99,6 +99,21 @@ export default function HookPlayer({
 
   const totalEpisodes = allEpisodes.length || 80;
 
+  // Format save count for display (like "3.2M")
+  const formatCount = (count?: number | null): string => {
+    if (!count) return '0';
+    if (count >= 1000000) {
+      return `${(count / 1000000).toFixed(1)}M`;
+    }
+    if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}K`;
+    }
+    return count.toString();
+  };
+
+  // Use viewCount as a proxy for save count (in real app, this would be actual save count)
+  const saveCount = series.viewCount ? Math.floor(series.viewCount * 0.15) : 0;
+
   return (
     <div className="relative w-full h-full bg-black">
       <video
@@ -115,7 +130,7 @@ export default function HookPlayer({
 
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute right-4 bottom-56 flex flex-col gap-6 pointer-events-auto items-center">
-          <div className="flex flex-col items-center gap-1.5">
+          <div className="flex flex-col items-center gap-1">
             <Button
               size="icon"
               variant="ghost"
@@ -127,12 +142,12 @@ export default function HookPlayer({
                   : 'text-white'
               }`}
             >
-              <Bookmark className="h-9 w-9" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
+              <Award className="h-9 w-9" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
             </Button>
-            <span className="text-white text-xs font-medium">My List</span>
+            <span className="text-white text-xs font-semibold">{formatCount(saveCount)}</span>
           </div>
 
-          <div className="flex flex-col items-center gap-1.5">
+          <div className="flex flex-col items-center gap-1">
             <Button
               size="icon"
               variant="ghost"
@@ -140,12 +155,12 @@ export default function HookPlayer({
               data-testid="button-episodes-hook"
               className="text-white rounded-full p-2"
             >
-              <List className="h-9 w-9" strokeWidth={1.5} />
+              <ListVideo className="h-9 w-9" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-medium">Episodes</span>
           </div>
 
-          <div className="flex flex-col items-center gap-1.5">
+          <div className="flex flex-col items-center gap-1">
             <Button
               size="icon"
               variant="ghost"
@@ -153,7 +168,7 @@ export default function HookPlayer({
               data-testid="button-share-hook"
               className="text-white rounded-full p-2"
             >
-              <Send className="h-9 w-9" strokeWidth={1.5} />
+              <Share className="h-9 w-9" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-medium">Share</span>
           </div>
@@ -176,7 +191,7 @@ export default function HookPlayer({
               className="w-full bg-black/50 backdrop-blur-sm border-t border-b border-white/20 p-4 flex items-center justify-between hover:bg-black/60 transition-all active:scale-[0.99]"
             >
               <div className="flex items-center gap-3 pl-4">
-                <List className="h-5 w-5 text-white" />
+                <Film className="h-5 w-5 text-white" />
                 <span className="text-white font-semibold text-sm">
                   EP.1 / EP.{totalEpisodes}
                 </span>
