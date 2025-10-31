@@ -4,10 +4,10 @@ import {
   ChevronLeft, 
   Pause, 
   Play, 
-  Heart, 
-  Share2, 
+  Bookmark, 
+  Redo, 
   MoreVertical,
-  List,
+  ListVideo,
   Gauge
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -198,6 +198,17 @@ export default function PlayerScreen({
     });
   };
 
+  const formatCount = (count: number): string => {
+    if (count >= 1000000) {
+      return `${(count / 1000000).toFixed(1)}M`;
+    } else if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}K`;
+    }
+    return count.toString();
+  };
+
+  const saveCount = series ? Math.floor((series.viewCount || 0) * 0.23) : 0;
+
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   if (episodeLoading || !episode) {
@@ -289,7 +300,7 @@ export default function PlayerScreen({
         </div>
 
         <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-6 items-center">
-          <div className="flex flex-col items-center gap-1.5">
+          <div className="flex flex-col items-center gap-1">
             <Button
               size="icon"
               variant="ghost"
@@ -297,16 +308,16 @@ export default function PlayerScreen({
               data-testid="button-like"
               className={`rounded-full p-2 ${
                 isLiked 
-                  ? 'text-red-500' 
+                  ? 'text-primary' 
                   : 'text-white'
               }`}
             >
-              <Heart className="h-9 w-9" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
+              <Bookmark className="h-9 w-9" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
             </Button>
-            <span className="text-white text-xs font-medium">Like</span>
+            <span className="text-white text-xs font-semibold">{formatCount(saveCount)}</span>
           </div>
           
-          <div className="flex flex-col items-center gap-1.5">
+          <div className="flex flex-col items-center gap-1">
             <Button
               size="icon"
               variant="ghost"
@@ -314,12 +325,12 @@ export default function PlayerScreen({
               data-testid="button-episodes"
               className="text-white rounded-full p-2"
             >
-              <List className="h-9 w-9" strokeWidth={1.5} />
+              <ListVideo className="h-9 w-9" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-medium">Episodes</span>
           </div>
           
-          <div className="flex flex-col items-center gap-1.5">
+          <div className="flex flex-col items-center gap-1">
             <Button
               size="icon"
               variant="ghost"
@@ -327,7 +338,7 @@ export default function PlayerScreen({
               data-testid="button-share"
               className="text-white rounded-full p-2"
             >
-              <Share2 className="h-9 w-9" strokeWidth={1.5} />
+              <Redo className="h-9 w-9" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-medium">Share</span>
           </div>
