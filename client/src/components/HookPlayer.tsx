@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Award, ListVideo, Share, ChevronRight, Film } from 'lucide-react';
+import { Bookmark, ListVideo, Redo, ChevronRight, Film } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -142,7 +142,7 @@ export default function HookPlayer({
                   : 'text-white'
               }`}
             >
-              <Award className="h-9 w-9" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
+              <Bookmark className="h-9 w-9" fill={isLiked ? 'currentColor' : 'none'} strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-semibold">{formatCount(saveCount)}</span>
           </div>
@@ -168,7 +168,7 @@ export default function HookPlayer({
               data-testid="button-share-hook"
               className="text-white rounded-full p-2"
             >
-              <Share className="h-9 w-9" strokeWidth={1.5} />
+              <Redo className="h-9 w-9" strokeWidth={1.5} />
             </Button>
             <span className="text-white text-xs font-medium">Share</span>
           </div>
