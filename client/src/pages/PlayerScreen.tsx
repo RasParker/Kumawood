@@ -8,7 +8,8 @@ import {
   Redo, 
   MoreVertical,
   ListVideo,
-  Gauge
+  Gauge,
+  Download
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -24,6 +25,8 @@ interface PlayerScreenProps {
   playerStartTime?: number;
   onNavigateHome: () => void;
   onNavigateToPlayer: (seriesId: string, episodeNumber: number, startTime?: number) => void;
+  openMembershipUpsell: () => void;
+  has_membership: boolean;
 }
 
 export default function PlayerScreen({
@@ -32,6 +35,8 @@ export default function PlayerScreen({
   playerStartTime = 0,
   onNavigateHome,
   onNavigateToPlayer,
+  openMembershipUpsell,
+  has_membership,
 }: PlayerScreenProps) {
   const { toast } = useToast();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -354,7 +359,7 @@ export default function PlayerScreen({
               {series?.title || 'Loading...'}
             </h2>
             <p className="text-white/80 text-sm line-clamp-2 mt-1">
-              {episode.synopsis || episode.title}
+              {episode.title}
             </p>
           </div>
 
@@ -369,6 +374,34 @@ export default function PlayerScreen({
             >
               <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
+          </div>
+
+          <div className="flex gap-2 px-4 pb-4">
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                openMembershipUpsell();
+              }}
+              data-testid="button-join-membership"
+              className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold"
+            >
+              Join membership
+            </Button>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (has_membership) {
+                  console.log('Download logic to be implemented in Phase 18');
+                } else {
+                  openMembershipUpsell();
+                }
+              }}
+              data-testid="button-download"
+              className="flex-1 bg-white/20 hover:bg-white/30 text-white font-semibold backdrop-blur-sm"
+            >
+              <Download className="h-5 w-5 mr-2" />
+              Download
+            </Button>
           </div>
         </div>
       </div>

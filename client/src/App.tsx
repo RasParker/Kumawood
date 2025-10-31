@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { I18nextProvider } from 'react-i18next';
 import { queryClient } from './lib/queryClient';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import i18n from '@/i18n/config';
+import type { User } from '@shared/schema';
 
 // Import all screen components
 import HomeScreen from '@/pages/HomeScreen';
@@ -33,7 +34,7 @@ import HelpFeedbackScreen from '@/pages/HelpFeedbackScreen';
 import NotificationsScreen from '@/pages/NotificationsScreen';
 import BottomNavBar from '@/components/BottomNavBar';
 
-function App() {
+function AppContent() {
   // State management
   const [currentView, setCurrentView] = useState<string>('home');
   const [selectedSeriesId, setSelectedSeriesId] = useState<string>('');
@@ -44,10 +45,12 @@ function App() {
   const [currentLanguage, setCurrentLanguage] = useState<string>('en');
   const [cacheSizeMB, setCacheSizeMB] = useState<number>(61.2);
 
-  // Apply dark mode on mount
-  useEffect(() => {
-    document.documentElement.classList.add('dark');
-  }, []);
+  const userId = 'demo-user-id';
+  
+  const { data: user } = useQuery<User>({
+    queryKey: ['/api/users', userId],
+    enabled: !!userId,
+  });
 
   // Navigation functions
   const navigateToHome = () => {
@@ -154,6 +157,10 @@ function App() {
     i18n.changeLanguage(language);
   };
 
+  const openMembershipUpsell = () => {
+    navigateToManageMembership();
+  };
+
   // Render current screen based on state
   const renderScreen = () => {
     switch (currentView) {
@@ -179,6 +186,8 @@ function App() {
             playerStartTime={playerStartTime}
             onNavigateHome={navigateToHome}
             onNavigateToPlayer={navigateToPlayer}
+            openMembershipUpsell={openMembershipUpsell}
+            has_membership={user?.hasMembership || false}
           />
         );
       case 'search':
@@ -288,24 +297,35 @@ function App() {
   ].includes(currentView);
 
   return (
+    <I18nextProvider i18n={i18n}>
+      <TooltipProvider>
+        <div className="h-screen overflow-hidden bg-background">
+          {renderScreen()}
+          {shouldShowBottomNav && (
+            <BottomNavBar
+              currentView={currentView}
+              onNavigateHome={navigateToHome}
+              onNavigateForYou={navigateToForYou}
+              onNavigateMyList={navigateToMyList}
+              onNavigateProfile={navigateToProfile}
+            />
+          )}
+        </div>
+        <Toaster />
+      </TooltipProvider>
+    </I18nextProvider>
+  );
+}
+
+function App() {
+  // Apply dark mode on mount
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
+
+  return (
     <QueryClientProvider client={queryClient}>
-      <I18nextProvider i18n={i18n}>
-        <TooltipProvider>
-          <div className="h-screen overflow-hidden bg-background">
-            {renderScreen()}
-            {shouldShowBottomNav && (
-              <BottomNavBar
-                currentView={currentView}
-                onNavigateHome={navigateToHome}
-                onNavigateForYou={navigateToForYou}
-                onNavigateMyList={navigateToMyList}
-                onNavigateProfile={navigateToProfile}
-              />
-            )}
-          </div>
-          <Toaster />
-        </TooltipProvider>
-      </I18nextProvider>
+      <AppContent />
     </QueryClientProvider>
   );
 }
