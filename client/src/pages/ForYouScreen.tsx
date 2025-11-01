@@ -12,7 +12,7 @@ interface ForYouScreenProps {
 }
 
 export default function ForYouScreen({ onNavigateToPlayer, onNavigateToSearch }: ForYouScreenProps) {
-  const userId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
+  const userId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'; // Fixed demo user UUID from seed script
 
   const { data: episodesWithSeries = [], isLoading } = useQuery<EpisodeWithSeries[]>({
     queryKey: ['/api/episodes/random-first?limit=20'],

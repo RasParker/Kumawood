@@ -391,7 +391,7 @@ async function main() {
     console.log('\n✅ Database seeding completed successfully!');
     console.log('\nDemo user credentials:');
     console.log('  Email: demo@afrishorts.com');
-    console.log('  User ID: demo-user-id');
+    console.log('  User ID: a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11');
     console.log('  Coins: 500 | Reward Coins: 200 | Points: 1500');
   } catch (error) {
     console.error('\n❌ Error during seeding:', error);

@@ -16,6 +16,7 @@ export default function MyWalletScreen({
   onNavigateToConsumptionRecords,
   onNavigateToStore,
 }: MyWalletScreenProps) {
+  const userId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'; // Fixed demo user UUID from seed script
   return (
     <div className="flex flex-col h-full bg-background pb-20">
       {/* Header */}
