@@ -43,3 +43,9 @@ waitForPort = 5000
 
 [agent]
 expertMode = true
+
+[userenv]
+
+[userenv.shared]
+SUPABASE_PROJECT_URL = "https://ekbrffjnwltjwrstjnnt.supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVrYnJmZmpud2x0andyc3Rqbm50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2MDM2NTYsImV4cCI6MjA3NzE3OTY1Nn0.xocHG0MaHezuWOFl8QqbtHMGGbUuXdtUXx4AblHND8M"
