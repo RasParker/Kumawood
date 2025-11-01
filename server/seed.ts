@@ -39,6 +39,10 @@ interface MockComingSoonSeries {
 async function clearExistingData() {
   console.log('Clearing existing data...');
 
+  await supabase.from('user_reminders').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  await supabase.from('watch_history').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  await supabase.from('user_following').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  await supabase.from('unlocked_episodes').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('consumption_history').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('reward_coin_history').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('purchase_history').delete().neq('id', '00000000-0000-0000-0000-000000000000');
@@ -166,6 +170,118 @@ async function seedRedeemableItems() {
   }
 }
 
+async function seedDemoUser() {
+  console.log('Seeding demo user...');
+
+  const demoUserId = 'demo-user-id';
+
+  const { error: userError } = await supabase.from('users').upsert({
+    id: demoUserId,
+    email: 'demo@afrishorts.com',
+    password_hash: 'demo-hash',
+    coins: 500,
+    reward_coins: 200,
+    points: 1500,
+    has_membership: true,
+    autoplay_preference: true,
+    preferred_language: 'en',
+  }, {
+    onConflict: 'id'
+  });
+
+  if (userError) {
+    console.error('Error creating demo user:', userError);
+  } else {
+    console.log('  ✓ Created demo user');
+  }
+
+  return demoUserId;
+}
+
+async function seedUserData(userId: string) {
+  console.log('Seeding user following, watch history, and reminders...');
+
+  const { data: allSeries } = await supabase
+    .from('series')
+    .select('id, is_coming_soon')
+    .order('created_at', { ascending: true });
+
+  if (!allSeries || allSeries.length === 0) {
+    console.log('  ⚠️  No series found to create user data');
+    return;
+  }
+
+  const regularSeries = allSeries.filter(s => !s.is_coming_soon);
+  const comingSoonSeries = allSeries.filter(s => s.is_coming_soon);
+
+  if (regularSeries.length >= 5) {
+    const followingSeriesIds = regularSeries.slice(0, 5).map(s => s.id);
+    const followingData = followingSeriesIds.map(seriesId => ({
+      user_id: userId,
+      series_id: seriesId,
+    }));
+
+    const { error: followingError } = await supabase
+      .from('user_following')
+      .insert(followingData);
+
+    if (followingError) {
+      console.error('Error inserting user following:', followingError);
+    } else {
+      console.log(`  ✓ Added ${followingData.length} series to Following`);
+    }
+  }
+
+  if (regularSeries.length >= 3) {
+    for (let i = 0; i < 3; i++) {
+      const seriesId = regularSeries[i].id;
+      
+      const { data: episodes } = await supabase
+        .from('episodes')
+        .select('id, episode_number')
+        .eq('series_id', seriesId)
+        .order('episode_number', { ascending: true })
+        .limit(1);
+
+      if (episodes && episodes.length > 0) {
+        const watchData = {
+          user_id: userId,
+          series_id: seriesId,
+          episode_id: episodes[0].id,
+          last_watched_timestamp: Math.floor(Math.random() * 3000),
+        };
+
+        const { error: watchError } = await supabase
+          .from('watch_history')
+          .insert(watchData);
+
+        if (watchError) {
+          console.error(`Error inserting watch history for series ${i + 1}:`, watchError);
+        }
+      }
+    }
+    console.log('  ✓ Added 3 series to Watch History');
+  }
+
+  if (comingSoonSeries.length >= 2) {
+    const reminderSeriesIds = comingSoonSeries.slice(0, 2).map(s => s.id);
+    const reminderData = reminderSeriesIds.map(seriesId => ({
+      user_id: userId,
+      series_id: seriesId,
+    }));
+
+    const { error: reminderError } = await supabase
+      .from('user_reminders')
+      .insert(reminderData);
+
+    if (reminderError) {
+      console.error('Error inserting user reminders:', reminderError);
+    } else {
+      console.log(`  ✓ Added ${reminderData.length} series to Reminder Set`);
+    }
+  }
+}
+
 async function main() {
   console.log('Starting database seeding...\n');
   console.log('⚠️  Make sure you have run the migration SQL in your Supabase SQL Editor first!');
@@ -237,7 +353,14 @@ async function main() {
     await seedComingSoon(comingSoonSeries);
     await seedRedeemableItems();
 
+    const userId = await seedDemoUser();
+    await seedUserData(userId);
+
     console.log('\n✅ Database seeding completed successfully!');
+    console.log('\nDemo user credentials:');
+    console.log('  Email: demo@afrishorts.com');
+    console.log('  User ID: demo-user-id');
+    console.log('  Coins: 500 | Reward Coins: 200 | Points: 1500');
   } catch (error) {
     console.error('\n❌ Error during seeding:', error);
     process.exit(1);
