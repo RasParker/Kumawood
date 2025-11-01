@@ -47,9 +47,6 @@ export default function NewTabComponent({ navigateToPlayer }: NewTabComponentPro
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-            <div className="absolute inset-0 flex items-center justify-center opacity-80">
-              <Play className="h-6 w-6 text-primary" />
-            </div>
             {series.isNew && (
               <div className="absolute top-1 right-1 px-2 py-0.5 bg-gradient-to-r from-primary to-accent rounded-full text-xs font-bold text-primary-foreground">
                 NEW
