@@ -6,11 +6,14 @@ AfriShorts is a mobile-first, short-form video streaming application focused on 
 
 **Core Purpose**: Provide an immersive, content-first streaming experience for African short-form dramas with a freemium business model combining ad-supported viewing, virtual currency purchases, and premium memberships.
 
-**Current Status** (Updated: October 30, 2025): 
-- Phases 4 and 4.5 completed
+**Current Status** (Updated: November 1, 2025): 
+- Phase 5 completed: Monetization system with coin-based episode unlocking
 - Full-featured PlayerScreen with HTML5 video player, watch history tracking, autoplay, overlays, and bottom sheets
 - ForYouScreen with vertical TikTok-style feed using Swiper
 - HookPlayer component for vertical feed showing first episodes with like/follow functionality
+- MonetizationOverlay component for unlocking episodes with coin payment
+- Episode locking system: Episode 1 is free, other episodes cost 50 coins
+- Tiered coin deduction: reward coins used first, then paid coins
 - All data fully integrated with Supabase backend
 - Cloudinary integration fully implemented with image/video upload and delete endpoints
 - User must follow setup instructions in SUPABASE_SETUP.md to run migrations and seed data
