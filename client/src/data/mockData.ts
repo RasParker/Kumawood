@@ -52,7 +52,7 @@ export const popularSeries: Series[] = [
   {
     id: 'pop3',
     title: 'Modern Marriage',
-    posterUrl: '/posters/Modern_Marriage_drama_poster_6e9f3a8b.png',
+    posterUrl: '/posters/Modern_Marriage_drama_poster_ac867bce.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 95,
     genre: 'Drama',
@@ -76,7 +76,7 @@ export const popularSeries: Series[] = [
   {
     id: 'pop5',
     title: 'African Queen',
-    posterUrl: '/posters/African_Queen_romance_poster_a9f4e1b2.png',
+    posterUrl: '/posters/African_Queen_historical_poster_41279f3b.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 78,
     genre: 'Romance',
@@ -343,7 +343,7 @@ export const kumawoodSeries: Series[] = [
   {
     id: 'kuma4',
     title: 'Village Comedy',
-    posterUrl: '/posters/Village_Comedy_comedy_poster_7c3d9e5f.png',
+    posterUrl: '/posters/Village_Comedy_funny_poster_b13d54d4.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 81,
     genre: 'Comedy',
@@ -395,7 +395,7 @@ export const naijaSeries: Series[] = [
   {
     id: 'naija2',
     title: 'Yoruba Romance',
-    posterUrl: '/posters/Yoruba_Romance_romance_poster_4b8a2c1d.png',
+    posterUrl: '/posters/Yoruba_Romance_cultural_poster_8321657b.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 76,
     genre: 'Romance',
@@ -443,7 +443,7 @@ export const naijaSeries: Series[] = [
   {
     id: 'naija6',
     title: 'Calabar Beauty',
-    posterUrl: '/posters/Calabar_Beauty_romance_poster_2d7c4f9e.png',
+    posterUrl: '/posters/Hearts_Entangled_romance_poster_623f1511.png',
     videoUrl: 'https://res.cloudinary.com/demo/video/upload/v1/samples/placeholder_video.mp4',
     episodeCount: 55,
     genre: 'Romance',
@@ -459,7 +459,7 @@ export const comingSoonSeries: ComingSoonSeries[] = [
   {
     id: 'coming1',
     title: 'Empire Rising',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_coming_soon_1.jpg',
+    posterUrl: '/posters/Empire_Rising_historical_drama_poster_f506104b.png',
     releaseDate: 'December 2025',
     description: 'The birth of a new African empire',
     genre: 'Historical Drama',
@@ -467,7 +467,7 @@ export const comingSoonSeries: ComingSoonSeries[] = [
   {
     id: 'coming2',
     title: 'Cyber Lagos',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_coming_soon_2.jpg',
+    posterUrl: '/posters/Cyber_Lagos_sci-fi_poster_e02b0641.png',
     releaseDate: 'January 2026',
     description: 'Tech revolution in West Africa',
     genre: 'Sci-Fi Drama',
@@ -475,7 +475,7 @@ export const comingSoonSeries: ComingSoonSeries[] = [
   {
     id: 'coming3',
     title: 'Sahara Crossing',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_coming_soon_3.jpg',
+    posterUrl: '/posters/Sahara_Crossing_adventure_poster_1679b3a9.png',
     releaseDate: 'February 2026',
     description: 'Epic journey across the desert',
     genre: 'Adventure',
@@ -483,7 +483,7 @@ export const comingSoonSeries: ComingSoonSeries[] = [
   {
     id: 'coming4',
     title: 'Island Mysteries',
-    posterUrl: 'https://res.cloudinary.com/demo/image/upload/v1/samples/placeholder_coming_soon_4.jpg',
+    posterUrl: '/posters/Island_Mysteries_thriller_poster_48c8beeb.png',
     releaseDate: 'March 2026',
     description: 'Supernatural events on a remote island',
     genre: 'Mystery Thriller',
