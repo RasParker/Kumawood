@@ -4,6 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import { queryClient } from './lib/queryClient';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { AuthProvider } from '@/contexts/AuthContext';
 import i18n from '@/i18n/config';
 import type { User } from '@shared/schema';
 
@@ -345,7 +346,9 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
