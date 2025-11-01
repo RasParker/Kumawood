@@ -185,7 +185,7 @@ async function seedDemoUser() {
   if (existingUser) {
     demoUserId = existingUser.id;
     console.log('  ℹ️  Demo user already exists, updating...');
-    
+
     const { error: updateError } = await supabase
       .from('users')
       .update({
@@ -219,7 +219,7 @@ async function seedDemoUser() {
       console.error('Error creating demo user:', userError);
       throw new Error('Failed to create demo user');
     }
-    
+
     demoUserId = newUser.id;
     console.log('  ✓ Created demo user');
   }
@@ -264,7 +264,7 @@ async function seedUserData(userId: string) {
   if (regularSeries.length >= 3) {
     for (let i = 0; i < 3; i++) {
       const seriesId = regularSeries[i].id;
-      
+
       const { data: episodes } = await supabase
         .from('episodes')
         .select('id, episode_number')
