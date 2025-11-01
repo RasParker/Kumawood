@@ -88,6 +88,8 @@ async function seedSeries(seriesData: MockSeries[], category: string) {
         episode_number: i,
         title: `Episode ${i}`,
         video_url: series.videoUrl,
+        is_free: i <= 10,
+        cost_in_coins: i <= 10 ? 0 : 50,
       });
     }
 

@@ -12,7 +12,7 @@ AfriShorts is a mobile-first, short-form video streaming application focused on 
 - ForYouScreen with vertical TikTok-style feed using Swiper
 - HookPlayer component for vertical feed showing first episodes with like/follow functionality
 - MonetizationOverlay component for unlocking episodes with coin payment
-- Episode locking system: Episode 1 is free, other episodes cost 50 coins
+- Episode locking system: Episodes 1-10 are free, episodes 11+ cost 50 coins
 - Tiered coin deduction: reward coins used first, then paid coins
 - All data fully integrated with Supabase backend
 - Cloudinary integration fully implemented with image/video upload and delete endpoints
