@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bookmark, Bell, History as HistoryIcon, Heart, Trash2, X } from 'lucide-react';
+import { Bookmark, Bell, History as HistoryIcon, Trash2, X } from 'lucide-react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -269,7 +269,7 @@ export default function MyListScreen({ onNavigateToPlayer }: MyListScreenProps) 
         <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v); setEditMode(false); setSelectedItems(new Set()); }}>
           <TabsList className="w-full justify-start rounded-none border-b border-border bg-transparent px-4">
             <TabsTrigger value="following" data-testid="tab-following">
-              <Heart className="h-4 w-4 mr-2" />
+              <Bookmark className="h-4 w-4 mr-2" />
               Following
             </TabsTrigger>
             <TabsTrigger value="history" data-testid="tab-history">
@@ -332,7 +332,7 @@ export default function MyListScreen({ onNavigateToPlayer }: MyListScreenProps) 
                 )}
               </div>
             ) : (
-              renderEmptyState(Heart, 'No series followed', 'Follow series to see them here')
+              renderEmptyState(Bookmark, 'No series followed', 'Follow series to see them here')
             )}
           </TabsContent>
 
