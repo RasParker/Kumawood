@@ -40,15 +40,15 @@ export default function NewTabComponent({ navigateToPlayer }: NewTabComponentPro
           data-testid={`series-${series.id}`}
         >
           {/* Thumbnail */}
-          <div className="relative flex-shrink-0 w-32 h-20 bg-muted rounded-md overflow-hidden">
+          <div className="relative flex-shrink-0 w-20 h-28 bg-muted rounded-md overflow-hidden">
             <img
               src={series.posterUrl}
               alt={series.title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-background/60 to-transparent" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Play className="h-8 w-8 text-primary" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+            <div className="absolute inset-0 flex items-center justify-center opacity-80">
+              <Play className="h-6 w-6 text-primary" />
             </div>
             {series.isNew && (
               <div className="absolute top-1 right-1 px-2 py-0.5 bg-gradient-to-r from-primary to-accent rounded-full text-xs font-bold text-primary-foreground">
