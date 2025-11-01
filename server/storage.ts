@@ -18,6 +18,8 @@ import {
   type InsertConsumptionHistory,
   type RewardCoinHistory,
   type InsertRewardCoinHistory,
+  type UserReminder,
+  type InsertUserReminder,
 } from "@shared/schema";
 import { supabase } from "./supabase";
 import { mapSeriesToCamelCase, mapEpisodeToCamelCase, mapRedeemableItemToCamelCase } from "./mappers";
@@ -55,6 +57,15 @@ export interface IStorage {
   updateUserCoins(userId: string, coins: number, rewardCoins: number): Promise<User>;
   addConsumptionHistory(history: InsertConsumptionHistory): Promise<ConsumptionHistory>;
   addRewardCoinHistory(history: InsertRewardCoinHistory): Promise<RewardCoinHistory>;
+  
+  addUserReminder(userReminder: InsertUserReminder): Promise<UserReminder>;
+  removeUserReminder(userId: string, seriesId: string): Promise<void>;
+  getUserReminders(userId: string): Promise<Series[]>;
+  getUserFollowingSeries(userId: string): Promise<Series[]>;
+  getUserWatchHistory(userId: string): Promise<Array<{ series: Series; episode: Episode; lastWatchedTimestamp: number }>>;
+  bulkDeleteUserFollowing(userId: string, seriesIds: string[]): Promise<void>;
+  bulkDeleteUserReminders(userId: string, seriesIds: string[]): Promise<void>;
+  bulkDeleteWatchHistory(userId: string, seriesIds: string[]): Promise<void>;
 }
 
 export class SupabaseStorage implements IStorage {
@@ -539,6 +550,128 @@ export class SupabaseStorage implements IStorage {
       reason: data.reason,
       createdAt: data.created_at,
     } as RewardCoinHistory;
+  }
+
+  async addUserReminder(userReminder: InsertUserReminder): Promise<UserReminder> {
+    const { data, error } = await supabase
+      .from('user_reminders')
+      .upsert({
+        user_id: userReminder.userId,
+        series_id: userReminder.seriesId,
+      }, {
+        onConflict: 'user_id,series_id'
+      })
+      .select()
+      .single();
+
+    if (error || !data) {
+      throw new Error(`Failed to add user reminder: ${error?.message}`);
+    }
+
+    return {
+      id: data.id,
+      userId: data.user_id,
+      seriesId: data.series_id,
+      createdAt: data.created_at,
+    } as UserReminder;
+  }
+
+  async removeUserReminder(userId: string, seriesId: string): Promise<void> {
+    const { error } = await supabase
+      .from('user_reminders')
+      .delete()
+      .eq('user_id', userId)
+      .eq('series_id', seriesId);
+
+    if (error) {
+      throw new Error(`Failed to remove user reminder: ${error.message}`);
+    }
+  }
+
+  async getUserReminders(userId: string): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('user_reminders')
+      .select('series:series_id (*)')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw new Error(`Failed to fetch user reminders: ${error.message}`);
+    
+    return (data || [])
+      .filter((item: any) => item.series)
+      .map((item: any) => mapSeriesToCamelCase(item.series));
+  }
+
+  async getUserFollowingSeries(userId: string): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('user_following')
+      .select('series:series_id (*)')
+      .eq('user_id', userId)
+      .order('id', { ascending: false });
+
+    if (error) throw new Error(`Failed to fetch user following: ${error.message}`);
+    
+    return (data || [])
+      .filter((item: any) => item.series)
+      .map((item: any) => mapSeriesToCamelCase(item.series));
+  }
+
+  async getUserWatchHistory(userId: string): Promise<Array<{ series: Series; episode: Episode; lastWatchedTimestamp: number }>> {
+    const { data, error } = await supabase
+      .from('watch_history')
+      .select(`
+        last_watched_timestamp,
+        episode:episode_id (*),
+        series:series_id (*)
+      `)
+      .eq('user_id', userId)
+      .order('last_watched_timestamp', { ascending: false });
+
+    if (error) throw new Error(`Failed to fetch watch history: ${error.message}`);
+    
+    return (data || [])
+      .filter((item: any) => item.series && item.episode)
+      .map((item: any) => ({
+        series: mapSeriesToCamelCase(item.series),
+        episode: mapEpisodeToCamelCase(item.episode),
+        lastWatchedTimestamp: item.last_watched_timestamp,
+      }));
+  }
+
+  async bulkDeleteUserFollowing(userId: string, seriesIds: string[]): Promise<void> {
+    const { error } = await supabase
+      .from('user_following')
+      .delete()
+      .eq('user_id', userId)
+      .in('series_id', seriesIds);
+
+    if (error) {
+      throw new Error(`Failed to bulk delete user following: ${error.message}`);
+    }
+  }
+
+  async bulkDeleteUserReminders(userId: string, seriesIds: string[]): Promise<void> {
+    const { error } = await supabase
+      .from('user_reminders')
+      .delete()
+      .eq('user_id', userId)
+      .in('series_id', seriesIds);
+
+    if (error) {
+      throw new Error(`Failed to bulk delete user reminders: ${error.message}`);
+    }
+  }
+
+  async bulkDeleteWatchHistory(userId: string, seriesIds: string[]): Promise<void> {
+    const { error } = await supabase
+      .from('watch_history')
+      .delete()
+      .eq('user_id', userId)
+      .in('series_id', seriesIds);
+
+    if (error) {
+      throw new Error(`Failed to bulk delete watch history: ${error.message}`);
+    }
   }
 }
 

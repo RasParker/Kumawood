@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertWatchHistorySchema, insertUserFollowingSchema } from "@shared/schema";
+import { insertWatchHistorySchema, insertUserFollowingSchema, insertUserReminderSchema } from "@shared/schema";
 import { cloudinary } from "./cloudinary";
 import multer from "multer";
 
@@ -214,6 +214,102 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error checking user following:', error);
       res.status(500).json({ error: 'Failed to check user following' });
+    }
+  });
+
+  app.post('/api/user-reminders', async (req, res) => {
+    try {
+      const validatedData = insertUserReminderSchema.parse(req.body);
+      const reminder = await storage.addUserReminder(validatedData);
+      res.json(reminder);
+    } catch (error) {
+      console.error('Error adding user reminder:', error);
+      if (error instanceof Error && error.name === 'ZodError') {
+        return res.status(400).json({ error: 'Invalid request data', details: error.message });
+      }
+      res.status(500).json({ error: 'Failed to add user reminder' });
+    }
+  });
+
+  app.delete('/api/user-reminders/:userId/:seriesId', async (req, res) => {
+    try {
+      await storage.removeUserReminder(req.params.userId, req.params.seriesId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error removing user reminder:', error);
+      res.status(500).json({ error: 'Failed to remove user reminder' });
+    }
+  });
+
+  app.get('/api/user-reminders/:userId', async (req, res) => {
+    try {
+      const reminders = await storage.getUserReminders(req.params.userId);
+      res.json(reminders);
+    } catch (error) {
+      console.error('Error fetching user reminders:', error);
+      res.status(500).json({ error: 'Failed to fetch user reminders' });
+    }
+  });
+
+  app.get('/api/user-following/:userId', async (req, res) => {
+    try {
+      const following = await storage.getUserFollowingSeries(req.params.userId);
+      res.json(following);
+    } catch (error) {
+      console.error('Error fetching user following:', error);
+      res.status(500).json({ error: 'Failed to fetch user following' });
+    }
+  });
+
+  app.get('/api/watch-history/:userId', async (req, res) => {
+    try {
+      const history = await storage.getUserWatchHistory(req.params.userId);
+      res.json(history);
+    } catch (error) {
+      console.error('Error fetching watch history:', error);
+      res.status(500).json({ error: 'Failed to fetch watch history' });
+    }
+  });
+
+  app.post('/api/user-following/bulk-delete', async (req, res) => {
+    try {
+      const { userId, seriesIds } = req.body;
+      if (!userId || !Array.isArray(seriesIds)) {
+        return res.status(400).json({ error: 'Invalid request data' });
+      }
+      await storage.bulkDeleteUserFollowing(userId, seriesIds);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error bulk deleting user following:', error);
+      res.status(500).json({ error: 'Failed to bulk delete user following' });
+    }
+  });
+
+  app.post('/api/user-reminders/bulk-delete', async (req, res) => {
+    try {
+      const { userId, seriesIds } = req.body;
+      if (!userId || !Array.isArray(seriesIds)) {
+        return res.status(400).json({ error: 'Invalid request data' });
+      }
+      await storage.bulkDeleteUserReminders(userId, seriesIds);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error bulk deleting user reminders:', error);
+      res.status(500).json({ error: 'Failed to bulk delete user reminders' });
+    }
+  });
+
+  app.post('/api/watch-history/bulk-delete', async (req, res) => {
+    try {
+      const { userId, seriesIds } = req.body;
+      if (!userId || !Array.isArray(seriesIds)) {
+        return res.status(400).json({ error: 'Invalid request data' });
+      }
+      await storage.bulkDeleteWatchHistory(userId, seriesIds);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error bulk deleting watch history:', error);
+      res.status(500).json({ error: 'Failed to bulk delete watch history' });
     }
   });
 
