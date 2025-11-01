@@ -173,25 +173,54 @@ async function seedRedeemableItems() {
 async function seedDemoUser() {
   console.log('Seeding demo user...');
 
-  const demoUserId = 'demo-user-id';
+  // Generate a proper UUID for the demo user
+  const { data: existingUser } = await supabase
+    .from('users')
+    .select('id')
+    .eq('email', 'demo@afrishorts.com')
+    .single();
 
-  const { error: userError } = await supabase.from('users').upsert({
-    id: demoUserId,
-    email: 'demo@afrishorts.com',
-    password_hash: 'demo-hash',
-    coins: 500,
-    reward_coins: 200,
-    points: 1500,
-    has_membership: true,
-    autoplay_preference: true,
-    preferred_language: 'en',
-  }, {
-    onConflict: 'id'
-  });
+  let demoUserId: string;
 
-  if (userError) {
-    console.error('Error creating demo user:', userError);
+  if (existingUser) {
+    demoUserId = existingUser.id;
+    console.log('  ℹ️  Demo user already exists, updating...');
+    
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({
+        coins: 500,
+        reward_coins: 200,
+        points: 1500,
+        has_membership: true,
+        autoplay_preference: true,
+        language_preference: 'en',
+      })
+      .eq('id', demoUserId);
+
+    if (updateError) {
+      console.error('Error updating demo user:', updateError);
+    } else {
+      console.log('  ✓ Updated demo user');
+    }
   } else {
+    const { data: newUser, error: userError } = await supabase.from('users').insert({
+      email: 'demo@afrishorts.com',
+      password: 'demo-hash', // Changed from password_hash to password
+      coins: 500,
+      reward_coins: 200,
+      points: 1500,
+      has_membership: true,
+      autoplay_preference: true,
+      language_preference: 'en',
+    }).select('id').single();
+
+    if (userError || !newUser) {
+      console.error('Error creating demo user:', userError);
+      throw new Error('Failed to create demo user');
+    }
+    
+    demoUserId = newUser.id;
     console.log('  ✓ Created demo user');
   }
 
