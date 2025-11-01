@@ -88,7 +88,7 @@ export default function EpisodeSheet({
           
           <TabsContent value="episodes" className="flex-1 overflow-hidden m-0">
             <ScrollArea className="h-full pr-4">
-              <div className="space-y-2">
+              <div className="grid grid-cols-6 gap-3 pb-4">
                 {episodes.map((episode) => {
                   const isActive = episode.episodeNumber === currentEpisodeNumber;
                   return (
@@ -99,27 +99,17 @@ export default function EpisodeSheet({
                         onOpenChange(false);
                       }}
                       data-testid={`button-episode-${episode.episodeNumber}`}
-                      className={`w-full p-4 rounded-lg flex items-center gap-4 transition-all hover-elevate active-elevate-2 ${
+                      className={`aspect-square rounded-lg flex items-center justify-center transition-all hover-elevate active-elevate-2 ${
                         isActive
                           ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground'
                           : 'bg-card text-foreground hover:bg-card/80'
                       }`}
                     >
-                      <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-background/50 flex items-center justify-center">
-                        {isActive ? (
-                          <Play className="h-5 w-5" fill="currentColor" />
-                        ) : (
-                          <span className="font-semibold">{episode.episodeNumber}</span>
-                        )}
-                      </div>
-                      <div className="flex-1 text-left">
-                        <h4 className="font-semibold text-sm line-clamp-1">
-                          Episode {episode.episodeNumber}: {episode.title}
-                        </h4>
-                        {isActive && (
-                          <p className="text-xs opacity-90 mt-1">Now Playing</p>
-                        )}
-                      </div>
+                      {isActive ? (
+                        <Play className="h-5 w-5" fill="currentColor" />
+                      ) : (
+                        <span className="font-semibold text-sm">{episode.episodeNumber}</span>
+                      )}
                     </button>
                   );
                 })}
