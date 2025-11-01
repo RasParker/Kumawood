@@ -96,6 +96,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/series/trending', async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 10;
+      const series = await storage.getTrendingSeries(limit);
+      res.json(series);
+    } catch (error) {
+      console.error('Error fetching trending series:', error);
+      res.status(500).json({ error: 'Failed to fetch trending series' });
+    }
+  });
+
+  app.get('/api/series/search', async (req, res) => {
+    try {
+      const query = req.query.q as string;
+      if (!query) {
+        return res.status(400).json({ error: 'Search query is required' });
+      }
+      const series = await storage.searchSeriesByTitle(query);
+      res.json(series);
+    } catch (error) {
+      console.error('Error searching series:', error);
+      res.status(500).json({ error: 'Failed to search series' });
+    }
+  });
+
   app.get('/api/series/kumawood', async (_req, res) => {
     try {
       const series = await storage.getKumawoodSeries();

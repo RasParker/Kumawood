@@ -35,6 +35,8 @@ export interface IStorage {
   getPopularSeries(): Promise<Series[]>;
   getNewSeries(): Promise<Series[]>;
   getRankingSeries(): Promise<Series[]>;
+  getTrendingSeries(limit: number): Promise<Series[]>;
+  searchSeriesByTitle(query: string): Promise<Series[]>;
   getKumawoodSeries(): Promise<Series[]>;
   getNaijaSeries(): Promise<Series[]>;
   getComingSoonSeries(): Promise<Series[]>;
@@ -176,6 +178,31 @@ export class SupabaseStorage implements IStorage {
       .limit(10);
 
     if (error) throw new Error(`Failed to fetch ranking series: ${error.message}`);
+    return (data || []).map(mapSeriesToCamelCase);
+  }
+
+  async getTrendingSeries(limit: number = 10): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('is_coming_soon', false)
+      .order('view_count', { ascending: false })
+      .limit(limit);
+
+    if (error) throw new Error(`Failed to fetch trending series: ${error.message}`);
+    return (data || []).map(mapSeriesToCamelCase);
+  }
+
+  async searchSeriesByTitle(query: string): Promise<Series[]> {
+    const { data, error } = await supabase
+      .from('series')
+      .select('*')
+      .eq('is_coming_soon', false)
+      .ilike('title', `%${query}%`)
+      .order('view_count', { ascending: false })
+      .limit(20);
+
+    if (error) throw new Error(`Failed to search series: ${error.message}`);
     return (data || []).map(mapSeriesToCamelCase);
   }
 

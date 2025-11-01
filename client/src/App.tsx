@@ -200,7 +200,7 @@ function AppContent() {
           />
         );
       case 'search':
-        return <SearchScreen onNavigateToPlayer={navigateToPlayer} />;
+        return <SearchScreen onNavigateToPlayer={navigateToPlayer} onNavigateToForYou={navigateToForYou} />;
       case 'myList':
         return <MyListScreen onNavigateToPlayer={navigateToPlayer} />;
       case 'profile':
