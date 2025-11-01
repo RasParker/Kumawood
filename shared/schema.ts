@@ -126,6 +126,15 @@ export const unlockedEpisodes = pgTable("unlocked_episodes", {
   uniqueUserEpisode: uniqueIndex("unlocked_episodes_user_episode_unique").on(table.userId, table.episodeId),
 }));
 
+export const userReminders = pgTable("user_reminders", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  seriesId: uuid("series_id").notNull().references(() => series.id, { onDelete: 'cascade' }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => ({
+  uniqueUserSeries: uniqueIndex("user_reminders_user_series_unique").on(table.userId, table.seriesId),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -154,6 +163,7 @@ export const insertConsumptionHistorySchema = createInsertSchema(consumptionHist
 export const insertWatchHistorySchema = createInsertSchema(watchHistory).omit({ id: true });
 export const insertUserFollowingSchema = createInsertSchema(userFollowing).omit({ id: true });
 export const insertUnlockedEpisodeSchema = createInsertSchema(unlockedEpisodes).omit({ id: true });
+export const insertUserReminderSchema = createInsertSchema(userReminders).omit({ id: true, createdAt: true });
 
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -194,6 +204,9 @@ export type UserFollowing = typeof userFollowing.$inferSelect;
 
 export type InsertUnlockedEpisode = z.infer<typeof insertUnlockedEpisodeSchema>;
 export type UnlockedEpisode = typeof unlockedEpisodes.$inferSelect;
+
+export type InsertUserReminder = z.infer<typeof insertUserReminderSchema>;
+export type UserReminder = typeof userReminders.$inferSelect;
 
 export interface EpisodeWithSeries extends Episode {
   series: Series;
