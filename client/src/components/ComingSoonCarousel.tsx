@@ -1,12 +1,75 @@
-import { Bell } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import { Bell, BellOff } from 'lucide-react';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import type { Series } from '@shared/schema';
+import { apiRequest, queryClient } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 
 export default function ComingSoonCarousel() {
+  const userId = 'demo-user-id';
+  const { toast } = useToast();
+
   const { data: comingSoonSeries = [], isLoading } = useQuery<Series[]>({
     queryKey: ['/api/series/coming-soon'],
   });
+
+  const { data: userReminders = [] } = useQuery<Series[]>({
+    queryKey: ['/api/user-reminders', userId],
+    enabled: !!userId,
+  });
+
+  const reminderSeriesIds = new Set(userReminders.map(s => s.id));
+
+  const addReminderMutation = useMutation({
+    mutationFn: async (seriesId: string) => {
+      await apiRequest('POST', '/api/user-reminders', {
+        userId,
+        seriesId,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/user-reminders', userId] });
+      toast({
+        title: 'Reminder Set',
+        description: "You'll be notified when this series is released.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: 'Failed to set reminder',
+        description: 'Please try again.',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const removeReminderMutation = useMutation({
+    mutationFn: async (seriesId: string) => {
+      await apiRequest('DELETE', `/api/user-reminders/${userId}/${seriesId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/user-reminders', userId] });
+      toast({
+        title: 'Reminder Removed',
+        description: 'You will no longer be notified about this series.',
+      });
+    },
+    onError: () => {
+      toast({
+        title: 'Failed to remove reminder',
+        description: 'Please try again.',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const handleToggleReminder = (seriesId: string, hasReminder: boolean) => {
+    if (hasReminder) {
+      removeReminderMutation.mutate(seriesId);
+    } else {
+      addReminderMutation.mutate(seriesId);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -50,15 +113,31 @@ export default function ComingSoonCarousel() {
               <h4 className="text-xs font-bold text-foreground line-clamp-2 leading-tight">
                 {series.title}
               </h4>
-              <Button
-                variant="outline"
-                size="sm"
-                data-testid={`button-remind-${series.id}`}
-                className="w-full h-7 text-[10px] rounded-full hover-elevate active-elevate-2"
-              >
-                <Bell className="h-2.5 w-2.5 mr-1" />
-                Remind Me
-              </Button>
+              {(() => {
+                const hasReminder = reminderSeriesIds.has(series.id);
+                return (
+                  <Button
+                    variant={hasReminder ? "default" : "outline"}
+                    size="sm"
+                    data-testid={`button-remind-${series.id}`}
+                    className="w-full h-7 text-[10px] rounded-full hover-elevate active-elevate-2"
+                    onClick={() => handleToggleReminder(series.id, hasReminder)}
+                    disabled={addReminderMutation.isPending || removeReminderMutation.isPending}
+                  >
+                    {hasReminder ? (
+                      <>
+                        <BellOff className="h-2.5 w-2.5 mr-1" />
+                        Reminded
+                      </>
+                    ) : (
+                      <>
+                        <Bell className="h-2.5 w-2.5 mr-1" />
+                        Remind Me
+                      </>
+                    )}
+                  </Button>
+                );
+              })()}
             </div>
           </div>
         ))}
