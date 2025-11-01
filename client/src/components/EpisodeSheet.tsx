@@ -128,16 +128,14 @@ export default function EpisodeSheet({
                       }`}
                     >
                       {isLocked && (
-                        <div className="absolute inset-0 bg-background/60 rounded-lg flex items-center justify-center">
-                          <Lock className="h-4 w-4 text-foreground" data-testid={`lock-episode-${episode.episodeNumber}`} />
+                        <div className="absolute top-0 right-0 bg-gradient-to-r from-primary to-accent rounded-tr-lg rounded-bl-lg p-1" data-testid={`lock-indicator-${episode.episodeNumber}`}>
+                          <Lock className="h-3 w-3 text-white" data-testid={`lock-episode-${episode.episodeNumber}`} />
                         </div>
                       )}
                       {!isLocked && isActive ? (
                         <Play className="h-5 w-5" fill="currentColor" />
-                      ) : !isLocked ? (
-                        <span className="font-semibold text-sm">{episode.episodeNumber}</span>
                       ) : (
-                        <span className="font-semibold text-sm opacity-40">{episode.episodeNumber}</span>
+                        <span className="font-semibold text-sm">{episode.episodeNumber}</span>
                       )}
                     </button>
                   );
