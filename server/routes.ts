@@ -117,6 +117,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/episodes/:episodeId/unlock-status/:userId', async (req, res) => {
+    try {
+      const isUnlocked = await storage.isEpisodeUnlocked(req.params.userId, req.params.episodeId);
+      res.json({ isUnlocked });
+    } catch (error) {
+      console.error('Error checking episode unlock status:', error);
+      res.status(500).json({ error: 'Failed to check episode unlock status' });
+    }
+  });
+
+  app.post('/api/episodes/:episodeId/unlock', async (req, res) => {
+    try {
+      const { userId } = req.body;
+      if (!userId) {
+        return res.status(400).json({ error: 'User ID is required' });
+      }
+      const result = await storage.unlockEpisode(userId, req.params.episodeId);
+      if (result.success) {
+        res.json(result);
+      } else {
+        res.status(400).json(result);
+      }
+    } catch (error) {
+      console.error('Error unlocking episode:', error);
+      res.status(500).json({ error: 'Failed to unlock episode' });
+    }
+  });
+
   app.get('/api/users/:id', async (req, res) => {
     try {
       const user = await storage.getUser(req.params.id);

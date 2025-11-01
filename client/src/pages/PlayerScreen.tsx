@@ -16,6 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import EpisodeSheet from '@/components/EpisodeSheet';
 import SpeedSelectionSheet from '@/components/SpeedSelectionSheet';
 import PlaybackSettingsSheet from '@/components/PlaybackSettingsSheet';
+import MonetizationOverlay from '@/components/MonetizationOverlay';
 import { apiRequest } from '@/lib/queryClient';
 import type { Episode, Series, User } from '@shared/schema';
 
@@ -77,6 +78,22 @@ export default function PlayerScreen({
     enabled: !!userId,
   });
 
+  const { data: unlockStatus, isLoading: unlockStatusLoading } = useQuery<{ isUnlocked: boolean }>({
+    queryKey: ['/api/episodes', episode?.id, 'unlock-status', userId],
+    enabled: !!episode?.id && !!userId,
+  });
+
+  const isEpisodeLocked = episode && !episode.isFree && !unlockStatus?.isUnlocked;
+  const [showMonetizationOverlay, setShowMonetizationOverlay] = useState(false);
+
+  useEffect(() => {
+    if (isEpisodeLocked && !unlockStatusLoading) {
+      setShowMonetizationOverlay(true);
+    } else {
+      setShowMonetizationOverlay(false);
+    }
+  }, [isEpisodeLocked, unlockStatusLoading]);
+
   const saveWatchHistoryMutation = useMutation({
     mutationFn: async (timestamp: number) => {
       if (!episode) return;
@@ -96,11 +113,11 @@ export default function PlayerScreen({
   }, [user]);
 
   useEffect(() => {
-    if (videoRef.current && episode?.videoUrl) {
+    if (videoRef.current && episode?.videoUrl && !isEpisodeLocked) {
       videoRef.current.src = episode.videoUrl;
       videoRef.current.playbackRate = playbackSpeed;
     }
-  }, [episode, playbackSpeed]);
+  }, [episode, playbackSpeed, isEpisodeLocked]);
 
   useEffect(() => {
     resetOverlayTimer();
@@ -232,7 +249,7 @@ export default function PlayerScreen({
       <video
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-contain"
-        autoPlay
+        autoPlay={!isEpisodeLocked}
         playsInline
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
@@ -240,6 +257,19 @@ export default function PlayerScreen({
         onClick={handleVideoClick}
         data-testid="video-player"
       />
+
+      {showMonetizationOverlay && episode && (
+        <MonetizationOverlay 
+          episode={episode} 
+          onUnlockSuccess={() => {
+            setShowMonetizationOverlay(false);
+            if (videoRef.current && episode.videoUrl) {
+              videoRef.current.src = episode.videoUrl;
+              videoRef.current.play();
+            }
+          }}
+        />
+      )}
 
       <div 
         className={`absolute inset-0 transition-opacity duration-300 ${

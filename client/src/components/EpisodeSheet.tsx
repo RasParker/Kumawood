@@ -1,7 +1,8 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Play } from 'lucide-react';
+import { Play, Lock } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import type { Series, Episode } from '@shared/schema';
 
 interface EpisodeSheetProps {
@@ -21,6 +22,24 @@ export default function EpisodeSheet({
   currentEpisodeNumber,
   onEpisodeSelect,
 }: EpisodeSheetProps) {
+  const userId = 'demo-user-id';
+
+  const { data: unlockStatuses = {} } = useQuery({
+    queryKey: ['/api/episodes/unlock-status', userId, episodes.map(e => e.id)],
+    enabled: open && episodes.length > 0,
+    queryFn: async () => {
+      const statuses: Record<string, boolean> = {};
+      await Promise.all(
+        episodes.map(async (episode) => {
+          const response = await fetch(`/api/episodes/${episode.id}/unlock-status/${userId}`);
+          const data = await response.json();
+          statuses[episode.id] = data.isUnlocked || episode.isFree;
+        })
+      );
+      return statuses;
+    },
+  });
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent 
@@ -91,6 +110,9 @@ export default function EpisodeSheet({
               <div className="grid grid-cols-6 gap-3 pb-4">
                 {episodes.map((episode) => {
                   const isActive = episode.episodeNumber === currentEpisodeNumber;
+                  const isUnlocked = unlockStatuses[episode.id] ?? episode.isFree;
+                  const isLocked = !isUnlocked;
+                  
                   return (
                     <button
                       key={episode.id}
@@ -99,16 +121,23 @@ export default function EpisodeSheet({
                         onOpenChange(false);
                       }}
                       data-testid={`button-episode-${episode.episodeNumber}`}
-                      className={`aspect-square rounded-lg flex items-center justify-center transition-all hover-elevate active-elevate-2 ${
+                      className={`aspect-square rounded-lg flex items-center justify-center transition-all hover-elevate active-elevate-2 relative ${
                         isActive
                           ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground'
                           : 'bg-card text-foreground hover:bg-card/80'
                       }`}
                     >
-                      {isActive ? (
+                      {isLocked && (
+                        <div className="absolute inset-0 bg-background/60 rounded-lg flex items-center justify-center">
+                          <Lock className="h-4 w-4 text-foreground" data-testid={`lock-episode-${episode.episodeNumber}`} />
+                        </div>
+                      )}
+                      {!isLocked && isActive ? (
                         <Play className="h-5 w-5" fill="currentColor" />
-                      ) : (
+                      ) : !isLocked ? (
                         <span className="font-semibold text-sm">{episode.episodeNumber}</span>
+                      ) : (
+                        <span className="font-semibold text-sm opacity-40">{episode.episodeNumber}</span>
                       )}
                     </button>
                   );

@@ -12,6 +12,12 @@ import {
   type UserFollowing,
   type InsertUserFollowing,
   type EpisodeWithSeries,
+  type UnlockedEpisode,
+  type InsertUnlockedEpisode,
+  type ConsumptionHistory,
+  type InsertConsumptionHistory,
+  type RewardCoinHistory,
+  type InsertRewardCoinHistory,
 } from "@shared/schema";
 import { supabase } from "./supabase";
 import { mapSeriesToCamelCase, mapEpisodeToCamelCase, mapRedeemableItemToCamelCase } from "./mappers";
@@ -43,6 +49,12 @@ export interface IStorage {
   isUserFollowingSeries(userId: string, seriesId: string): Promise<boolean>;
   updateSeries(id: string, updates: Partial<Series>): Promise<Series>;
   deleteSeries(id: string): Promise<void>;
+  
+  isEpisodeUnlocked(userId: string, episodeId: string): Promise<boolean>;
+  unlockEpisode(userId: string, episodeId: string): Promise<{ success: boolean; message: string }>;
+  updateUserCoins(userId: string, coins: number, rewardCoins: number): Promise<User>;
+  addConsumptionHistory(history: InsertConsumptionHistory): Promise<ConsumptionHistory>;
+  addRewardCoinHistory(history: InsertRewardCoinHistory): Promise<RewardCoinHistory>;
 }
 
 export class SupabaseStorage implements IStorage {
@@ -355,6 +367,178 @@ export class SupabaseStorage implements IStorage {
     }
 
     return mapSeriesToCamelCase(data);
+  }
+
+  async isEpisodeUnlocked(userId: string, episodeId: string): Promise<boolean> {
+    const episodeResult = await supabase
+      .from('episodes')
+      .select('is_free')
+      .eq('id', episodeId)
+      .single();
+
+    if (episodeResult.data?.is_free) {
+      return true;
+    }
+
+    const { data, error } = await supabase
+      .from('unlocked_episodes')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('episode_id', episodeId)
+      .single();
+
+    return !!data && !error;
+  }
+
+  async unlockEpisode(userId: string, episodeId: string): Promise<{ success: boolean; message: string }> {
+    const episode = await supabase
+      .from('episodes')
+      .select('id, cost_in_coins, is_free')
+      .eq('id', episodeId)
+      .single();
+
+    if (!episode.data) {
+      return { success: false, message: 'Episode not found' };
+    }
+
+    if (episode.data.is_free) {
+      return { success: true, message: 'Episode is free' };
+    }
+
+    const alreadyUnlocked = await this.isEpisodeUnlocked(userId, episodeId);
+    if (alreadyUnlocked) {
+      return { success: true, message: 'Episode already unlocked' };
+    }
+
+    const user = await this.getUser(userId);
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    const cost = episode.data.cost_in_coins;
+    let rewardCoinsUsed = 0;
+    let paidCoinsUsed = 0;
+
+    if (user.rewardCoins >= cost) {
+      rewardCoinsUsed = cost;
+    } else {
+      rewardCoinsUsed = user.rewardCoins;
+      paidCoinsUsed = cost - user.rewardCoins;
+    }
+
+    if (user.coins < paidCoinsUsed) {
+      return { success: false, message: 'Not enough coins' };
+    }
+
+    const newRewardCoins = user.rewardCoins - rewardCoinsUsed;
+    const newPaidCoins = user.coins - paidCoinsUsed;
+
+    await this.updateUserCoins(userId, newPaidCoins, newRewardCoins);
+
+    if (rewardCoinsUsed > 0) {
+      await this.addConsumptionHistory({
+        userId,
+        episodeId,
+        coinType: 'reward',
+        coinsSpent: rewardCoinsUsed,
+      });
+      
+      await this.addRewardCoinHistory({
+        userId,
+        coinsChange: -rewardCoinsUsed,
+        reason: `Unlocked episode ${episodeId}`,
+      });
+    }
+
+    if (paidCoinsUsed > 0) {
+      await this.addConsumptionHistory({
+        userId,
+        episodeId,
+        coinType: 'paid',
+        coinsSpent: paidCoinsUsed,
+      });
+    }
+
+    const { error: unlockError } = await supabase
+      .from('unlocked_episodes')
+      .insert({
+        user_id: userId,
+        episode_id: episodeId,
+      });
+
+    if (unlockError) {
+      throw new Error(`Failed to unlock episode: ${unlockError.message}`);
+    }
+
+    return { success: true, message: 'Episode unlocked successfully' };
+  }
+
+  async updateUserCoins(userId: string, coins: number, rewardCoins: number): Promise<User> {
+    const { data, error } = await supabase
+      .from('users')
+      .update({
+        coins,
+        reward_coins: rewardCoins,
+      })
+      .eq('id', userId)
+      .select()
+      .single();
+
+    if (error || !data) {
+      throw new Error(`Failed to update user coins: ${error?.message}`);
+    }
+
+    return data as User;
+  }
+
+  async addConsumptionHistory(history: InsertConsumptionHistory): Promise<ConsumptionHistory> {
+    const { data, error } = await supabase
+      .from('consumption_history')
+      .insert({
+        user_id: history.userId,
+        episode_id: history.episodeId,
+        coin_type: history.coinType,
+        coins_spent: history.coinsSpent,
+      })
+      .select()
+      .single();
+
+    if (error || !data) {
+      throw new Error(`Failed to add consumption history: ${error?.message}`);
+    }
+
+    return {
+      id: data.id,
+      userId: data.user_id,
+      episodeId: data.episode_id,
+      coinType: data.coin_type,
+      coinsSpent: data.coins_spent,
+      createdAt: data.created_at,
+    } as ConsumptionHistory;
+  }
+
+  async addRewardCoinHistory(history: InsertRewardCoinHistory): Promise<RewardCoinHistory> {
+    const { data, error } = await supabase
+      .from('reward_coin_history')
+      .insert({
+        user_id: history.userId,
+        coins_change: history.coinsChange,
+        reason: history.reason,
+      })
+      .select()
+      .single();
+
+    if (error || !data) {
+      throw new Error(`Failed to add reward coin history: ${error?.message}`);
+    }
+
+    return {
+      id: data.id,
+      userId: data.user_id,
+      coinsChange: data.coins_change,
+      reason: data.reason,
+      createdAt: data.created_at,
+    } as RewardCoinHistory;
   }
 }
 
