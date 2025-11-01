@@ -35,17 +35,17 @@ export default function EpisodeSheet({
         </SheetHeader>
         
         <Tabs defaultValue="episodes" className="w-full h-full flex flex-col">
-          <TabsList className="bg-card border border-border mb-4 w-full">
+          <TabsList className="bg-transparent border-b border-border/50 mb-4 w-full h-auto p-0 rounded-none justify-start gap-6">
             <TabsTrigger 
               value="synopsis" 
-              className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground"
+              className="flex-shrink-0 pb-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-base font-medium transition-colors relative data-[state=active]:text-foreground text-muted-foreground rounded-none border-b-2 border-transparent data-[state=active]:border-foreground"
               data-testid="tab-synopsis"
             >
               Synopsis
             </TabsTrigger>
             <TabsTrigger 
               value="episodes" 
-              className="flex-1 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground"
+              className="flex-shrink-0 pb-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-base font-medium transition-colors relative data-[state=active]:text-foreground text-muted-foreground rounded-none border-b-2 border-transparent data-[state=active]:border-foreground"
               data-testid="tab-episodes"
             >
               Episodes ({episodes.length})
