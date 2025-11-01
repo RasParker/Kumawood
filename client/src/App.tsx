@@ -161,6 +161,15 @@ function AppContent() {
     navigateToManageMembership();
   };
 
+  const handleCopyId = (id: string) => {
+    navigator.clipboard.writeText(id).then(() => {
+      setShowCopiedToast(true);
+      setTimeout(() => setShowCopiedToast(false), 3000);
+    }).catch((err) => {
+      console.error('Failed to copy ID:', err);
+    });
+  };
+
   // Render current screen based on state
   const renderScreen = () => {
     switch (currentView) {
@@ -208,12 +217,14 @@ function AppContent() {
             onNavigateToHelpFeedback={navigateToHelpFeedback}
             onNavigateToAbout={navigateToAbout}
             onNavigateToNotifications={navigateToNotifications}
+            onNavigateToStore={navigateToStore}
+            onCopyId={handleCopyId}
           />
         );
       case 'login':
         return <LoginScreen onNavigateHome={navigateToHome} />;
       case 'store':
-        return <StoreScreen />;
+        return <StoreScreen onNavigateBack={navigateToProfile} onNavigateToTerms={navigateToTerms} />;
       case 'rewards':
         return <RewardsScreen onNavigateToPointsHistory={navigateToPointsHistory} />;
       case 'termsOfUse':
@@ -309,6 +320,15 @@ function AppContent() {
               onNavigateMyList={navigateToMyList}
               onNavigateProfile={navigateToProfile}
             />
+          )}
+          
+          {/* Copied Toast */}
+          {showCopiedToast && (
+            <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+              <div className="bg-card border border-border rounded-lg px-6 py-3 shadow-lg">
+                <p className="text-sm font-medium text-foreground">Copied</p>
+              </div>
+            </div>
           )}
         </div>
         <Toaster />

@@ -3,11 +3,69 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertWatchHistorySchema, insertUserFollowingSchema, insertUserReminderSchema } from "@shared/schema";
 import { cloudinary } from "./cloudinary";
+import { supabase } from "./supabase";
 import multer from "multer";
 
 const upload = multer({ storage: multer.memoryStorage() });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  app.post('/api/auth/register', async (req, res) => {
+    try {
+      const { id, email } = req.body;
+      if (!id || !email) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+      
+      const existingUser = await storage.getUser(id);
+      if (existingUser) {
+        return res.json(existingUser);
+      }
+      
+      const { data, error } = await supabase
+        .from('users')
+        .insert({
+          id,
+          email,
+          password: '',
+          coins: 0,
+          reward_coins: 0,
+          points: 0,
+          has_membership: false,
+          membership_expires_at: null,
+          check_in_streak: 0,
+          last_check_in_date: null,
+          ads_watched_today: 0,
+          autoplay_preference: true,
+          language_preference: 'en',
+          allow_mobile_download: false,
+        })
+        .select()
+        .single();
+      
+      if (error) {
+        throw new Error(error.message);
+      }
+      
+      res.status(201).json(data);
+    } catch (error) {
+      console.error('Error registering user:', error);
+      res.status(500).json({ error: 'Failed to register user' });
+    }
+  });
+
+  app.get('/api/users/:id', async (req, res) => {
+    try {
+      const user = await storage.getUser(req.params.id);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(user);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      res.status(500).json({ error: 'Failed to fetch user' });
+    }
+  });
+
   app.get('/api/series/popular', async (_req, res) => {
     try {
       const series = await storage.getPopularSeries();
