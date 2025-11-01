@@ -6,7 +6,6 @@ interface TransactionHistoryScreenProps {
 }
 
 export default function TransactionHistoryScreen({ onNavigateBack }: TransactionHistoryScreenProps) {
-  const userId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'; // Fixed demo user UUID from seed script
   const transactions = [
     { id: 1, type: 'purchase', amount: 500, method: 'Credit Card', date: '2025-10-27', time: '08:30 PM' },
     { id: 2, type: 'purchase', amount: 100, method: 'PayPal', date: '2025-10-20', time: '03:15 PM' },

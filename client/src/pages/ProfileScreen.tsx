@@ -42,8 +42,6 @@ export default function ProfileScreen({
   onNavigateToAbout,
   onNavigateToNotifications,
 }: ProfileScreenProps) {
-  const userId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'; // Fixed demo user UUID from seed script
-
   const menuItems = [
     { icon: Bell, label: 'Notifications', onClick: onNavigateToNotifications, testId: 'link-notifications' },
     { icon: Wallet, label: 'My Wallet', onClick: onNavigateToMyWallet, testId: 'link-wallet' },

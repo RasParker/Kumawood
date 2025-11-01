@@ -6,7 +6,6 @@ interface ConsumptionRecordsScreenProps {
 }
 
 export default function ConsumptionRecordsScreen({ onNavigateBack }: ConsumptionRecordsScreenProps) {
-  const userId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'; // Fixed demo user UUID from seed script
   const records = [
     { id: 1, title: 'Love in Lagos - Episode 45', amount: 5, date: '2025-10-27', time: '08:15 PM' },
     { id: 2, title: 'The Kingdom - Episode 12', amount: 5, date: '2025-10-26', time: '06:30 PM' },

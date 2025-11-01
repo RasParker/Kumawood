@@ -23,10 +23,9 @@ interface MyListScreenProps {
 }
 
 export default function MyListScreen({ onNavigateToPlayer }: MyListScreenProps) {
-  const [activeTab, setActiveTab] = useState('following');
-
-  const userId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'; // Fixed demo user UUID from seed script
+  const userId = 'demo-user-id';
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState('following');
   const [editMode, setEditMode] = useState(false);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);

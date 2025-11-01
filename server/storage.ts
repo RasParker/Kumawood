@@ -592,7 +592,8 @@ export class SupabaseStorage implements IStorage {
     const { data, error } = await supabase
       .from('user_reminders')
       .select('series:series_id (*)')
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
 
     if (error) throw new Error(`Failed to fetch user reminders: ${error.message}`);
     
@@ -605,7 +606,8 @@ export class SupabaseStorage implements IStorage {
     const { data, error } = await supabase
       .from('user_following')
       .select('series:series_id (*)')
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .order('id', { ascending: false });
 
     if (error) throw new Error(`Failed to fetch user following: ${error.message}`);
     

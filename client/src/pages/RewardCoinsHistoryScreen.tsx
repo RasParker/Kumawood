@@ -6,7 +6,6 @@ interface RewardCoinsHistoryScreenProps {
 }
 
 export default function RewardCoinsHistoryScreen({ onNavigateBack }: RewardCoinsHistoryScreenProps) {
-  const userId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'; // Fixed demo user UUID from seed script
   const rewards = [
     { id: 1, amount: 10, source: 'Daily Sign-in', date: '2025-10-28', time: '09:00 AM' },
     { id: 2, amount: 50, source: 'Achievement Unlocked', date: '2025-10-26', time: '04:30 PM' },

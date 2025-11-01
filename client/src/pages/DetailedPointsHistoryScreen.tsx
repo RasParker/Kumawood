@@ -6,7 +6,6 @@ interface DetailedPointsHistoryScreenProps {
 }
 
 export default function DetailedPointsHistoryScreen({ onNavigateBack }: DetailedPointsHistoryScreenProps) {
-  const userId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'; // Fixed demo user UUID from seed script
   const history = [
     { id: 1, type: 'earned', amount: 10, description: 'Daily sign-in', date: '2025-10-28', time: '09:30 AM' },
     { id: 2, type: 'spent', amount: -50, description: 'Unlocked Episode 45', date: '2025-10-27', time: '08:15 PM' },

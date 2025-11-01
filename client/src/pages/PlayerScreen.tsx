@@ -43,7 +43,7 @@ export default function PlayerScreen({
   const videoRef = useRef<HTMLVideoElement>(null);
   const hideOverlaysTimeoutRef = useRef<NodeJS.Timeout>();
   const lastSaveTimeRef = useRef<number>(0);
-
+  
   const [isPlaying, setIsPlaying] = useState(true);
   const [showOverlays, setShowOverlays] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
@@ -51,13 +51,12 @@ export default function PlayerScreen({
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [autoplayEnabled, setAutoplayEnabled] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
-
+  
   const [showEpisodeSheet, setShowEpisodeSheet] = useState(false);
   const [showSpeedSheet, setShowSpeedSheet] = useState(false);
   const [showSettingsSheet, setShowSettingsSheet] = useState(false);
 
-  // Demo user ID (matches seed script)
-  const userId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
+  const userId = 'demo-user-id';
 
   const { data: episode, isLoading: episodeLoading } = useQuery<Episode>({
     queryKey: ['/api/series', seriesId, 'episodes', episodeNumber],
@@ -185,11 +184,11 @@ export default function PlayerScreen({
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!videoRef.current || !duration) return;
-
+    
     const bounds = e.currentTarget.getBoundingClientRect();
     const clickX = e.clientX - bounds.left;
     const newTime = (clickX / bounds.width) * duration;
-
+    
     videoRef.current.currentTime = newTime;
     setCurrentTime(newTime);
   };
@@ -352,7 +351,7 @@ export default function PlayerScreen({
             </Button>
             <span className="text-white text-xs font-semibold text-center">{formatCount(saveCount)}</span>
           </div>
-
+          
           <div className="flex flex-col items-center gap-1 w-16">
             <Button
               size="icon"
@@ -365,7 +364,7 @@ export default function PlayerScreen({
             </Button>
             <span className="text-white text-xs font-medium text-center">Episodes</span>
           </div>
-
+          
           <div className="flex flex-col items-center gap-1 w-16">
             <Button
               size="icon"

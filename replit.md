@@ -7,7 +7,6 @@ AfriShorts is a mobile-first, short-form video streaming application focused on 
 **Core Purpose**: Provide an immersive, content-first streaming experience for African short-form dramas with a freemium business model combining ad-supported viewing, virtual currency purchases, and premium memberships.
 
 **Current Status** (Updated: November 1, 2025): 
-- Phase 8 completed: MyListScreen with Following, History, and Reminder Set tabs
 - Phase 5 completed: Monetization system with coin-based episode unlocking
 - Full-featured PlayerScreen with HTML5 video player, watch history tracking, autoplay, overlays, and bottom sheets
 - ForYouScreen with vertical TikTok-style feed using Swiper
