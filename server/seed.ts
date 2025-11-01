@@ -173,11 +173,13 @@ async function seedRedeemableItems() {
 async function seedDemoUser() {
   console.log('Seeding demo user...');
 
-  // Generate a proper UUID for the demo user
+  // Use a fixed UUID for the demo user for easy testing
+  const DEMO_USER_ID = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'; // Fixed UUID
+  
   const { data: existingUser } = await supabase
     .from('users')
     .select('id')
-    .eq('email', 'demo@afrishorts.com')
+    .eq('id', DEMO_USER_ID)
     .single();
 
   let demoUserId: string;
@@ -205,8 +207,9 @@ async function seedDemoUser() {
     }
   } else {
     const { data: newUser, error: userError } = await supabase.from('users').insert({
+      id: DEMO_USER_ID,
       email: 'demo@afrishorts.com',
-      password: 'demo-hash', // Changed from password_hash to password
+      password: 'demo-hash',
       coins: 500,
       reward_coins: 200,
       points: 1500,
