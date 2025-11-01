@@ -1,0 +1,116 @@
+~/workspace$ ./seed.sh
+🌱 AfriShorts Database Seeding Script
+======================================
+
+This will populate your Supabase database with:
+  • 35+ series (Popular, New, Rankings, Kumawood, Naija)
+  • Hundreds of episodes with pricing
+  • 4 coming-soon series
+  • Demo user (demo-user-id)
+  • Sample following, history, and reminders
+
+⚠️  Make sure you have run ALL migrations first!
+   (001, 002, 003, 004 in Supabase SQL Editor)
+
+Starting database seeding...
+
+⚠️  Make sure you have run the migration SQL in your Supabase SQL Editor first!
+    Location: server/migrations/001_initial_schema.sql
+
+Clearing existing data...
+Existing data cleared!
+Seeding Popular series...
+  ✓ Inserted: The Kingdom
+    Added 120 episodes
+  ✓ Inserted: Love in Lagos
+    Added 95 episodes
+  ✓ Inserted: Night Tales
+    Added 87 episodes
+  ✓ Inserted: Modern Marriage
+    Added 110 episodes
+  ✓ Inserted: African Queen
+    Added 78 episodes
+  ✓ Inserted: City Lights
+    Added 92 episodes
+Seeding New series...
+  ✓ Inserted: Desert Rose
+    Added 45 episodes
+  ✓ Inserted: Hidden Secrets
+    Added 38 episodes
+  ✓ Inserted: Night Tales
+    Added 52 episodes
+  ✓ Inserted: Family Ties
+    Added 88 episodes
+  ✓ Inserted: Street Dreams
+    Added 73 episodes
+Seeding Ranking series...
+  ✓ Inserted: Love & War
+    Added 145 episodes
+  ✓ Inserted: The Royal Court
+    Added 132 episodes
+  ✓ Inserted: Sunset Boulevard
+    Added 118 episodes
+  ✓ Inserted: The Hustle
+    Added 105 episodes
+  ✓ Inserted: Broken Promises
+    Added 97 episodes
+  ✓ Inserted: Hearts Entangled
+    Added 89 episodes
+  ✓ Inserted: The Village Chief
+    Added 76 episodes
+  ✓ Inserted: Midnight Call
+    Added 68 episodes
+  ✓ Inserted: Golden Dreams
+    Added 61 episodes
+  ✓ Inserted: River's Edge
+    Added 54 episodes
+Seeding Kumawood series...
+  ✓ Inserted: Asante Kingdom
+    Added 65 episodes
+  ✓ Inserted: Kumasi Love
+    Added 72 episodes
+  ✓ Inserted: The Akan Warrior
+    Added 58 episodes
+  ✓ Inserted: Village Comedy
+    Added 81 episodes
+  ✓ Inserted: Traditional Healer
+    Added 47 episodes
+  ✓ Inserted: Market Queen
+    Added 69 episodes
+Seeding Naija series...
+  ✓ Inserted: Lagos Hustle
+    Added 93 episodes
+  ✓ Inserted: Yoruba Romance
+    Added 76 episodes
+  ✓ Inserted: Abuja Chronicles
+    Added 64 episodes
+  ✓ Inserted: Igbo Billionaire
+    Added 88 episodes
+  ✓ Inserted: Port Harcourt Nights
+    Added 71 episodes
+  ✓ Inserted: Calabar Beauty
+    Added 55 episodes
+Seeding coming soon series...
+  ✓ Inserted: Empire Rising
+  ✓ Inserted: Cyber Lagos
+  ✓ Inserted: Sahara Crossing
+  ✓ Inserted: Island Mysteries
+Seeding redeemable items...
+  ✓ Inserted 3 redeemable items
+Seeding demo user...
+Error creating demo user: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'password_hash' column of 'users' in the schema cache"
+}
+Seeding user following, watch history, and reminders...
+  ⚠️  No series found to create user data
+
+✅ Database seeding completed successfully!
+
+Demo user credentials:
+  Email: demo@afrishorts.com
+  User ID: demo-user-id
+  Coins: 500 | Reward Coins: 200 | Points: 1500
+~/workspace$ 
