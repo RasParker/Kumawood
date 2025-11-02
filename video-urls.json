@@ -1,0 +1,37 @@
+[
+  {
+    "episode": 1,
+    "file": "episode1_test.mp4",
+    "url": "https://res.cloudinary.com/dmuexsrq8/video/upload/v1762043728/afrishorts/videos/episode1_sample.mp4",
+    "publicId": "afrishorts/videos/episode1_sample",
+    "duration": 15
+  },
+  {
+    "episode": 2,
+    "file": "episode2_test.mp4",
+    "url": "https://res.cloudinary.com/dmuexsrq8/video/upload/v1762043729/afrishorts/videos/episode2_sample.mp4",
+    "publicId": "afrishorts/videos/episode2_sample",
+    "duration": 12
+  },
+  {
+    "episode": 3,
+    "file": "episode3_test.mp4",
+    "url": "https://res.cloudinary.com/dmuexsrq8/video/upload/v1762043730/afrishorts/videos/episode3_sample.mp4",
+    "publicId": "afrishorts/videos/episode3_sample",
+    "duration": 10
+  },
+  {
+    "episode": 4,
+    "file": "episode4_test.mp4",
+    "url": "https://res.cloudinary.com/dmuexsrq8/video/upload/v1762043732/afrishorts/videos/episode4_sample.mp4",
+    "publicId": "afrishorts/videos/episode4_sample",
+    "duration": 14
+  },
+  {
+    "episode": 5,
+    "file": "episode5_test.mp4",
+    "url": "https://res.cloudinary.com/dmuexsrq8/video/upload/v1762043733/afrishorts/videos/episode5_sample.mp4",
+    "publicId": "afrishorts/videos/episode5_sample",
+    "duration": 13
+  }
+]
