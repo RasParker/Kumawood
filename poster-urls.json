@@ -1,0 +1,152 @@
+[
+  {
+    "id": "pop6",
+    "title": "City Lights",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043241/afrishorts/posters/pop6_City_Lights.png",
+    "publicId": "afrishorts/posters/pop6_City_Lights"
+  },
+  {
+    "id": "new2",
+    "title": "Hidden Secrets",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043242/afrishorts/posters/new2_Hidden_Secrets.png",
+    "publicId": "afrishorts/posters/new2_Hidden_Secrets"
+  },
+  {
+    "id": "new3",
+    "title": "Night Tales",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043243/afrishorts/posters/new3_Night_Tales.png",
+    "publicId": "afrishorts/posters/new3_Night_Tales"
+  },
+  {
+    "id": "new4",
+    "title": "Family Ties",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043244/afrishorts/posters/new4_Family_Ties.png",
+    "publicId": "afrishorts/posters/new4_Family_Ties"
+  },
+  {
+    "id": "new5",
+    "title": "Street Dreams",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043245/afrishorts/posters/new5_Street_Dreams.png",
+    "publicId": "afrishorts/posters/new5_Street_Dreams"
+  },
+  {
+    "id": "rank2",
+    "title": "The Royal Court",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043246/afrishorts/posters/rank2_The_Royal_Court.png",
+    "publicId": "afrishorts/posters/rank2_The_Royal_Court"
+  },
+  {
+    "id": "rank3",
+    "title": "Sunset Boulevard",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043247/afrishorts/posters/rank3_Sunset_Boulevard.png",
+    "publicId": "afrishorts/posters/rank3_Sunset_Boulevard"
+  },
+  {
+    "id": "rank4",
+    "title": "The Hustle",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043248/afrishorts/posters/rank4_The_Hustle.png",
+    "publicId": "afrishorts/posters/rank4_The_Hustle"
+  },
+  {
+    "id": "rank5",
+    "title": "Broken Promises",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043249/afrishorts/posters/rank5_Broken_Promises.png",
+    "publicId": "afrishorts/posters/rank5_Broken_Promises"
+  },
+  {
+    "id": "rank6",
+    "title": "Hearts Entangled",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043250/afrishorts/posters/rank6_Hearts_Entangled.png",
+    "publicId": "afrishorts/posters/rank6_Hearts_Entangled"
+  },
+  {
+    "id": "rank7",
+    "title": "The Village Chief",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043251/afrishorts/posters/rank7_The_Village_Chief.png",
+    "publicId": "afrishorts/posters/rank7_The_Village_Chief"
+  },
+  {
+    "id": "rank8",
+    "title": "Midnight Call",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043251/afrishorts/posters/rank8_Midnight_Call.png",
+    "publicId": "afrishorts/posters/rank8_Midnight_Call"
+  },
+  {
+    "id": "rank9",
+    "title": "Golden Dreams",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043252/afrishorts/posters/rank9_Golden_Dreams.png",
+    "publicId": "afrishorts/posters/rank9_Golden_Dreams"
+  },
+  {
+    "id": "rank10",
+    "title": "River's Edge",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043253/afrishorts/posters/rank10_Rivers_Edge.png",
+    "publicId": "afrishorts/posters/rank10_Rivers_Edge"
+  },
+  {
+    "id": "kuma2",
+    "title": "Kumasi Love",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043254/afrishorts/posters/kuma2_Kumasi_Love.png",
+    "publicId": "afrishorts/posters/kuma2_Kumasi_Love"
+  },
+  {
+    "id": "kuma3",
+    "title": "The Akan Warrior",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043255/afrishorts/posters/kuma3_The_Akan_Warrior.png",
+    "publicId": "afrishorts/posters/kuma3_The_Akan_Warrior"
+  },
+  {
+    "id": "kuma5",
+    "title": "Traditional Healer",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043257/afrishorts/posters/kuma5_Traditional_Healer.png",
+    "publicId": "afrishorts/posters/kuma5_Traditional_Healer"
+  },
+  {
+    "id": "kuma6",
+    "title": "Market Queen",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043258/afrishorts/posters/kuma6_Market_Queen.png",
+    "publicId": "afrishorts/posters/kuma6_Market_Queen"
+  },
+  {
+    "id": "naija3",
+    "title": "Abuja Chronicles",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043258/afrishorts/posters/naija3_Abuja_Chronicles.png",
+    "publicId": "afrishorts/posters/naija3_Abuja_Chronicles"
+  },
+  {
+    "id": "naija4",
+    "title": "Igbo Billionaire",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043259/afrishorts/posters/naija4_Igbo_Billionaire.png",
+    "publicId": "afrishorts/posters/naija4_Igbo_Billionaire"
+  },
+  {
+    "id": "naija5",
+    "title": "Port Harcourt Nights",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043260/afrishorts/posters/naija5_Port_Harcourt_Nights.png",
+    "publicId": "afrishorts/posters/naija5_Port_Harcourt_Nights"
+  },
+  {
+    "id": "coming1",
+    "title": "Empire Rising",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043261/afrishorts/posters/coming1_Empire_Rising.png",
+    "publicId": "afrishorts/posters/coming1_Empire_Rising"
+  },
+  {
+    "id": "coming2",
+    "title": "Cyber Lagos",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043262/afrishorts/posters/coming2_Cyber_Lagos.png",
+    "publicId": "afrishorts/posters/coming2_Cyber_Lagos"
+  },
+  {
+    "id": "coming3",
+    "title": "Sahara Crossing",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043264/afrishorts/posters/coming3_Sahara_Crossing.png",
+    "publicId": "afrishorts/posters/coming3_Sahara_Crossing"
+  },
+  {
+    "id": "coming4",
+    "title": "Island Mysteries",
+    "url": "https://res.cloudinary.com/dmuexsrq8/image/upload/v1762043265/afrishorts/posters/coming4_Island_Mysteries.png",
+    "publicId": "afrishorts/posters/coming4_Island_Mysteries"
+  }
+]
