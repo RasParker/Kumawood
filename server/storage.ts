@@ -68,6 +68,13 @@ export interface IStorage {
   bulkDeleteUserFollowing(userId: string, seriesIds: string[]): Promise<void>;
   bulkDeleteUserReminders(userId: string, seriesIds: string[]): Promise<void>;
   bulkDeleteWatchHistory(userId: string, seriesIds: string[]): Promise<void>;
+
+  claimDailyPoints(userId: string): Promise<{ success: boolean; message: string; points?: number }>;
+  redeemItem(userId: string, itemId: string): Promise<{ success: boolean; message: string }>;
+  dailyCheckIn(userId: string): Promise<{ success: boolean; message: string; coins?: number; streak?: number }>;
+  completeTask(userId: string, taskId: string, reward: number): Promise<{ success: boolean; message: string }>;
+  watchAd(userId: string): Promise<{ success: boolean; message: string; coins?: number }>;
+  getUserTasks(userId: string): Promise<Array<{ id: string; userId: string; taskIdString: string }>>;
 }
 
 export class SupabaseStorage implements IStorage {
@@ -699,6 +706,247 @@ export class SupabaseStorage implements IStorage {
     if (error) {
       throw new Error(`Failed to bulk delete watch history: ${error.message}`);
     }
+  }
+
+  async claimDailyPoints(userId: string): Promise<{ success: boolean; message: string; points?: number }> {
+    const user = await this.getUser(userId);
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    if (!user.hasMembership) {
+      return { success: false, message: 'Only members can claim daily points' };
+    }
+
+    const { data: lastClaim } = await supabase
+      .from('daily_reward_claims')
+      .select('*')
+      .eq('user_id', userId)
+      .single();
+
+    const today = new Date();
+    if (lastClaim) {
+      const lastClaimDate = new Date(lastClaim.last_claim_date);
+      if (lastClaimDate.toDateString() === today.toDateString()) {
+        return { success: false, message: 'Daily points already claimed today' };
+      }
+    }
+
+    const pointsToGrant = 100;
+
+    await supabase
+      .from('users')
+      .update({ points: user.points + pointsToGrant })
+      .eq('id', userId);
+
+    await supabase
+      .from('daily_reward_claims')
+      .upsert({
+        user_id: userId,
+        last_claim_date: today.toISOString(),
+      });
+
+    await supabase
+      .from('user_points_history')
+      .insert({
+        user_id: userId,
+        points_change: pointsToGrant,
+        reason: 'Daily claim',
+      });
+
+    return { success: true, message: 'Daily points claimed successfully', points: pointsToGrant };
+  }
+
+  async redeemItem(userId: string, itemId: string): Promise<{ success: boolean; message: string }> {
+    const user = await this.getUser(userId);
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    if (!user.hasMembership) {
+      return { success: false, message: 'Only members can redeem items' };
+    }
+
+    const { data: item } = await supabase
+      .from('redeemable_items')
+      .select('*')
+      .eq('id', itemId)
+      .single();
+
+    if (!item) {
+      return { success: false, message: 'Item not found' };
+    }
+
+    if (user.points < item.points_cost) {
+      return { success: false, message: 'Insufficient points' };
+    }
+
+    await supabase
+      .from('users')
+      .update({ points: user.points - item.points_cost })
+      .eq('id', userId);
+
+    if (item.reward_type === 'membership_extension') {
+      const currentExpiry = user.membershipExpiresAt ? new Date(user.membershipExpiresAt) : new Date();
+      const newExpiry = new Date(currentExpiry.getTime() + item.reward_value * 24 * 60 * 60 * 1000);
+      
+      await supabase
+        .from('users')
+        .update({ membership_expires_at: newExpiry.toISOString() })
+        .eq('id', userId);
+    }
+
+    await supabase
+      .from('user_points_history')
+      .insert({
+        user_id: userId,
+        points_change: -item.points_cost,
+        reason: `Redeemed: ${item.title}`,
+      });
+
+    return { success: true, message: 'Item redeemed successfully' };
+  }
+
+  async dailyCheckIn(userId: string): Promise<{ success: boolean; message: string; coins?: number; streak?: number }> {
+    const user = await this.getUser(userId);
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    const today = new Date();
+    const lastCheckIn = user.lastCheckInDate ? new Date(user.lastCheckInDate) : null;
+
+    if (lastCheckIn && lastCheckIn.toDateString() === today.toDateString()) {
+      return { success: false, message: 'Already checked in today' };
+    }
+
+    let newStreak = 1;
+    if (lastCheckIn) {
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      if (lastCheckIn.toDateString() === yesterday.toDateString()) {
+        newStreak = (user.checkInStreak || 0) + 1;
+      }
+    }
+
+    if (newStreak > 7) {
+      newStreak = 1;
+    }
+
+    const coinsToGrant = newStreak === 7 ? 50 : 10;
+
+    await supabase
+      .from('users')
+      .update({
+        reward_coins: user.rewardCoins + coinsToGrant,
+        check_in_streak: newStreak,
+        last_check_in_date: today.toISOString(),
+      })
+      .eq('id', userId);
+
+    await supabase
+      .from('reward_coin_history')
+      .insert({
+        user_id: userId,
+        coins_change: coinsToGrant,
+        reason: `Daily check-in (Day ${newStreak})`,
+      });
+
+    return { 
+      success: true, 
+      message: 'Check-in successful', 
+      coins: coinsToGrant,
+      streak: newStreak 
+    };
+  }
+
+  async completeTask(userId: string, taskId: string, reward: number): Promise<{ success: boolean; message: string }> {
+    const { data: existingTask } = await supabase
+      .from('user_tasks_completed')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('task_id_string', taskId)
+      .single();
+
+    if (existingTask) {
+      return { success: false, message: 'Task already completed' };
+    }
+
+    const user = await this.getUser(userId);
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    await supabase
+      .from('users')
+      .update({ reward_coins: user.rewardCoins + reward })
+      .eq('id', userId);
+
+    await supabase
+      .from('user_tasks_completed')
+      .insert({
+        user_id: userId,
+        task_id_string: taskId,
+      });
+
+    await supabase
+      .from('reward_coin_history')
+      .insert({
+        user_id: userId,
+        coins_change: reward,
+        reason: `Task completed: ${taskId}`,
+      });
+
+    return { success: true, message: 'Task completed successfully' };
+  }
+
+  async watchAd(userId: string): Promise<{ success: boolean; message: string; coins?: number }> {
+    const user = await this.getUser(userId);
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
+
+    if (user.adsWatchedToday >= 15) {
+      return { success: false, message: 'Daily ad limit reached' };
+    }
+
+    const coinsToGrant = 10;
+
+    await supabase
+      .from('users')
+      .update({
+        reward_coins: user.rewardCoins + coinsToGrant,
+        ads_watched_today: user.adsWatchedToday + 1,
+      })
+      .eq('id', userId);
+
+    await supabase
+      .from('reward_coin_history')
+      .insert({
+        user_id: userId,
+        coins_change: coinsToGrant,
+        reason: 'Watched rewarded ad',
+      });
+
+    return { success: true, message: 'Ad watched successfully', coins: coinsToGrant };
+  }
+
+  async getUserTasks(userId: string): Promise<Array<{ id: string; userId: string; taskIdString: string }>> {
+    const { data, error } = await supabase
+      .from('user_tasks_completed')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (error) {
+      throw new Error(`Failed to fetch user tasks: ${error.message}`);
+    }
+
+    return (data || []).map((task: any) => ({
+      id: task.id,
+      userId: task.user_id,
+      taskIdString: task.task_id_string,
+    }));
   }
 }
 

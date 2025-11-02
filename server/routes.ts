@@ -396,6 +396,127 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Rewards routes
+  app.get('/api/redeemable-items', async (_req, res) => {
+    try {
+      const items = await storage.getAllRedeemableItems();
+      res.json(items);
+    } catch (error) {
+      console.error('Error fetching redeemable items:', error);
+      res.status(500).json({ error: 'Failed to fetch redeemable items' });
+    }
+  });
+
+  app.get('/api/user-tasks/:userId', async (req, res) => {
+    try {
+      const tasks = await storage.getUserTasks(req.params.userId);
+      res.json(tasks);
+    } catch (error) {
+      console.error('Error fetching user tasks:', error);
+      res.status(500).json({ error: 'Failed to fetch user tasks' });
+    }
+  });
+
+  app.post('/api/rewards/claim-daily-points', async (req, res) => {
+    try {
+      const { userId } = req.body;
+      if (!userId) {
+        return res.status(400).json({ error: 'Missing userId' });
+      }
+
+      const result = await storage.claimDailyPoints(userId);
+      
+      if (!result.success) {
+        return res.status(400).json({ message: result.message });
+      }
+
+      res.json(result);
+    } catch (error) {
+      console.error('Error claiming daily points:', error);
+      res.status(500).json({ error: 'Failed to claim daily points' });
+    }
+  });
+
+  app.post('/api/rewards/redeem-item', async (req, res) => {
+    try {
+      const { userId, itemId } = req.body;
+      if (!userId || !itemId) {
+        return res.status(400).json({ error: 'Missing userId or itemId' });
+      }
+
+      const result = await storage.redeemItem(userId, itemId);
+      
+      if (!result.success) {
+        return res.status(400).json({ message: result.message });
+      }
+
+      res.json(result);
+    } catch (error) {
+      console.error('Error redeeming item:', error);
+      res.status(500).json({ error: 'Failed to redeem item' });
+    }
+  });
+
+  app.post('/api/rewards/daily-check-in', async (req, res) => {
+    try {
+      const { userId } = req.body;
+      if (!userId) {
+        return res.status(400).json({ error: 'Missing userId' });
+      }
+
+      const result = await storage.dailyCheckIn(userId);
+      
+      if (!result.success) {
+        return res.status(400).json({ message: result.message });
+      }
+
+      res.json(result);
+    } catch (error) {
+      console.error('Error checking in:', error);
+      res.status(500).json({ error: 'Failed to check in' });
+    }
+  });
+
+  app.post('/api/rewards/complete-task', async (req, res) => {
+    try {
+      const { userId, taskId, reward } = req.body;
+      if (!userId || !taskId || reward === undefined) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+
+      const result = await storage.completeTask(userId, taskId, reward);
+      
+      if (!result.success) {
+        return res.status(400).json({ message: result.message });
+      }
+
+      res.json(result);
+    } catch (error) {
+      console.error('Error completing task:', error);
+      res.status(500).json({ error: 'Failed to complete task' });
+    }
+  });
+
+  app.post('/api/rewards/watch-ad', async (req, res) => {
+    try {
+      const { userId } = req.body;
+      if (!userId) {
+        return res.status(400).json({ error: 'Missing userId' });
+      }
+
+      const result = await storage.watchAd(userId);
+      
+      if (!result.success) {
+        return res.status(400).json({ message: result.message });
+      }
+
+      res.json(result);
+    } catch (error) {
+      console.error('Error watching ad:', error);
+      res.status(500).json({ error: 'Failed to watch ad' });
+    }
+  });
+
   app.post('/api/upload/image', upload.single('file'), async (req, res) => {
     try {
       if (!req.file) {

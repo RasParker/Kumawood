@@ -46,7 +46,8 @@ function AppContent() {
   const [currentLanguage, setCurrentLanguage] = useState<string>('en');
   const [cacheSizeMB, setCacheSizeMB] = useState<number>(61.2);
 
-  const userId = 'demo-user-id';
+  // TODO: Replace with actual authentication user ID from auth context
+  const userId = '57566876-ea2c-48ff-bf38-8c5d4f535ea3';
   
   const { data: user } = useQuery<User>({
     queryKey: ['/api/users', userId],
@@ -227,7 +228,14 @@ function AppContent() {
       case 'store':
         return <StoreScreen onNavigateBack={navigateToProfile} onNavigateToTerms={navigateToTerms} />;
       case 'rewards':
-        return <RewardsScreen onNavigateToPointsHistory={navigateToPointsHistory} />;
+        return (
+          <RewardsScreen 
+            onNavigateToPointsHistory={navigateToPointsHistory}
+            onNavigateToStore={navigateToStore}
+            setShowToastMessage={setShowToastMessage}
+            userId={userId}
+          />
+        );
       case 'termsOfUse':
         return <TermsOfUseScreen onNavigateBack={navigateToProfile} />;
       case 'pointsHistory':
