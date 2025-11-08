@@ -56,7 +56,7 @@ export default function PlayerScreen({
   const [showSpeedSheet, setShowSpeedSheet] = useState(false);
   const [showSettingsSheet, setShowSettingsSheet] = useState(false);
 
-  const userId = 'demo-user-id';
+  const userId = '57566876-ea2c-48ff-bf38-8c5d4f535ea3';
 
   const { data: episode, isLoading: episodeLoading } = useQuery<Episode>({
     queryKey: ['/api/series', seriesId, 'episodes', episodeNumber],

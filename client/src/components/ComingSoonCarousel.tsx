@@ -6,7 +6,7 @@ import { apiRequest, queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 
 export default function ComingSoonCarousel() {
-  const userId = 'demo-user-id';
+  const userId = '57566876-ea2c-48ff-bf38-8c5d4f535ea3';
   const { toast } = useToast();
 
   const { data: comingSoonSeries = [], isLoading } = useQuery<Series[]>({

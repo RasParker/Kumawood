@@ -23,7 +23,7 @@ interface MyListScreenProps {
 }
 
 export default function MyListScreen({ onNavigateToPlayer }: MyListScreenProps) {
-  const userId = 'demo-user-id';
+  const userId = '57566876-ea2c-48ff-bf38-8c5d4f535ea3';
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('following');
   const [editMode, setEditMode] = useState(false);

@@ -22,7 +22,7 @@ export default function EpisodeSheet({
   currentEpisodeNumber,
   onEpisodeSelect,
 }: EpisodeSheetProps) {
-  const userId = 'demo-user-id';
+  const userId = '57566876-ea2c-48ff-bf38-8c5d4f535ea3';
 
   const { data: unlockStatuses = {} } = useQuery({
     queryKey: ['/api/episodes/unlock-status', userId, episodes.map(e => e.id)],

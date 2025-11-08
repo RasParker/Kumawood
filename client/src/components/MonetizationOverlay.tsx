@@ -12,7 +12,7 @@ interface MonetizationOverlayProps {
 
 export default function MonetizationOverlay({ episode, onUnlockSuccess }: MonetizationOverlayProps) {
   const { toast } = useToast();
-  const userId = 'demo-user-id';
+  const userId = '57566876-ea2c-48ff-bf38-8c5d4f535ea3';
 
   const { data: user } = useQuery<User>({
     queryKey: ['/api/users', userId],

@@ -12,7 +12,7 @@ interface ForYouScreenProps {
 }
 
 export default function ForYouScreen({ onNavigateToPlayer, onNavigateToSearch }: ForYouScreenProps) {
-  const userId = 'demo-user-id';
+  const userId = '57566876-ea2c-48ff-bf38-8c5d4f535ea3';
 
   const { data: episodesWithSeries = [], isLoading } = useQuery<EpisodeWithSeries[]>({
     queryKey: ['/api/episodes/random-first?limit=20'],
